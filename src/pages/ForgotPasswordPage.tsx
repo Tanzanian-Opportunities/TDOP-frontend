@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Mail, Send, ArrowLeft, CheckCircle2, AlertCircle } from 'lucide-react';
 import Logo from '@/components/layout/Logo';
 import { Input } from '@/components/ui/Input';
+import { authApi } from '@/services/api/authApi';
 
 interface ForgotPasswordData {
   email: string;
@@ -13,6 +14,8 @@ interface ForgotPasswordData {
 const ForgotPasswordPage: React.FC = () => {
   const { t } = useTranslation();
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -22,9 +25,16 @@ const ForgotPasswordPage: React.FC = () => {
   });
 
   const onSubmit = async (data: ForgotPasswordData) => {
-    // TODO: wire to authApi.forgotPassword(data.email)
-    await new Promise((r) => setTimeout(r, 600));
-    setSubmitted(true);
+    try {
+      setLoading(true);
+      setError('');
+      await authApi.forgotPassword(data.email);
+      setSubmitted(true);
+    } catch {
+      setError('Failed to send reset link. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -64,6 +74,11 @@ const ForgotPasswordPage: React.FC = () => {
             </div>
           ) : (
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+              {error && (
+                <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-sm text-red-600">
+                  {error}
+                </div>
+              )}
               <Input
                 label={t('auth.email')}
                 type="email"
@@ -79,9 +94,14 @@ const ForgotPasswordPage: React.FC = () => {
 
               <button
                 type="submit"
-                className="w-full inline-flex items-center justify-center gap-2 py-3 rounded-full bg-tdop-royal hover:bg-tdop-royalLight text-white font-semibold shadow-soft transition-colors"
+                disabled={loading}
+                className="w-full inline-flex items-center justify-center gap-2 py-3 rounded-full bg-tdop-royal hover:bg-tdop-royalLight text-white font-semibold shadow-soft transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <Send className="w-4 h-4" />
+                {loading ? (
+                  <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <Send className="w-4 h-4" />
+                )}
                 {t('auth.sendResetLink')}
               </button>
 

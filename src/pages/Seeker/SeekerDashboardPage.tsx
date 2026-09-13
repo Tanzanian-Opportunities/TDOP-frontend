@@ -70,10 +70,10 @@ const SeekerDashboardPage: React.FC = () => {
   ];
 
   const metrics = [
-    { value: opportunities.length, label: t('dashboard.metricAvailable'), change: '+12', dir: 'up' as const },
-    { value: savedCount, label: t('dashboard.metricSaved'), change: '+2', dir: savedCount > 0 ? ('up' as const) : ('down' as const) },
-    { value: applications.length, label: t('dashboard.metricApplications'), change: '+5', dir: 'up' as const },
-    { value: unreadNotifications, label: t('dashboard.metricNotifications') || 'Notifications', change: unreadNotifications > 0 ? `+${unreadNotifications}` : '0', dir: unreadNotifications > 0 ? ('up' as const) : ('down' as const) },
+    { value: opportunities.length, label: t('dashboard.metricAvailable'), dir: 'up' as const },
+    { value: savedCount, label: t('dashboard.metricSaved'), dir: savedCount > 0 ? ('up' as const) : ('down' as const) },
+    { value: applications.length, label: t('dashboard.metricApplications'), dir: 'up' as const },
+    { value: unreadNotifications, label: t('dashboard.metricNotifications') || 'Notifications', dir: unreadNotifications > 0 ? ('up' as const) : ('down' as const) },
   ];
 
   const list = opportunities.slice(0, 6);
@@ -131,8 +131,6 @@ const SeekerDashboardPage: React.FC = () => {
                   <div className="mt-3 flex items-center gap-1 text-xs font-semibold">
                     {m.dir === 'up' && <TrendingUp className="w-3.5 h-3.5 text-green-500" />}
                     {m.dir === 'down' && <TrendingDown className="w-3.5 h-3.5 text-red-500" />}
-                    {m.dir === 'up' ? <span className="text-green-600">{t('dashboard.weeklyUp', { value: m.change.slice(1) })}</span>
-                      : <span className="text-red-500">{t('dashboard.weeklyDown', { value: m.change.slice(1) })}</span>}
                   </div>
                 </Card>
               );

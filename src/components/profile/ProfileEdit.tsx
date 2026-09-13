@@ -7,13 +7,13 @@ import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
 import { useAuth } from '@/hooks/useAuth';
 import { useProfile } from '@/hooks/useProfile';
+import { profileApi } from '@/services/api/profileApi';
 import { ProfileUpdateData } from '@/types/profile';
-import { User } from '@/types/user';
 import { Save, Loader2 } from 'lucide-react';
 
 export const ProfileEdit: React.FC = () => {
   const { t } = useTranslation();
-  const { updateUser } = useAuth();
+  const { refreshUser } = useAuth();
   const { profileData } = useProfile();
   const profile = (profileData || {}) as Record<string, string | undefined>;
   const [success, setSuccess] = useState(false);
@@ -31,7 +31,8 @@ export const ProfileEdit: React.FC = () => {
 
   const onSubmit = async (data: ProfileUpdateData) => {
     try {
-      await updateUser(data as unknown as Partial<User>);
+      await profileApi.updateProfile(data);
+      await refreshUser();
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);
     } catch {

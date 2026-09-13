@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useQuery } from '@tanstack/react-query';
+import axiosInstance from '@/services/api/axiosInstance';
 import {
   Briefcase, GraduationCap, Award, Coins, ClipboardList, Calendar, BookOpen, ArrowRight
 } from 'lucide-react';
@@ -8,14 +10,27 @@ import {
 const CategoryGrid: React.FC = () => {
   const { t } = useTranslation();
 
+  const { data: allOpps } = useQuery({
+    queryKey: ['all-opportunities-for-categories'],
+    queryFn: async () => {
+      const { data } = await axiosInstance.get('/opportunities');
+      return data?.data || [];
+    },
+    refetchOnWindowFocus: false,
+  });
+
+  const opportunities = Array.isArray(allOpps) ? allOpps : [];
+  const getCount = (category: string) =>
+    opportunities.filter((o: any) => o.category?.toLowerCase() === category.toLowerCase()).length;
+
   const categories = [
-    { key: 'catJobs', icon: Briefcase, pastel: 'bg-tdop-pastel-jobs', text: 'text-tdop-royalLight', count: 1240 },
-    { key: 'catInternships', icon: GraduationCap, pastel: 'bg-tdop-pastel-internships', text: 'text-amber-600', count: 860 },
-    { key: 'catScholarships', icon: Award, pastel: 'bg-tdop-pastel-scholarships', text: 'text-green-600', count: 540 },
-    { key: 'catLoans', icon: Coins, pastel: 'bg-tdop-pastel-loans', text: 'text-purple-600', count: 320 },
-    { key: 'catTenders', icon: ClipboardList, pastel: 'bg-tdop-pastel-tenders', text: 'text-cyan-600', count: 410 },
-    { key: 'catEvents', icon: Calendar, pastel: 'bg-tdop-pastel-events', text: 'text-tdop-goldDark', count: 280 },
-    { key: 'catTraining', icon: BookOpen, pastel: 'bg-tdop-pastel-training', text: 'text-rose-600', count: 610 },
+    { key: 'catJobs', icon: Briefcase, pastel: 'bg-tdop-pastel-jobs', text: 'text-tdop-royalLight', categoryKey: 'job' },
+    { key: 'catInternships', icon: GraduationCap, pastel: 'bg-tdop-pastel-internships', text: 'text-amber-600', categoryKey: 'internship' },
+    { key: 'catScholarships', icon: Award, pastel: 'bg-tdop-pastel-scholarships', text: 'text-green-600', categoryKey: 'scholarship' },
+    { key: 'catLoans', icon: Coins, pastel: 'bg-tdop-pastel-loans', text: 'text-purple-600', categoryKey: 'loan' },
+    { key: 'catTenders', icon: ClipboardList, pastel: 'bg-tdop-pastel-tenders', text: 'text-cyan-600', categoryKey: 'tender' },
+    { key: 'catEvents', icon: Calendar, pastel: 'bg-tdop-pastel-events', text: 'text-tdop-goldDark', categoryKey: 'event' },
+    { key: 'catTraining', icon: BookOpen, pastel: 'bg-tdop-pastel-training', text: 'text-rose-600', categoryKey: 'training' },
   ];
 
   return (
@@ -52,7 +67,7 @@ const CategoryGrid: React.FC = () => {
                   <Icon className="w-7 h-7" />
                 </div>
                 <h3 className="mt-4 font-display font-semibold text-tdop-royal">{t(`landing.${cat.key}`)}</h3>
-                <p className="mt-1 text-sm text-gray-500">{t('landing.catCounts', { count: cat.count.toLocaleString() })}</p>
+                <p className="mt-1 text-sm text-gray-500">{t('landing.catCounts', { count: getCount(cat.categoryKey).toLocaleString() })}</p>
               </Link>
             );
           })}

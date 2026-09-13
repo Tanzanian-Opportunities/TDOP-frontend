@@ -41,9 +41,12 @@ export const useNotifications = () => {
     addNotification(notification);
   }, [addNotification]);
 
+  const notifications = data?.data || [];
+  const unreadCount = Array.isArray(notifications) ? notifications.filter((n: any) => !n.read).length : 0;
+
   return {
-    notifications: data?.data || [],
-    unreadCount: 0,
+    notifications,
+    unreadCount,
     total: data?.pagination?.total || 0,
     isLoading,
     refetch,
