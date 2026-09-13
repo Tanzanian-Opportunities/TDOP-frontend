@@ -18,7 +18,7 @@ const MyApplicationsPage: React.FC = () => {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+        <h1 className="text-3xl font-bold text-tdop-navy flex items-center gap-2">
           <FileText className="w-8 h-8 text-tdop-primary" />
           {t('application.title')}
         </h1>
@@ -38,7 +38,7 @@ const MyApplicationsPage: React.FC = () => {
               <div className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="font-semibold text-gray-900 dark:text-white">{app.opportunityTitle}</h3>
+                    <h3 className="font-semibold text-tdop-navy">{app.opportunityTitle}</h3>
                     <p className="text-sm text-gray-500">{app.company}</p>
                     <div className="flex items-center gap-2 mt-2">
                       <Badge variant={app.status}>{formatApplicationStatus(app.status)}</Badge>

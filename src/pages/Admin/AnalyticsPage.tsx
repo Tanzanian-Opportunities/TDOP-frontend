@@ -19,7 +19,7 @@ const AnalyticsPage: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+        <h1 className="text-3xl font-bold text-tdop-navy flex items-center gap-2">
           <BarChart3 className="w-8 h-8 text-tdop-primary" />
           {t('admin.analytics')}
         </h1>
@@ -48,7 +48,7 @@ const AnalyticsPage: React.FC = () => {
               <Users className="w-6 h-6" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{mockAnalytics.users.total}</p>
+              <p className="text-2xl font-bold text-tdop-navy">{mockAnalytics.users.total}</p>
               <p className="text-sm text-gray-500">{t('admin.totalUsers')}</p>
             </div>
           </div>
@@ -59,7 +59,7 @@ const AnalyticsPage: React.FC = () => {
               <TrendingUp className="w-6 h-6" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{mockAnalytics.opportunities.total}</p>
+              <p className="text-2xl font-bold text-tdop-navy">{mockAnalytics.opportunities.total}</p>
               <p className="text-sm text-gray-500">{t('admin.totalOpportunities')}</p>
             </div>
           </div>
@@ -70,7 +70,7 @@ const AnalyticsPage: React.FC = () => {
               <FileText className="w-6 h-6" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{mockAnalytics.applications.total}</p>
+              <p className="text-2xl font-bold text-tdop-navy">{mockAnalytics.applications.total}</p>
               <p className="text-sm text-gray-500">{t('admin.totalApplications')}</p>
             </div>
           </div>
@@ -79,7 +79,7 @@ const AnalyticsPage: React.FC = () => {
 
       <Card padding={false}>
         <div className="p-6 border-b border-gray-100 dark:border-gray-700">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{t('admin.dateRange')}</h2>
+          <h2 className="text-lg font-semibold text-tdop-navy">{t('admin.dateRange')}</h2>
         </div>
         <div className="p-6">
           <div className="h-64 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center text-gray-400">

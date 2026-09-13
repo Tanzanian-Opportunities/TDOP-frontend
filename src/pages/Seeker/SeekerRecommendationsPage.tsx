@@ -12,9 +12,9 @@ const SeekerRecommendationsPage: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">
-      <div className="rounded-3xl bg-gradient-to-br from-tdop-navy via-tdop-royal to-tdop-royalLight p-8 text-white shadow-navy">
+      <div className="rounded-3xl bg-tdop-primary p-8 text-white shadow-soft">
         <div className="flex items-center gap-3">
-          <Sparkles className="w-8 h-8 text-tdop-gold" />
+          <Sparkles className="w-8 h-8 text-tdop-accent" />
           <div>
             <h1 className="font-display text-3xl font-extrabold">{t('dashboard.recommendationsTitle')}</h1>
             <p className="text-white/70 mt-1">{t('dashboard.greetingSubtitle')}</p>
@@ -34,7 +34,7 @@ const SeekerRecommendationsPage: React.FC = () => {
       ) : list.length === 0 ? (
         <Card className="text-center py-16">
           <Sparkles className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">{t('dashboard.recommendationsTitle')}</h3>
+          <h3 className="text-lg font-semibold text-tdop-navy mb-2">{t('dashboard.recommendationsTitle')}</h3>
           <p className="text-gray-500 mb-4">Complete your profile to get personalized recommendations.</p>
           <Link to="/profile" className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-tdop-primary text-white text-sm font-medium">
             Complete Profile <ArrowRight className="w-4 h-4" />
@@ -49,8 +49,8 @@ const SeekerRecommendationsPage: React.FC = () => {
               className="group rounded-2xl border border-gray-100 bg-white hover:shadow-soft hover:-translate-y-1 transition-all overflow-hidden flex flex-col"
             >
               <div className="p-5 flex-1 flex flex-col">
-                <span className="text-xs font-semibold uppercase tracking-wide text-tdop-cyan">{opp.type}</span>
-                <h3 className="mt-1 font-display font-semibold text-tdop-royal line-clamp-2">{opp.title}</h3>
+                <span className="text-xs font-semibold uppercase tracking-wide text-tdop-secondary">{opp.type}</span>
+                <h3 className="mt-1 font-display font-semibold text-tdop-navy line-clamp-2">{opp.title}</h3>
                 <div className="mt-3 space-y-1.5 text-sm text-gray-500 flex-1">
                   <p className="flex items-center gap-1.5"><MapPin className="w-4 h-4 text-gray-400" />{opp.location}</p>
                   <p className="flex items-center gap-1.5"><Calendar className="w-4 h-4 text-gray-400" />{t('opportunities.deadline')}: {opp.deadline ? new Date(opp.deadline).toLocaleDateString() : 'N/A'}</p>

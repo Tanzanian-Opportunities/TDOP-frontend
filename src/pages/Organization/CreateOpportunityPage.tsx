@@ -56,8 +56,8 @@ const CreateOpportunityPage: React.FC = () => {
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{t('nav.create')}</h1>
-        <p className="text-gray-500 dark:text-gray-400 mt-1">{t('organization.postOpportunity')}</p>
+        <h1 className="text-3xl font-bold text-tdop-navy">{t('nav.create')}</h1>
+        <p className="text-gray-500 mt-1">{t('organization.postOpportunity')}</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">

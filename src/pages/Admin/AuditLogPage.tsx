@@ -32,7 +32,7 @@ const AuditLogPage: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+        <h1 className="text-3xl font-bold text-tdop-navy flex items-center gap-2">
           <ScrollText className="w-8 h-8 text-tdop-primary" />
           {t('admin.auditLog')}
         </h1>
@@ -49,7 +49,7 @@ const AuditLogPage: React.FC = () => {
                   {actionIcons[log.action] || <Shield className="w-4 h-4 text-gray-400" />}
                 </div>
                 <div>
-                  <p className="font-medium text-gray-900 dark:text-white">{log.action}</p>
+                  <p className="font-medium text-tdop-navy">{log.action}</p>
                   <p className="text-xs text-gray-500">by {log.user} → {log.target}</p>
                 </div>
               </div>

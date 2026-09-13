@@ -20,7 +20,7 @@ const ReportsPage: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+        <h1 className="text-3xl font-bold text-tdop-navy flex items-center gap-2">
           <Flag className="w-8 h-8 text-tdop-primary" />
           {t('admin.reports')}
         </h1>
@@ -43,7 +43,7 @@ const ReportsPage: React.FC = () => {
             <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
               {mockReports.map(report => (
                 <tr key={report.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                  <td className="p-4 text-sm text-gray-900 dark:text-white">{report.reportedBy}</td>
+                  <td className="p-4 text-sm text-tdop-navy">{report.reportedBy}</td>
                   <td className="p-4"><Badge variant="info">{report.targetType}</Badge></td>
                   <td className="p-4 text-sm text-gray-600 dark:text-gray-300">{report.reason}</td>
                   <td className="p-4"><Badge variant={report.status === 'open' ? 'warning' : 'verified'}>{report.status}</Badge></td>

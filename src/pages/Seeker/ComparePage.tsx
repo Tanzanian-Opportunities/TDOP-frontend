@@ -27,11 +27,11 @@ const ComparePage: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+        <h1 className="text-3xl font-bold text-tdop-navy flex items-center gap-2">
           <Scale className="w-8 h-8 text-tdop-primary" />
           {t('comparison.title')}
         </h1>
-        <p className="text-gray-500 dark:text-gray-400 mt-2">{t('comparison.selectOpportunities')}</p>
+        <p className="text-gray-500 mt-2">{t('comparison.selectOpportunities')}</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -43,7 +43,7 @@ const ComparePage: React.FC = () => {
           >
             <div className="flex items-start justify-between">
               <div>
-                <h4 className="font-medium text-gray-900 dark:text-white">{opp.title}</h4>
+                <h4 className="font-medium text-tdop-navy">{opp.title}</h4>
                 <p className="text-sm text-gray-500">{opp.company}</p>
               </div>
               {selectedIds.includes(opp.id) && (

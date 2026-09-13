@@ -45,9 +45,9 @@ const SeekerDocumentsPage: React.FC = () => {
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">
-      <div className="rounded-3xl bg-gradient-to-br from-tdop-navy via-tdop-royal to-tdop-royalLight p-8 text-white shadow-navy">
+      <div className="rounded-3xl bg-tdop-primary p-8 text-white shadow-soft">
         <div className="flex items-center gap-3">
-          <FolderOpen className="w-8 h-8 text-tdop-gold" />
+          <FolderOpen className="w-8 h-8 text-tdop-accent" />
           <div>
             <h1 className="font-display text-3xl font-extrabold">{t('documents.title')}</h1>
             <p className="text-white/70 mt-1">{t('documents.subtitle')}</p>
@@ -60,11 +60,11 @@ const SeekerDocumentsPage: React.FC = () => {
           const uploaded = docs[doc.id];
           return (
             <div key={doc.id} className="bg-white dark:bg-gray-800/70 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm p-5 flex flex-col sm:flex-row sm:items-center gap-4">
-              <div className="w-11 h-11 rounded-xl bg-tdop-pastel-jobs text-tdop-royalLight flex items-center justify-center shrink-0">
+              <div className="w-11 h-11 rounded-xl bg-tdop-primary/10 text-tdop-primary flex items-center justify-center shrink-0">
                 <FileText className="w-5 h-5" />
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-tdop-royal dark:text-white">{t(`documents.${doc.labelKey}`)}</h3>
+                <h3 className="font-semibold text-tdop-navy">{t(`documents.${doc.labelKey}`)}</h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400">{t(`documents.${doc.hintKey}`)}</p>
               </div>
 

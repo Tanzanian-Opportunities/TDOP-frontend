@@ -31,7 +31,7 @@ const OrganizationProfilePage: React.FC = () => {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{t('organization.profile')}</h1>
+        <h1 className="text-3xl font-bold text-tdop-navy">{t('organization.profile')}</h1>
         <Button variant="outline" onClick={() => setIsEditing(!isEditing)}>
           <Edit3 className="w-4 h-4 mr-2" />
           {isEditing ? t('common.cancel') : t('organization.editProfile')}
@@ -45,7 +45,7 @@ const OrganizationProfilePage: React.FC = () => {
       )}
 
       <Card>
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">{t('organization.verification')}</h2>
+        <h2 className="text-lg font-semibold text-tdop-navy mb-4">{t('organization.verification')}</h2>
         <div className="space-y-3">
           <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
             <span className="text-gray-600 dark:text-gray-300">{t('organization.verifiedStatus', { status: mockProfile.verificationStatus })}</span>

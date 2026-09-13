@@ -151,12 +151,12 @@ const BrowseOrganizationsPage: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">
-      <div className="rounded-3xl bg-gradient-to-br from-tdop-royal via-tdop-primary to-tdop-royal dark:from-tdop-royal dark:via-tdop-primary dark:to-tdop-royal p-8 sm:p-10 text-white shadow-navy overflow-hidden relative">
+      <div className="rounded-3xl bg-tdop-primary p-8 sm:p-10 text-white shadow-soft overflow-hidden relative">
         <div className="absolute -top-16 -right-16 w-64 h-64 rounded-full bg-white/10 blur-2xl" />
-        <div className="absolute -bottom-20 -left-10 w-72 h-72 rounded-full bg-tdop-gold/10 blur-3xl" />
+        <div className="absolute -bottom-20 -left-10 w-72 h-72 rounded-full bg-tdop-accent/10 blur-3xl" />
         <div className="relative space-y-2">
           <div className="inline-flex items-center gap-2 text-white/80 text-sm">
-            <Building2 className="w-4 h-4 text-tdop-gold" />
+            <Building2 className="w-4 h-4 text-tdop-accent" />
             {t('organizations.browse')}
           </div>
           <h1 className="font-display font-extrabold text-3xl sm:text-4xl">
@@ -213,7 +213,7 @@ const BrowseOrganizationsPage: React.FC = () => {
                   {org.name.charAt(0)}
                 </div>
                 <div className="min-w-0">
-                  <h2 className="font-semibold text-gray-900 dark:text-white group-hover:text-tdop-primary dark:group-hover:text-tdop-cyan transition-colors truncate">
+                  <h2 className="font-semibold text-tdop-navy group-hover:text-tdop-primary transition-colors truncate">
                     {org.name}
                   </h2>
                   <p className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400 mt-0.5">
@@ -278,7 +278,7 @@ const BrowseOrganizationsPage: React.FC = () => {
       {filtered.length === 0 && (
         <Card className="py-12 text-center">
           <AlertCircle className="w-10 h-10 mx-auto text-gray-300 dark:text-gray-600" />
-          <h2 className="mt-4 font-display font-bold text-lg text-gray-900 dark:text-white">
+            <h2 className="mt-4 font-display font-bold text-lg text-tdop-navy">
             {t('organizations.noResults')}
           </h2>
           <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{t('organizations.noResultsDesc')}</p>
