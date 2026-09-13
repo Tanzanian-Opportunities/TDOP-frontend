@@ -29,14 +29,14 @@ const AnalyticsPage: React.FC = () => {
             type="date"
             value={dateRange.from}
             onChange={(e) => setDateRange(prev => ({ ...prev, from: e.target.value }))}
-            className="px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-white"
+            className="px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm text-tdop-navy"
           />
           <span className="text-gray-400">to</span>
           <input
             type="date"
             value={dateRange.to}
             onChange={(e) => setDateRange(prev => ({ ...prev, to: e.target.value }))}
-            className="px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-white"
+            className="px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm text-tdop-navy"
           />
         </div>
       </div>
@@ -82,7 +82,7 @@ const AnalyticsPage: React.FC = () => {
           <h2 className="text-lg font-semibold text-tdop-navy">{t('admin.dateRange')}</h2>
         </div>
         <div className="p-6">
-          <div className="h-64 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center text-gray-400">
+          <div className="h-64 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400">
             <div className="text-center">
               <BarChart3 className="w-12 h-12 mx-auto mb-2" />
               <p>{t('admin.chartPlaceholder')}</p>

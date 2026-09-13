@@ -29,7 +29,7 @@ export const InterestList: React.FC<InterestListProps> = ({ interests, onAdd, on
   return (
     <Card className={className}>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{t('profile.interests')}</h3>
+        <h3 className="text-lg font-semibold text-tdop-navy">{t('profile.interests')}</h3>
         {onAdd && (
           <Button variant="outline" size="sm" onClick={() => setShowAdd(!showAdd)}>
             <Plus className="w-4 h-4 mr-1" />
@@ -45,14 +45,14 @@ export const InterestList: React.FC<InterestListProps> = ({ interests, onAdd, on
             placeholder={t('common.category')}
             value={newInterest.category}
             onChange={(e) => setNewInterest(prev => ({ ...prev, category: e.target.value }))}
-            className="flex-1 px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-gray-900 dark:text-white"
+            className="flex-1 px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-tdop-navy"
           />
           <input
             type="text"
             placeholder={t('common.subcategory')}
             value={newInterest.subcategory}
             onChange={(e) => setNewInterest(prev => ({ ...prev, subcategory: e.target.value }))}
-            className="flex-1 px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-gray-900 dark:text-white"
+            className="flex-1 px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-tdop-navy"
           />
           <Button size="sm" onClick={handleAdd}>{t('common.save')}</Button>
         </div>

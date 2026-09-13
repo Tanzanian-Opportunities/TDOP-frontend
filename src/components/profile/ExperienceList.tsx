@@ -47,7 +47,7 @@ export const ExperienceList: React.FC<ExperienceListProps> = ({ experiences, onA
   return (
     <Card className={className}>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+        <h3 className="text-lg font-semibold text-tdop-navy flex items-center gap-2">
           <Briefcase className="w-5 h-5 text-tdop-primary" />
           {t('profile.experience') || 'Experience'}
         </h3>
@@ -67,14 +67,14 @@ export const ExperienceList: React.FC<ExperienceListProps> = ({ experiences, onA
               placeholder={t('common.company') || 'Company'}
               value={newExp.company}
               onChange={(e) => setNewExp(prev => ({ ...prev, company: e.target.value }))}
-              className="flex-1 px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-gray-900 dark:text-white"
+              className="flex-1 px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-tdop-navy"
             />
             <input
               type="text"
               placeholder={t('common.jobTitle') || 'Job Title'}
               value={newExp.title}
               onChange={(e) => setNewExp(prev => ({ ...prev, title: e.target.value }))}
-              className="flex-1 px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-gray-900 dark:text-white"
+              className="flex-1 px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-tdop-navy"
             />
           </div>
           <input
@@ -82,7 +82,7 @@ export const ExperienceList: React.FC<ExperienceListProps> = ({ experiences, onA
             placeholder={t('common.location') || 'Location'}
             value={newExp.location}
             onChange={(e) => setNewExp(prev => ({ ...prev, location: e.target.value }))}
-            className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-gray-900 dark:text-white"
+            className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-tdop-navy"
           />
           <div className="flex gap-2">
             <input
@@ -90,7 +90,7 @@ export const ExperienceList: React.FC<ExperienceListProps> = ({ experiences, onA
               placeholder={t('common.startDate') || 'Start Date'}
               value={newExp.startDate}
               onChange={(e) => setNewExp(prev => ({ ...prev, startDate: e.target.value }))}
-              className="flex-1 px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-gray-900 dark:text-white"
+              className="flex-1 px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-tdop-navy"
             />
             {!newExp.isCurrent && (
               <input
@@ -98,7 +98,7 @@ export const ExperienceList: React.FC<ExperienceListProps> = ({ experiences, onA
                 placeholder={t('common.endDate') || 'End Date'}
                 value={newExp.endDate}
                 onChange={(e) => setNewExp(prev => ({ ...prev, endDate: e.target.value }))}
-                className="flex-1 px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-gray-900 dark:text-white"
+                className="flex-1 px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-tdop-navy"
               />
             )}
           </div>
@@ -116,7 +116,7 @@ export const ExperienceList: React.FC<ExperienceListProps> = ({ experiences, onA
             value={newExp.description}
             onChange={(e) => setNewExp(prev => ({ ...prev, description: e.target.value }))}
             rows={2}
-            className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-gray-900 dark:text-white"
+            className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-tdop-navy"
           />
           <div className="flex justify-end">
             <Button size="sm" onClick={handleAdd}>{t('common.save')}</Button>
@@ -131,7 +131,7 @@ export const ExperienceList: React.FC<ExperienceListProps> = ({ experiences, onA
           {experiences.map(exp => (
             <div key={exp.id} className="flex items-start justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
               <div className="flex-1">
-                <h4 className="font-medium text-gray-900 dark:text-white">{exp.title}</h4>
+                <h4 className="font-medium text-tdop-navy">{exp.title}</h4>
                 <p className="text-sm text-gray-600 dark:text-gray-400">{exp.company}</p>
                 {exp.location && <p className="text-xs text-gray-400">{exp.location}</p>}
                 <p className="text-xs text-gray-400">

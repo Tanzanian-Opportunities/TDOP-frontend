@@ -36,7 +36,7 @@ export const SkillList: React.FC<SkillListProps> = ({ skills, onAdd, onRemove, c
   return (
     <Card className={className}>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{t('profile.skills')}</h3>
+        <h3 className="text-lg font-semibold text-tdop-navy">{t('profile.skills')}</h3>
         {onAdd && (
           <Button variant="outline" size="sm" onClick={() => setShowAdd(!showAdd)}>
             <Plus className="w-4 h-4 mr-1" />
@@ -52,12 +52,12 @@ export const SkillList: React.FC<SkillListProps> = ({ skills, onAdd, onRemove, c
             placeholder={t('profile.addSkill')}
             value={newSkill.name}
             onChange={(e) => setNewSkill(prev => ({ ...prev, name: e.target.value }))}
-            className="flex-1 px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-gray-900 dark:text-white"
+            className="flex-1 px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-tdop-navy"
           />
           <select
             value={newSkill.category}
             onChange={(e) => setNewSkill(prev => ({ ...prev, category: e.target.value }))}
-            className="px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-gray-900 dark:text-white"
+            className="px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-tdop-navy"
           >
             <option value="">Category</option>
             {['Technology', 'Business', 'Design', 'Marketing'].map(c => (
@@ -67,7 +67,7 @@ export const SkillList: React.FC<SkillListProps> = ({ skills, onAdd, onRemove, c
           <select
             value={newSkill.level}
             onChange={(e) => setNewSkill(prev => ({ ...prev, level: e.target.value }))}
-            className="px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-gray-900 dark:text-white"
+            className="px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-tdop-navy"
           >
             {['beginner', 'intermediate', 'advanced', 'expert'].map(l => (
               <option key={l} value={l}>{l}</option>

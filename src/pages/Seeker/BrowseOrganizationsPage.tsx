@@ -180,7 +180,7 @@ const BrowseOrganizationsPage: React.FC = () => {
           className={`px-4 py-2 rounded-full text-sm font-medium border transition-colors ${
             sector === 'all'
               ? 'bg-tdop-primary text-white border-tdop-primary'
-              : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-tdop-primary dark:hover:border-tdop-cyan'
+              : 'border-gray-200 text-gray-600 hover:border-tdop-primary'
           }`}
         >
           {t('organizations.all')}
@@ -192,7 +192,7 @@ const BrowseOrganizationsPage: React.FC = () => {
             className={`px-4 py-2 rounded-full text-sm font-medium border transition-colors ${
               sector === s
                 ? 'bg-tdop-primary text-white border-tdop-primary'
-                : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-tdop-primary dark:hover:border-tdop-cyan'
+                : 'border-gray-200 text-gray-600 hover:border-tdop-primary'
             }`}
           >
             {s}
@@ -205,11 +205,11 @@ const BrowseOrganizationsPage: React.FC = () => {
           <Link
             key={org.id}
             to={`/browse?organization=${encodeURIComponent(org.name)}`}
-            className="group bg-white dark:bg-gray-800/70 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-soft hover:shadow-navy hover:border-tdop-primary/30 dark:hover:border-tdop-cyan/30 dark:hover:border-tdop-cyan/30 transition-all p-6 flex flex-col"
+            className="group bg-white rounded-2xl border border-gray-100 shadow-soft hover:shadow-card hover:border-tdop-primary/30 transition-all p-6 flex flex-col"
           >
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-center gap-3 min-w-0">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-tdop-primary to-tdop-royal flex items-center justify-center text-white font-bold shrink-0">
+                <div className="w-12 h-12 rounded-xl bg-tdop-primary flex items-center justify-center text-white font-bold shrink-0">
                   {org.name.charAt(0)}
                 </div>
                 <div className="min-w-0">
@@ -246,18 +246,18 @@ const BrowseOrganizationsPage: React.FC = () => {
 
             <div className="mt-5 grid grid-cols-3 gap-2 text-xs text-gray-500 dark:text-gray-300">
               <div className="flex flex-col items-center py-2 rounded-xl bg-tdop-light dark:bg-gray-900/60">
-                <Calendar className="w-4 h-4 text-tdop-primary dark:text-tdop-cyan mb-1" />
+                <Calendar className="w-4 h-4 text-tdop-primary mb-1" />
                 <span className="flex items-center gap-1 whitespace-nowrap">
                   <Building2 className="w-3 h-3" />
                   {org.foundedYear}
                 </span>
               </div>
               <div className="flex flex-col items-center py-2 rounded-xl bg-tdop-light dark:bg-gray-900/60">
-                <Users className="w-4 h-4 text-tdop-primary dark:text-tdop-cyan mb-1" />
+                <Users className="w-4 h-4 text-tdop-primary mb-1" />
                 {org.employeeCount}
               </div>
               <div className="flex flex-col items-center py-2 rounded-xl bg-tdop-light dark:bg-gray-900/60">
-                <Briefcase className="w-4 h-4 text-tdop-primary dark:text-tdop-cyan mb-1" />
+                <Briefcase className="w-4 h-4 text-tdop-primary mb-1" />
                 {t('organizations.viewOpportunities', { count: org.openRoles })}
               </div>
             </div>
@@ -266,7 +266,7 @@ const BrowseOrganizationsPage: React.FC = () => {
               <span className="text-xs text-gray-400 dark:text-gray-500 truncate max-w-[60%]">
                 {org.sector}
               </span>
-              <span className="inline-flex items-center gap-1 text-sm font-medium text-tdop-primary dark:text-tdop-cyan">
+              <span className="inline-flex items-center gap-1 text-sm font-medium text-tdop-primary">
                 {t('organizations.viewOpportunities')}
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
               </span>
@@ -281,7 +281,7 @@ const BrowseOrganizationsPage: React.FC = () => {
             <h2 className="mt-4 font-display font-bold text-lg text-tdop-navy">
             {t('organizations.noResults')}
           </h2>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{t('organizations.noResultsDesc')}</p>
+                  <p className="text-sm text-gray-500">{t('organizations.noResultsDesc')}</p>
           <button
             onClick={() => {
               setSearchInput('');

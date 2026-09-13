@@ -30,7 +30,7 @@ export const EducationList: React.FC<EducationListProps> = ({ education, onAdd, 
   return (
     <Card className={className}>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+        <h3 className="text-lg font-semibold text-tdop-navy flex items-center gap-2">
           <GraduationCap className="w-5 h-5 text-tdop-primary" />
           {t('profile.education')}
         </h3>
@@ -49,21 +49,21 @@ export const EducationList: React.FC<EducationListProps> = ({ education, onAdd, 
             placeholder={t('common.institution')}
             value={newEducation.institution}
             onChange={(e) => setNewEducation(prev => ({ ...prev, institution: e.target.value }))}
-            className="flex-1 px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-gray-900 dark:text-white"
+            className="flex-1 px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-tdop-navy"
           />
           <input
             type="text"
             placeholder={t('common.degree')}
             value={newEducation.degree}
             onChange={(e) => setNewEducation(prev => ({ ...prev, degree: e.target.value }))}
-            className="flex-1 px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-gray-900 dark:text-white"
+            className="flex-1 px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-tdop-navy"
           />
           <input
             type="text"
             placeholder={t('common.fieldOfStudy')}
             value={newEducation.fieldOfStudy}
             onChange={(e) => setNewEducation(prev => ({ ...prev, fieldOfStudy: e.target.value }))}
-            className="flex-1 px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-gray-900 dark:text-white"
+            className="flex-1 px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-tdop-navy"
           />
           <Button size="sm" onClick={handleAdd}>{t('common.save')}</Button>
         </div>
@@ -76,7 +76,7 @@ export const EducationList: React.FC<EducationListProps> = ({ education, onAdd, 
           {education.map(edu => (
             <div key={edu.id} className="flex items-start justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
               <div className="flex-1">
-                <h4 className="font-medium text-gray-900 dark:text-white">{edu.degree}</h4>
+                <h4 className="font-medium text-tdop-navy">{edu.degree}</h4>
                 <p className="text-sm text-gray-600 dark:text-gray-400">{edu.institution}</p>
                 <p className="text-xs text-gray-400">
                   {formatDate(edu.startDate)} - {edu.endDate ? formatDate(edu.endDate) : 'Present'}

@@ -27,7 +27,7 @@ export const OpportunityCompare: React.FC<OpportunityCompareProps> = ({
     return (
       <div className="text-center py-12">
         <Scale className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">{t('comparison.noSelection')}</h3>
+        <h3 className="text-lg font-semibold text-tdop-navy mb-2">{t('comparison.noSelection')}</h3>
         <p className="text-gray-500 dark:text-gray-400 mb-4">{t('comparison.selectOpportunities')}</p>
       </div>
     );
@@ -38,7 +38,7 @@ export const OpportunityCompare: React.FC<OpportunityCompareProps> = ({
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white">{t('comparison.title')}</h2>
+        <h2 className="text-xl font-bold text-tdop-navy">{t('comparison.title')}</h2>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" onClick={onClearAll}>
             {t('comparison.clearAll')}
@@ -69,7 +69,7 @@ export const OpportunityCompare: React.FC<OpportunityCompareProps> = ({
           <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
             {columns.map(col => (
               <tr key={col}>
-                <td className="p-3 text-sm font-medium text-gray-900 dark:text-white capitalize">{col}</td>
+                <td className="p-3 text-sm font-medium text-tdop-navy capitalize">{col}</td>
                 {opportunities.map(opp => (
                   <td key={`${opp.id}-${col}`} className="p-3 text-sm text-gray-600 dark:text-gray-300 capitalize">
                     {col === 'salary' ? formatSalary(opp.salaryMin, opp.salaryMax) :
@@ -83,7 +83,7 @@ export const OpportunityCompare: React.FC<OpportunityCompareProps> = ({
               </tr>
             ))}
             <tr>
-              <td className="p-3 text-sm font-medium text-gray-900 dark:text-white">{t('comparison.applyColumn')}</td>
+              <td className="p-3 text-sm font-medium text-tdop-navy">{t('comparison.applyColumn')}</td>
               {opportunities.map(opp => (
                 <td key={`${opp.id}-apply`} className="p-3">
                   <Button size="sm" asChild>

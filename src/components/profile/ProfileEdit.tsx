@@ -43,7 +43,7 @@ export const ProfileEdit: React.FC = () => {
   return (
     <div className="max-w-2xl mx-auto space-y-6 animate-slide-up">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('profile.edit')}</h1>
+        <h1 className="text-2xl font-bold text-tdop-navy">{t('profile.edit')}</h1>
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{t('profile.settings')}</p>
       </div>
 

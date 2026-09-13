@@ -21,7 +21,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ profile, isOrganizatio
     return (
       <div className="text-center py-16">
         <Briefcase className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">{t('profile.title')}</h3>
+        <h3 className="text-lg font-semibold text-tdop-navy mb-2">{t('profile.title')}</h3>
         <p className="text-gray-500 dark:text-gray-400 mb-4">{t('profile.noSkills')}</p>
         {onEdit && <Button onClick={onEdit}>{t('profile.edit')}</Button>}
       </div>
@@ -40,7 +40,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ profile, isOrganizatio
               {isOrganization ? (profile as OrganizationProfile).organizationName?.[0] : (profile as SeekerProfile).headline?.[0] || 'U'}
             </div>
             <div className="flex-1 min-w-0">
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{getName()}</h1>
+              <h1 className="text-2xl font-bold text-tdop-navy">{getName()}</h1>
               <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 flex items-center gap-1">
                 <MapPin className="w-4 h-4" />
                 {getLocation() || 'Location not specified'}
@@ -80,19 +80,19 @@ const OrganizationProfileContent: React.FC<{ profile: OrganizationProfile }> = (
       <div className="grid grid-cols-2 gap-4">
         <div>
           <p className="text-xs text-gray-400 uppercase">{t('profile.industry')}</p>
-          <p className="text-sm text-gray-900 dark:text-white">{profile.industry || 'N/A'}</p>
+          <p className="text-sm text-tdop-navy">{profile.industry || 'N/A'}</p>
         </div>
         <div>
           <p className="text-xs text-gray-400 uppercase">{t('common.companySize')}</p>
-          <p className="text-sm text-gray-900 dark:text-white">{profile.companySize || 'N/A'}</p>
+          <p className="text-sm text-tdop-navy">{profile.companySize || 'N/A'}</p>
         </div>
         <div>
           <p className="text-xs text-gray-400 uppercase">{t('common.foundedYear')}</p>
-          <p className="text-sm text-gray-900 dark:text-white">{profile.foundedYear ? String(profile.foundedYear) : 'N/A'}</p>
+          <p className="text-sm text-tdop-navy">{profile.foundedYear ? String(profile.foundedYear) : 'N/A'}</p>
         </div>
         <div>
           <p className="text-xs text-gray-400 uppercase">{t('profile.verificationStatus')}</p>
-          <p className="text-sm text-gray-900 dark:text-white capitalize">{profile.verificationStatus}</p>
+          <p className="text-sm text-tdop-navy capitalize">{profile.verificationStatus}</p>
         </div>
       </div>
       <div className="flex items-center gap-2 text-sm text-gray-500">
@@ -112,19 +112,19 @@ const SeekerProfileContent: React.FC<{ profile: SeekerProfile }> = ({ profile })
       <div className="grid grid-cols-2 gap-4">
         <div>
           <p className="text-xs text-gray-400 uppercase">{t('profile.skills')}</p>
-          <p className="text-sm text-gray-900 dark:text-white">{profile.skills.length} {t('profile.skills')}</p>
+          <p className="text-sm text-tdop-navy">{profile.skills.length} {t('profile.skills')}</p>
         </div>
         <div>
           <p className="text-xs text-gray-400 uppercase">{t('profile.education')}</p>
-          <p className="text-sm text-gray-900 dark:text-white">{profile.education.length} {t('profile.education')}</p>
+          <p className="text-sm text-tdop-navy">{profile.education.length} {t('profile.education')}</p>
         </div>
         <div>
           <p className="text-xs text-gray-400 uppercase">{t('profile.experience')}</p>
-          <p className="text-sm text-gray-900 dark:text-white">{profile.workExperience?.length || 0}</p>
+          <p className="text-sm text-tdop-navy">{profile.workExperience?.length || 0}</p>
         </div>
         <div>
           <p className="text-xs text-gray-400 uppercase">{t('profile.interests')}</p>
-          <p className="text-sm text-gray-900 dark:text-white">{profile.interests.length}</p>
+          <p className="text-sm text-tdop-navy">{profile.interests.length}</p>
         </div>
       </div>
       <div className="flex items-center gap-2 text-sm text-gray-500">

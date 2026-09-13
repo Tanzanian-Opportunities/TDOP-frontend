@@ -30,7 +30,7 @@ export const OpportunityFilters: React.FC<OpportunityFiltersProps> = ({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <SlidersHorizontal className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-          <h2 className="font-semibold text-gray-900 dark:text-white">{t('opportunities.filters')}</h2>
+          <h2 className="font-semibold text-tdop-navy">{t('opportunities.filters')}</h2>
           {hasActiveFilters && (
             <Badge variant="primary" className="bg-tdop-primary/10 text-tdop-primary">
               {t('common.active')}
@@ -105,14 +105,14 @@ export const OpportunityFilters: React.FC<OpportunityFiltersProps> = ({
                 placeholder={t('common.min')}
                 value={filters.minSalary || ''}
                 onChange={(e) => onFilterChange('minSalary', Number(e.target.value))}
-                className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-tdop-primary focus:border-transparent"
+                className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-sm text-tdop-navy focus:ring-2 focus:ring-tdop-primary focus:border-transparent"
               />
               <input
                 type="number"
                 placeholder={t('common.max')}
                 value={filters.maxSalary || ''}
                 onChange={(e) => onFilterChange('maxSalary', Number(e.target.value))}
-                className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-tdop-primary focus:border-transparent"
+                className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-sm text-tdop-navy focus:ring-2 focus:ring-tdop-primary focus:border-transparent"
               />
             </div>
           </div>

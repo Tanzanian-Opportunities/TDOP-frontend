@@ -83,7 +83,7 @@ const SeekerDocumentsPage: React.FC = () => {
                   </button>
                 </div>
               ) : (
-                <label className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-tdop-primary hover:bg-tdop-royalLight text-white text-sm font-medium cursor-pointer transition-colors w-full sm:w-auto">
+                <label className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-tdop-primary hover:bg-blue-700 text-white text-sm font-medium cursor-pointer transition-colors w-full sm:w-auto">
                   <Upload className="w-4 h-4" />
                   {t('documents.upload')}
                   <input
