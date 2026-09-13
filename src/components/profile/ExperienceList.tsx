@@ -60,21 +60,21 @@ export const ExperienceList: React.FC<ExperienceListProps> = ({ experiences, onA
       </div>
 
       {showAdd && onAdd && (
-        <div className="mb-4 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg animate-slide-up space-y-2">
+        <div className="mb-4 p-3 bg-gray-50 bg-gray-50 rounded-lg animate-slide-up space-y-2">
           <div className="flex gap-2">
             <input
               type="text"
               placeholder={t('common.company') || 'Company'}
               value={newExp.company}
               onChange={(e) => setNewExp(prev => ({ ...prev, company: e.target.value }))}
-              className="flex-1 px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-tdop-navy"
+              className="flex-1 px-3 py-2 bg-white border border-gray-300 rounded text-sm text-tdop-navy"
             />
             <input
               type="text"
               placeholder={t('common.jobTitle') || 'Job Title'}
               value={newExp.title}
               onChange={(e) => setNewExp(prev => ({ ...prev, title: e.target.value }))}
-              className="flex-1 px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-tdop-navy"
+              className="flex-1 px-3 py-2 bg-white border border-gray-300 rounded text-sm text-tdop-navy"
             />
           </div>
           <input
@@ -82,7 +82,7 @@ export const ExperienceList: React.FC<ExperienceListProps> = ({ experiences, onA
             placeholder={t('common.location') || 'Location'}
             value={newExp.location}
             onChange={(e) => setNewExp(prev => ({ ...prev, location: e.target.value }))}
-            className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-tdop-navy"
+            className="w-full px-3 py-2 bg-white border border-gray-300 rounded text-sm text-tdop-navy"
           />
           <div className="flex gap-2">
             <input
@@ -90,7 +90,7 @@ export const ExperienceList: React.FC<ExperienceListProps> = ({ experiences, onA
               placeholder={t('common.startDate') || 'Start Date'}
               value={newExp.startDate}
               onChange={(e) => setNewExp(prev => ({ ...prev, startDate: e.target.value }))}
-              className="flex-1 px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-tdop-navy"
+              className="flex-1 px-3 py-2 bg-white border border-gray-300 rounded text-sm text-tdop-navy"
             />
             {!newExp.isCurrent && (
               <input
@@ -98,11 +98,11 @@ export const ExperienceList: React.FC<ExperienceListProps> = ({ experiences, onA
                 placeholder={t('common.endDate') || 'End Date'}
                 value={newExp.endDate}
                 onChange={(e) => setNewExp(prev => ({ ...prev, endDate: e.target.value }))}
-                className="flex-1 px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-tdop-navy"
+                className="flex-1 px-3 py-2 bg-white border border-gray-300 rounded text-sm text-tdop-navy"
               />
             )}
           </div>
-          <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+          <label className="flex items-center gap-2 text-sm text-gray-700">
             <input
               type="checkbox"
               checked={newExp.isCurrent}
@@ -116,7 +116,7 @@ export const ExperienceList: React.FC<ExperienceListProps> = ({ experiences, onA
             value={newExp.description}
             onChange={(e) => setNewExp(prev => ({ ...prev, description: e.target.value }))}
             rows={2}
-            className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-tdop-navy"
+            className="w-full px-3 py-2 bg-white border border-gray-300 rounded text-sm text-tdop-navy"
           />
           <div className="flex justify-end">
             <Button size="sm" onClick={handleAdd}>{t('common.save')}</Button>
@@ -125,14 +125,14 @@ export const ExperienceList: React.FC<ExperienceListProps> = ({ experiences, onA
       )}
 
       {experiences.length === 0 ? (
-        <p className="text-center text-gray-500 dark:text-gray-400 py-4">{t('profile.noExperience') || 'No experience added yet'}</p>
+        <p className="text-center text-gray-500 py-4">{t('profile.noExperience') || 'No experience added yet'}</p>
       ) : (
         <div className="space-y-3">
           {experiences.map(exp => (
-            <div key={exp.id} className="flex items-start justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+            <div key={exp.id} className="flex items-start justify-between p-3 bg-gray-50 bg-gray-50 rounded-lg">
               <div className="flex-1">
                 <h4 className="font-medium text-tdop-navy">{exp.title}</h4>
-                <p className="text-sm text-gray-600 dark:text-gray-400">{exp.company}</p>
+                <p className="text-sm text-gray-600">{exp.company}</p>
                 {exp.location && <p className="text-xs text-gray-400">{exp.location}</p>}
                 <p className="text-xs text-gray-400">
                   {exp.startDate ? formatDate(exp.startDate) : ''} - {exp.isCurrent ? (t('common.present') || 'Present') : (exp.endDate ? formatDate(exp.endDate) : '')}
@@ -140,7 +140,7 @@ export const ExperienceList: React.FC<ExperienceListProps> = ({ experiences, onA
                 {exp.description && <p className="text-xs text-gray-500 mt-1">{exp.description}</p>}
               </div>
               {onRemove && (
-                <button onClick={() => onRemove(exp.id)} className="p-1 rounded hover:bg-red-100 dark:hover:bg-red-900/20 opacity-70 hover:opacity-100 transition-opacity">
+                <button onClick={() => onRemove(exp.id)} className="p-1 rounded hover:bg-red-100 opacity-70 hover:opacity-100 transition-opacity">
                   <Trash2 className="w-4 h-4 text-red-500" />
                 </button>
               )}

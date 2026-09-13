@@ -11,7 +11,7 @@ interface CardProps {
 export const Card: React.FC<CardProps> = ({ children, className = '', hover = false, padding = true, onClick }) => {
   return (
     <div
-      className={`bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-card ${padding ? 'p-6' : ''} ${hover ? 'hover:shadow-md hover:border-tdop-primary/30 cursor-pointer transition-all duration-200' : ''} ${className}`}
+      className={`bg-white rounded-xl border border-gray-200 shadow-card ${padding ? 'p-6' : ''} ${hover ? 'hover:shadow-md hover:border-tdop-primary/30 cursor-pointer transition-all duration-200' : ''} ${className}`}
       onClick={onClick}
     >
       {children}
@@ -25,7 +25,7 @@ interface CardHeaderProps {
 }
 
 export const CardHeader: React.FC<CardHeaderProps> = ({ children, className = '' }) => {
-  return <div className={`border-b border-gray-100 dark:border-gray-700 pb-4 mb-4 ${className}`}>{children}</div>;
+  return <div className={`border-b border-gray-100 pb-4 mb-4 ${className}`}>{children}</div>;
 };
 
 interface CardTitleProps {
@@ -34,7 +34,7 @@ interface CardTitleProps {
 }
 
 export const CardTitle: React.FC<CardTitleProps> = ({ children, className = '' }) => {
-  return <h3 className={`text-lg font-semibold text-tdop-navy dark:text-white ${className}`}>{children}</h3>;
+  return <h3 className={`text-lg font-semibold text-tdop-navy ${className}`}>{children}</h3>;
 };
 
 interface CardBodyProps {
@@ -52,5 +52,5 @@ interface CardFooterProps {
 }
 
 export const CardFooter: React.FC<CardFooterProps> = ({ children, className = '' }) => {
-  return <div className={`border-t border-gray-100 dark:border-gray-700 pt-4 mt-4 ${className}`}>{children}</div>;
+  return <div className={`border-t border-gray-100 pt-4 mt-4 ${className}`}>{children}</div>;
 };

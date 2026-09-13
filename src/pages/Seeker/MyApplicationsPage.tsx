@@ -35,7 +35,7 @@ const MyApplicationsPage: React.FC = () => {
       {applications.length === 0 ? (
         <Card>
           <div className="text-center py-12">
-            <FileText className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+            <FileText className="w-16 h-16 text-gray-300  mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-tdop-navy mb-2">{t('application.noApplications')}</h3>
             <p className="text-gray-500 mb-4">{t('application.startApplying')}</p>
             <Button asChild>

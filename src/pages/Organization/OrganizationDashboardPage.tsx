@@ -20,10 +20,10 @@ const OrganizationDashboardPage: React.FC = () => {
 
   const myOpps = opportunities;
   const stats = [
-    { label: t('dashboard.stats.totalPosted'), value: total, icon: Briefcase, color: 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400' },
-    { label: t('dashboard.stats.totalViews'), value: myOpps.reduce((acc: number, o: any) => acc + o.views, 0), icon: Eye, color: 'bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400' },
-    { label: t('dashboard.stats.totalApplicants'), value: totalApplicants, icon: Users, color: 'bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400' },
-    { label: 'Total Applications', value: applications.length, icon: FileText, color: 'bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30 dark:text-yellow-400' },
+    { label: t('dashboard.stats.totalPosted'), value: total, icon: Briefcase, color: 'bg-blue-100 text-blue-600' },
+    { label: t('dashboard.stats.totalViews'), value: myOpps.reduce((acc: number, o: any) => acc + o.views, 0), icon: Eye, color: 'bg-green-100 text-green-600' },
+    { label: t('dashboard.stats.totalApplicants'), value: totalApplicants, icon: Users, color: 'bg-purple-100 text-purple-600' },
+    { label: 'Total Applications', value: applications.length, icon: FileText, color: 'bg-yellow-100 text-yellow-600' },
   ];
 
   return (
@@ -64,7 +64,7 @@ const OrganizationDashboardPage: React.FC = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card padding={false}>
-          <div className="p-6 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
+          <div className="p-6 border-b border-gray-100 flex items-center justify-between">
             <h2 className="text-lg font-semibold text-tdop-navy">{t('organization.postOpportunity')}</h2>
             <Button variant="outline" size="sm" asChild>
               <a href="/create-opportunity">{t('common.seeMore')}</a>
@@ -72,11 +72,11 @@ const OrganizationDashboardPage: React.FC = () => {
           </div>
           <div className="p-6">
             {myOpps.length === 0 ? (
-              <p className="text-center text-gray-500 dark:text-gray-400 py-4">{t('organization.noOpportunities')}</p>
+              <p className="text-center text-gray-500 py-4">{t('organization.noOpportunities')}</p>
             ) : (
               <div className="space-y-3">
                 {myOpps.slice(0, 5).map(opp => (
-                  <div key={opp.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                  <div key={opp.id} className="flex items-center justify-between p-3 bg-gray-50 bg-gray-50 rounded-lg">
                     <div>
                       <p className="font-medium text-tdop-navy text-sm">{opp.title}</p>
                       <p className="text-xs text-gray-500">{formatDate(opp.publishedAt)}</p>
@@ -90,14 +90,14 @@ const OrganizationDashboardPage: React.FC = () => {
         </Card>
 
         <Card padding={false}>
-          <div className="p-6 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
+          <div className="p-6 border-b border-gray-100 flex items-center justify-between">
             <h2 className="text-lg font-semibold text-tdop-navy">{t('organization.viewApplicants')}</h2>
             <Button variant="outline" size="sm" asChild>
               <a href="/applications">{t('common.seeMore')}</a>
             </Button>
           </div>
           <div className="p-6">
-            <p className="text-center text-gray-500 dark:text-gray-400 py-4">
+            <p className="text-center text-gray-500 py-4">
               {t('organization.applicantsCount', { count: totalApplicants })}
             </p>
           </div>

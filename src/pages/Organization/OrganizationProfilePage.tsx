@@ -47,8 +47,8 @@ const OrganizationProfilePage: React.FC = () => {
       <Card>
         <h2 className="text-lg font-semibold text-tdop-navy mb-4">{t('organization.verification')}</h2>
         <div className="space-y-3">
-          <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-            <span className="text-gray-600 dark:text-gray-300">{t('organization.verifiedStatus', { status: mockProfile.verificationStatus })}</span>
+          <div className="flex items-center justify-between p-3 bg-gray-50 bg-gray-50 rounded-lg">
+            <span className="text-gray-600">{t('organization.verifiedStatus', { status: mockProfile.verificationStatus })}</span>
             {mockProfile.isVerified && <Badge variant="verified">Verified</Badge>}
           </div>
         </div>

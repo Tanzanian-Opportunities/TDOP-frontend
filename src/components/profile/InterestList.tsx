@@ -39,27 +39,27 @@ export const InterestList: React.FC<InterestListProps> = ({ interests, onAdd, on
       </div>
 
       {showAdd && onAdd && (
-        <div className="flex gap-2 mb-4 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg animate-slide-up">
+        <div className="flex gap-2 mb-4 p-3 bg-gray-50 bg-gray-50 rounded-lg animate-slide-up">
           <input
             type="text"
             placeholder={t('common.category')}
             value={newInterest.category}
             onChange={(e) => setNewInterest(prev => ({ ...prev, category: e.target.value }))}
-            className="flex-1 px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-tdop-navy"
+            className="flex-1 px-3 py-2 bg-white border border-gray-300 rounded text-sm text-tdop-navy"
           />
           <input
             type="text"
             placeholder={t('common.subcategory')}
             value={newInterest.subcategory}
             onChange={(e) => setNewInterest(prev => ({ ...prev, subcategory: e.target.value }))}
-            className="flex-1 px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-tdop-navy"
+            className="flex-1 px-3 py-2 bg-white border border-gray-300 rounded text-sm text-tdop-navy"
           />
           <Button size="sm" onClick={handleAdd}>{t('common.save')}</Button>
         </div>
       )}
 
       {interests.length === 0 ? (
-        <p className="text-center text-gray-500 dark:text-gray-400 py-4">{t('common.noInterests')}</p>
+        <p className="text-center text-gray-500 py-4">{t('common.noInterests')}</p>
       ) : (
         <div className="flex flex-wrap gap-2">
           {interests.map(interest => (
@@ -68,7 +68,7 @@ export const InterestList: React.FC<InterestListProps> = ({ interests, onAdd, on
               {onRemove && (
                 <button
                   onClick={() => onRemove(interest.id)}
-                  className="opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded hover:bg-red-100 dark:hover:bg-red-900/20"
+                  className="opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded hover:bg-red-100"
                 >
                   <Trash2 className="w-3 h-3 text-red-500" />
                 </button>

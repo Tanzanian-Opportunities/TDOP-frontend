@@ -44,11 +44,11 @@ export const ProfileEdit: React.FC = () => {
     <div className="max-w-2xl mx-auto space-y-6 animate-slide-up">
       <div>
         <h1 className="text-2xl font-bold text-tdop-navy">{t('profile.edit')}</h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{t('profile.settings')}</p>
+        <p className="text-sm text-gray-500 mt-1">{t('profile.settings')}</p>
       </div>
 
       {success && (
-        <div className="p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg text-sm text-green-600">
+        <div className="p-3 bg-green-50 border border-green-200 rounded-lg text-sm text-green-600">
           Profile updated successfully!
         </div>
       )}

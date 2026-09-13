@@ -55,20 +55,20 @@ export const CareerGoalList: React.FC<CareerGoalListProps> = ({ careerGoals, onA
       </div>
 
       {showAdd && onAdd && (
-        <div className="mb-4 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg animate-slide-up space-y-2">
+        <div className="mb-4 p-3 bg-gray-50 bg-gray-50 rounded-lg animate-slide-up space-y-2">
           <input
             type="text"
             placeholder={t('common.goalTitle') || 'Goal title'}
             value={newGoal.title}
             onChange={(e) => setNewGoal(prev => ({ ...prev, title: e.target.value }))}
-            className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-tdop-navy"
+            className="w-full px-3 py-2 bg-white border border-gray-300 rounded text-sm text-tdop-navy"
           />
           <textarea
             placeholder={t('common.description') || 'Description'}
             value={newGoal.description}
             onChange={(e) => setNewGoal(prev => ({ ...prev, description: e.target.value }))}
             rows={2}
-            className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-tdop-navy"
+            className="w-full px-3 py-2 bg-white border border-gray-300 rounded text-sm text-tdop-navy"
           />
           <div className="flex gap-2">
             <input
@@ -76,14 +76,14 @@ export const CareerGoalList: React.FC<CareerGoalListProps> = ({ careerGoals, onA
               placeholder={t('common.targetIndustry') || 'Target Industry'}
               value={newGoal.targetIndustry}
               onChange={(e) => setNewGoal(prev => ({ ...prev, targetIndustry: e.target.value }))}
-              className="flex-1 px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-tdop-navy"
+              className="flex-1 px-3 py-2 bg-white border border-gray-300 rounded text-sm text-tdop-navy"
             />
             <input
               type="text"
               placeholder={t('common.targetRole') || 'Target Role'}
               value={newGoal.targetRole}
               onChange={(e) => setNewGoal(prev => ({ ...prev, targetRole: e.target.value }))}
-              className="flex-1 px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-tdop-navy"
+              className="flex-1 px-3 py-2 bg-white border border-gray-300 rounded text-sm text-tdop-navy"
             />
           </div>
           <input
@@ -91,7 +91,7 @@ export const CareerGoalList: React.FC<CareerGoalListProps> = ({ careerGoals, onA
             placeholder={t('common.timeline') || 'Timeline (e.g., 2 years)'}
             value={newGoal.timeline}
             onChange={(e) => setNewGoal(prev => ({ ...prev, timeline: e.target.value }))}
-            className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-tdop-navy"
+            className="w-full px-3 py-2 bg-white border border-gray-300 rounded text-sm text-tdop-navy"
           />
           <div className="flex justify-end">
             <Button size="sm" onClick={handleAdd}>{t('common.save')}</Button>
@@ -100,14 +100,14 @@ export const CareerGoalList: React.FC<CareerGoalListProps> = ({ careerGoals, onA
       )}
 
       {careerGoals.length === 0 ? (
-        <p className="text-center text-gray-500 dark:text-gray-400 py-4">{t('profile.noCareerGoals') || 'No career goals added yet'}</p>
+        <p className="text-center text-gray-500 py-4">{t('profile.noCareerGoals') || 'No career goals added yet'}</p>
       ) : (
         <div className="space-y-3">
           {careerGoals.map(goal => (
-            <div key={goal.id} className="flex items-start justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+            <div key={goal.id} className="flex items-start justify-between p-3 bg-gray-50 bg-gray-50 rounded-lg">
               <div className="flex-1">
                 <h4 className="font-medium text-tdop-navy">{goal.title}</h4>
-                {goal.description && <p className="text-sm text-gray-600 dark:text-gray-400">{goal.description}</p>}
+                {goal.description && <p className="text-sm text-gray-600">{goal.description}</p>}
                 <div className="flex gap-3 mt-1 text-xs text-gray-400">
                   {goal.targetIndustry && <span>{goal.targetIndustry}</span>}
                   {goal.targetRole && <span>{goal.targetRole}</span>}
@@ -115,7 +115,7 @@ export const CareerGoalList: React.FC<CareerGoalListProps> = ({ careerGoals, onA
                 </div>
               </div>
               {onRemove && (
-                <button onClick={() => onRemove(goal.id)} className="p-1 rounded hover:bg-red-100 dark:hover:bg-red-900/20 opacity-70 hover:opacity-100 transition-opacity">
+                <button onClick={() => onRemove(goal.id)} className="p-1 rounded hover:bg-red-100 opacity-70 hover:opacity-100 transition-opacity">
                   <Trash2 className="w-4 h-4 text-red-500" />
                 </button>
               )}

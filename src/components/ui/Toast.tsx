@@ -16,17 +16,17 @@ const iconMap = {
 };
 
 const colorMap = {
-  info: 'border-blue-500 bg-blue-50 dark:bg-blue-900/20',
-  success: 'border-green-500 bg-green-50 dark:bg-green-900/20',
-  warning: 'border-yellow-500 bg-yellow-50 dark:bg-yellow-900/20',
-  error: 'border-red-500 bg-red-50 dark:bg-red-900/20',
+  info: 'border-blue-500 bg-blue-50',
+  success: 'border-green-500 bg-green-50',
+  warning: 'border-yellow-500 bg-yellow-50',
+  error: 'border-red-500 bg-red-50',
 };
 
 const textColorMap = {
-  info: 'text-blue-600 dark:text-blue-400',
-  success: 'text-green-600 dark:text-green-400',
-  warning: 'text-yellow-600 dark:text-yellow-400',
-  error: 'text-red-600 dark:text-red-400',
+  info: 'text-blue-600',
+  success: 'text-green-600',
+  warning: 'text-yellow-600',
+  error: 'text-red-600',
 };
 
 export const Toast: React.FC<ToastProps> = ({ notification, onDismiss, className = '' }) => {
@@ -44,11 +44,11 @@ export const Toast: React.FC<ToastProps> = ({ notification, onDismiss, className
       <Icon className={`w-5 h-5 flex-shrink-0 ${textColorMap[notification.type]}`} />
       <div className="flex-1 min-w-0">
         <p className="text-sm font-semibold text-tdop-navy">{notification.title}</p>
-        <p className="text-sm text-gray-600 dark:text-gray-300 mt-0.5">{notification.message}</p>
+        <p className="text-sm text-gray-600 mt-0.5">{notification.message}</p>
       </div>
       <button
         onClick={() => onDismiss?.(notification.id)}
-        className="flex-shrink-0 p-1 rounded hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+        className="flex-shrink-0 p-1 rounded hover:bg-black/5 transition-colors"
       >
         <X className="w-4 h-4 text-gray-400" />
       </button>

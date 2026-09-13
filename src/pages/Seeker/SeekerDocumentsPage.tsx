@@ -59,13 +59,13 @@ const SeekerDocumentsPage: React.FC = () => {
         {DOCS.map(doc => {
           const uploaded = docs[doc.id];
           return (
-            <div key={doc.id} className="bg-white dark:bg-gray-800/70 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+            <div key={doc.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex flex-col sm:flex-row sm:items-center gap-4">
               <div className="w-11 h-11 rounded-xl bg-tdop-primary/10 text-tdop-primary flex items-center justify-center shrink-0">
                 <FileText className="w-5 h-5" />
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="font-semibold text-tdop-navy">{t(`documents.${doc.labelKey}`)}</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">{t(`documents.${doc.hintKey}`)}</p>
+                <p className="text-sm text-gray-500">{t(`documents.${doc.hintKey}`)}</p>
               </div>
 
               {uploaded ? (
@@ -77,7 +77,7 @@ const SeekerDocumentsPage: React.FC = () => {
                   <button
                     onClick={() => remove(doc.id)}
                     aria-label={`${t('documents.remove')} ${t(`documents.${doc.labelKey}`)}`}
-                    className="p-2 rounded-lg text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors shrink-0"
+                    className="p-2 rounded-lg text-red-500 hover:bg-red-50 transition-colors shrink-0"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -103,9 +103,9 @@ const SeekerDocumentsPage: React.FC = () => {
         })}
       </div>
 
-      <div className="rounded-2xl border-2 border-dashed border-gray-200 dark:border-gray-700 p-8 text-center">
+      <div className="rounded-2xl border-2 border-dashed border-gray-200 p-8 text-center">
         <Plus className="w-8 h-8 mx-auto text-gray-300" />
-        <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">{t('documents.moreText')}</p>
+        <p className="mt-2 text-sm text-gray-500">{t('documents.moreText')}</p>
       </div>
     </div>
   );

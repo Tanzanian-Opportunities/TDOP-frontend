@@ -20,9 +20,9 @@ export const UserProfile: React.FC<UserProfileProps> = ({ profile, isOrganizatio
   if (!profile) {
     return (
       <div className="text-center py-16">
-        <Briefcase className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+        <Briefcase className="w-16 h-16 text-gray-300 mx-auto mb-4" />
         <h3 className="text-lg font-semibold text-tdop-navy mb-2">{t('profile.title')}</h3>
-        <p className="text-gray-500 dark:text-gray-400 mb-4">{t('profile.noSkills')}</p>
+        <p className="text-gray-500 mb-4">{t('profile.noSkills')}</p>
         {onEdit && <Button onClick={onEdit}>{t('profile.edit')}</Button>}
       </div>
     );
@@ -34,14 +34,14 @@ export const UserProfile: React.FC<UserProfileProps> = ({ profile, isOrganizatio
   return (
     <div className={`space-y-6 ${className}`}>
       <Card padding={false}>
-        <div className="p-6 border-b border-gray-100 dark:border-gray-700">
+        <div className="p-6 border-b border-gray-100">
           <div className="flex items-start gap-4">
             <div className="w-20 h-20 bg-tdop-primary rounded-full flex items-center justify-center text-white text-2xl font-bold flex-shrink-0">
               {isOrganization ? (profile as OrganizationProfile).organizationName?.[0] : (profile as SeekerProfile).headline?.[0] || 'U'}
             </div>
             <div className="flex-1 min-w-0">
               <h1 className="text-2xl font-bold text-tdop-navy">{getName()}</h1>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 flex items-center gap-1">
+              <p className="text-sm text-gray-500 mt-1 flex items-center gap-1">
                 <MapPin className="w-4 h-4" />
                 {getLocation() || 'Location not specified'}
               </p>
@@ -76,7 +76,7 @@ const OrganizationProfileContent: React.FC<{ profile: OrganizationProfile }> = (
   const { t } = useTranslation();
   return (
     <>
-      {profile.description && <p className="text-gray-600 dark:text-gray-300">{profile.description}</p>}
+      {profile.description && <p className="text-gray-600">{profile.description}</p>}
       <div className="grid grid-cols-2 gap-4">
         <div>
           <p className="text-xs text-gray-400 uppercase">{t('profile.industry')}</p>
@@ -107,8 +107,8 @@ const SeekerProfileContent: React.FC<{ profile: SeekerProfile }> = ({ profile })
   const { t } = useTranslation();
   return (
     <>
-      {profile.headline && <p className="text-lg text-gray-600 dark:text-gray-300">{profile.headline}</p>}
-      {profile.summary && <p className="text-gray-600 dark:text-gray-300">{profile.summary}</p>}
+      {profile.headline && <p className="text-lg text-gray-600">{profile.headline}</p>}
+      {profile.summary && <p className="text-gray-600">{profile.summary}</p>}
       <div className="grid grid-cols-2 gap-4">
         <div>
           <p className="text-xs text-gray-400 uppercase">{t('profile.skills')}</p>
