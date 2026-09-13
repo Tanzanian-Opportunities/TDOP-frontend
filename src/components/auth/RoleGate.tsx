@@ -18,7 +18,14 @@ const RoleGate: React.FC<RoleGateProps> = ({ allowedRoles, fallback }) => {
     );
   }
 
-  if (!isAuthenticated || !user || !allowedRoles.includes(user.role)) {
+  if (!isAuthenticated || !user) {
+    return <>{fallback || <Navigate to="/" replace />}</>;
+  }
+
+  const userRole = user.role?.toLowerCase();
+  const hasAccess = allowedRoles.some(role => role.toLowerCase() === userRole);
+
+  if (!hasAccess) {
     return <>{fallback || <Navigate to="/" replace />}</>;
   }
 

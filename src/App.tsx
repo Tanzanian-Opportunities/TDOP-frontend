@@ -34,6 +34,10 @@ import OpportunityModerationPage from '@/pages/Admin/OpportunityModerationPage';
 import AnalyticsPage from '@/pages/Admin/AnalyticsPage';
 import ReportsPage from '@/pages/Admin/ReportsPage';
 import AuditLogPage from '@/pages/Admin/AuditLogPage';
+import VerificationOfficerPage from '@/pages/Admin/VerificationOfficerPage';
+import ModerationPage from '@/pages/Admin/ModerationPage';
+import PlatformConfigPage from '@/pages/Admin/PlatformConfigPage';
+import OrganizationTeamPage from '@/pages/Organization/TeamManagementPage';
 
 const queryClient = new QueryClient();
 
@@ -65,15 +69,19 @@ const AppRoutes: React.FC = () => {
           <Route path="/organization/applications" element={<OrgMyApplicationsPage />} />
           <Route path="/organization/profile" element={<OrganizationProfilePage />} />
           <Route path="/organization/verification" element={<VerificationPage />} />
+          <Route path="/organization/team" element={<OrganizationTeamPage />} />
         </Route>
 
-        <Route element={<RoleGate allowedRoles={['admin']} />}>
+        <Route element={<RoleGate allowedRoles={['admin', 'verification_officer', 'moderator', 'super_admin']} />}>
           <Route path="/admin" element={<AdminDashboardPage />} />
           <Route path="/admin/users" element={<UserManagementPage />} />
           <Route path="/admin/opportunities" element={<OpportunityModerationPage />} />
           <Route path="/admin/analytics" element={<AnalyticsPage />} />
           <Route path="/admin/reports" element={<ReportsPage />} />
           <Route path="/admin/audit-log" element={<AuditLogPage />} />
+          <Route path="/admin/verification" element={<VerificationOfficerPage />} />
+          <Route path="/admin/moderation" element={<ModerationPage />} />
+          <Route path="/admin/config" element={<PlatformConfigPage />} />
         </Route>
       </Route>
 
