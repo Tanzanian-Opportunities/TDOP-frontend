@@ -3,7 +3,8 @@ import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   LayoutDashboard, Briefcase, Bookmark, FileText, Sparkles, FolderOpen, Building2,
-  User, Settings, BarChart3, Users, Shield, Flag, UserCog, ChevronLeft, ChevronRight
+  User, Settings, BarChart3, Users, Shield, Flag, UserCog, ChevronLeft, ChevronRight,
+  CheckCircle, Eye, Clock, UsersRound, Wrench
 } from 'lucide-react';
 import { useApplications } from '@/hooks/useApplications';
 import { useNotifications } from '@/hooks/useNotifications';
@@ -35,21 +36,27 @@ const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
     { to: '/recommendations', label: t('nav.recommendations'), icon: <Sparkles className="w-5 h-5" /> },
     { to: '/documents', label: t('nav.documents'), icon: <FolderOpen className="w-5 h-5" /> },
     { to: '/profile', label: t('profile.title'), icon: <User className="w-5 h-5" /> },
-    { to: '/profile', label: t('profile.settings'), icon: <Settings className="w-5 h-5" /> },
   ];
 
   const orgLinks: SidebarLink[] = [
-    { to: '/my-jobs', label: t('nav.myJobs'), icon: <Briefcase className="w-5 h-5" /> },
-    { to: '/profile', label: t('organization.profile'), icon: <UserCog className="w-5 h-5" /> },
-    { to: '/admin', label: t('admin.overview'), icon: <Shield className="w-5 h-5" /> },
+    { to: '/my-jobs', label: 'Dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
+    { to: '/organization/profile', label: 'Organization Profile', icon: <Building2 className="w-5 h-5" /> },
+    { to: '/organization/team', label: 'Team Management', icon: <UsersRound className="w-5 h-5" /> },
+    { to: '/organization/applications', label: 'Applications', icon: <FileText className="w-5 h-5" /> },
+    { to: '/organization/verification', label: 'Verification', icon: <CheckCircle className="w-5 h-5" /> },
+    { to: '/create-opportunity', label: 'Create Opportunity', icon: <Briefcase className="w-5 h-5" /> },
   ];
 
   const adminLinks: SidebarLink[] = [
-    { to: '/admin', label: t('admin.overview'), icon: <LayoutDashboard className="w-5 h-5" />, count: unreadCount },
-    { to: '/admin/users', label: t('admin.users'), icon: <Users className="w-5 h-5" /> },
-    { to: '/admin/opportunities', label: t('admin.opportunities'), icon: <Briefcase className="w-5 h-5" /> },
-    { to: '/admin/analytics', label: t('admin.analytics'), icon: <BarChart3 className="w-5 h-5" /> },
-    { to: '/admin/reports', label: t('admin.reports'), icon: <Flag className="w-5 h-5" /> },
+    { to: '/admin', label: 'Dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
+    { to: '/admin/users', label: 'Users', icon: <Users className="w-5 h-5" /> },
+    { to: '/admin/opportunities', label: 'Opportunities', icon: <Briefcase className="w-5 h-5" /> },
+    { to: '/admin/verification', label: 'Verification', icon: <CheckCircle className="w-5 h-5" /> },
+    { to: '/admin/moderation', label: 'Moderation', icon: <Eye className="w-5 h-5" /> },
+    { to: '/admin/reports', label: 'Reports', icon: <Flag className="w-5 h-5" /> },
+    { to: '/admin/analytics', label: 'Analytics', icon: <BarChart3 className="w-5 h-5" /> },
+    { to: '/admin/audit-log', label: 'Audit Log', icon: <Clock className="w-5 h-5" /> },
+    { to: '/admin/config', label: 'Platform Config', icon: <Wrench className="w-5 h-5" /> },
   ];
 
   const links = location.pathname.startsWith('/admin') ? adminLinks
