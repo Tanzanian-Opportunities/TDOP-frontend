@@ -33,7 +33,7 @@ const UserManagementPage: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+        <h1 className="text-3xl font-bold text-tdop-navy flex items-center gap-2">
           <Users className="w-8 h-8 text-tdop-primary" />
           {t('admin.users')}
         </h1>
@@ -74,7 +74,7 @@ const UserManagementPage: React.FC = () => {
                         {user.firstName[0]}{user.lastName[0]}
                       </div>
                       <div>
-                        <p className="font-medium text-gray-900 dark:text-white">{user.firstName} {user.lastName}</p>
+                        <p className="font-medium text-tdop-navy">{user.firstName} {user.lastName}</p>
                         <p className="text-xs text-gray-500">{user.email}</p>
                       </div>
                     </div>

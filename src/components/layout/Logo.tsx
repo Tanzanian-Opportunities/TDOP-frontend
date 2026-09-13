@@ -18,15 +18,15 @@ const Logo: React.FC<LogoProps> = ({ className = '', dark = false, size = 'md' }
   return (
     <span className={`inline-flex items-center gap-2.5 ${className}`}>
       <span
-        className={`${tile} bg-gradient-to-br from-tdop-royal via-tdop-royalLight to-tdop-cyan flex items-center justify-center font-display font-extrabold text-white shadow-soft`}
+        className={`${tile} bg-tdop-primary flex items-center justify-center font-display font-extrabold text-white shadow-soft`}
       >
         T
       </span>
       <span className={`font-display font-bold tracking-tight leading-none ${word}`}>
-        <span className="text-tdop-gold">T</span>
-        <span className={dark ? 'text-white' : 'text-tdop-royal'}>D</span>
-        <span className="text-tdop-cyan">O</span>
-        <span className={dark ? 'text-white' : 'text-tdop-royal'}>P</span>
+        <span className="text-tdop-primary">T</span>
+        <span className={dark ? 'text-white' : 'text-tdop-navy'}>D</span>
+        <span className="text-tdop-secondary">O</span>
+        <span className={dark ? 'text-white' : 'text-tdop-navy'}>P</span>
       </span>
     </span>
   );

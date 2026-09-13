@@ -2,7 +2,7 @@ import React from 'react';
 import { Loader2 } from 'lucide-react';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'accent';
   size?: 'sm' | 'md' | 'lg';
   loading?: boolean;
   asChild?: boolean;
@@ -19,13 +19,14 @@ export const Button: React.FC<ButtonProps> = ({
   icon,
   ...props
 }) => {
-  const baseClasses = 'inline-flex items-center justify-center font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed';
+  const baseClasses = 'inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed';
   const variantClasses = {
-    primary: 'bg-tdop-primary text-white hover:bg-tdop-secondary',
-    secondary: 'bg-gray-200 text-gray-800 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600',
-    outline: 'border-2 border-tdop-primary text-tdop-primary hover:bg-tdop-primary hover:text-white',
+    primary: 'bg-tdop-primary text-white hover:bg-blue-700 shadow-soft hover:shadow-md',
+    secondary: 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600',
+    outline: 'border border-tdop-primary/30 text-tdop-primary hover:bg-tdop-primary hover:text-white',
     ghost: 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800',
     danger: 'bg-red-500 text-white hover:bg-red-600',
+    accent: 'bg-tdop-accent text-white hover:bg-amber-600 shadow-gold',
   };
   const sizeClasses = {
     sm: 'px-3 py-1.5 text-sm',

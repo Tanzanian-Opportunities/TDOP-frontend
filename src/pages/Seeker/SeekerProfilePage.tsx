@@ -68,7 +68,7 @@ const SeekerProfilePage: React.FC = () => {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{t('profile.title')}</h1>
+        <h1 className="text-3xl font-bold text-tdop-navy">{t('profile.title')}</h1>
         <Button variant="outline" onClick={() => setIsEditing(!isEditing)}>
           <Edit3 className="w-4 h-4 mr-2" />
           {isEditing ? t('common.cancel') : t('profile.edit')}

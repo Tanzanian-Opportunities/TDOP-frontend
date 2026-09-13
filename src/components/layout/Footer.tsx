@@ -47,15 +47,15 @@ const Footer: React.FC = () => {
             </p>
             <ul className="space-y-2 text-sm text-gray-400">
               <li className="flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-tdop-cyan" />
+                <MapPin className="w-4 h-4 text-tdop-secondary" />
                 {t('footer.headquarters')}
               </li>
               <li className="flex items-center gap-2">
-                <Mail className="w-4 h-4 text-tdop-cyan" />
+                <Mail className="w-4 h-4 text-tdop-secondary" />
                 {t('footer.contactEmail')}
               </li>
               <li className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-tdop-cyan" />
+                <Phone className="w-4 h-4 text-tdop-secondary" />
                 {t('footer.contactPhone')}
               </li>
             </ul>
@@ -67,7 +67,7 @@ const Footer: React.FC = () => {
                     key={social.label}
                     href="#"
                     aria-label={social.label}
-                    className="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-gray-300 hover:bg-tdop-gold hover:text-tdop-navy transition-colors"
+                    className="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-gray-300 hover:bg-tdop-primary hover:text-white transition-colors"
                   >
                     <Icon className="w-4 h-4" />
                   </a>
@@ -84,7 +84,7 @@ const Footer: React.FC = () => {
               <ul className="space-y-2.5">
                 {items.map((item, i) => (
                   <li key={i}>
-                    <Link to={item.to || '#'} className="text-sm text-gray-400 hover:text-tdop-gold transition-colors">
+                    <Link to={item.to || '#'} className="text-sm text-gray-400 hover:text-tdop-primary transition-colors">
                       {item.label}
                     </Link>
                   </li>

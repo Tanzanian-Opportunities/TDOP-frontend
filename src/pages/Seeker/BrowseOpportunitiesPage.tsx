@@ -41,7 +41,7 @@ const BrowseOpportunitiesPage: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{t('opportunities.browseTitle')}</h1>
+        <h1 className="text-3xl font-bold text-tdop-navy">{t('opportunities.browseTitle')}</h1>
         <p className="text-gray-500 dark:text-gray-400 mt-2">
           {t('opportunities.applyCount', { count: total })} {t('opportunities.title')}
         </p>

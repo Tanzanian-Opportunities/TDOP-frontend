@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Search, MapPin, ArrowRight, BadgeCheck, Building2, Users, Sparkles } from 'lucide-react';
-import { heroImage, heroCollage } from './mockData';
+import { Search, MapPin, ArrowRight, BadgeCheck, CheckCircle2 } from 'lucide-react';
+import { heroImage } from './mockData';
 
 const HeroSection: React.FC = () => {
   const { t } = useTranslation();
@@ -23,31 +23,30 @@ const HeroSection: React.FC = () => {
   };
 
   return (
-    <section className="relative overflow-hidden">
+    <section className="relative overflow-hidden bg-white">
       <div className="absolute inset-0">
-        <img src={heroImage} alt="" className="w-full h-full object-cover" loading="eager" />
-        <div className="absolute inset-0 bg-gradient-to-br from-tdop-navy/95 via-tdop-royal/85 to-tdop-royalLight/70" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(6,182,212,0.25),transparent_55%)]" />
+        <img src={heroImage} alt="" className="w-full h-full object-cover opacity-[0.07]" loading="eager" />
+        <div className="absolute inset-0 bg-gradient-to-br from-tdop-primary/5 via-transparent to-tdop-secondary/5" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="animate-slide-up">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-white text-sm font-medium backdrop-blur">
-              <BadgeCheck className="w-4 h-4 text-tdop-gold" />
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-tdop-primary/10 text-tdop-primary text-sm font-semibold">
+              <BadgeCheck className="w-4 h-4" />
               {t('landing.heroBadge')}
             </span>
 
-            <h1 className="mt-6 font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight">
+            <h1 className="mt-6 font-display text-4xl sm:text-5xl lg:text-[3.5rem] font-extrabold text-tdop-navy leading-[1.1] tracking-tight">
               {t('landing.heroTitle')}
             </h1>
-            <p className="mt-5 text-lg text-gray-200 leading-relaxed max-w-xl">
+            <p className="mt-5 text-lg text-gray-600 leading-relaxed max-w-xl">
               {t('landing.heroSubtitle')}
             </p>
 
             <form
               onSubmit={onSubmit}
-              className="mt-8 bg-white rounded-2xl shadow-navy p-2 flex flex-col sm:flex-row gap-2"
+              className="mt-8 bg-white rounded-2xl shadow-card border border-gray-200 p-2 flex flex-col sm:flex-row gap-2"
             >
               <div className="flex-1 flex items-center gap-2 px-3">
                 <Search className="w-5 h-5 text-gray-400 shrink-0" />
@@ -55,7 +54,7 @@ const HeroSection: React.FC = () => {
                   value={query}
                   onChange={e => setQuery(e.target.value)}
                   placeholder={t('landing.heroSearchPlaceholder')}
-                  className="w-full py-2 text-gray-800 outline-none text-sm"
+                  className="w-full py-2.5 text-gray-800 outline-none text-sm"
                   aria-label={t('app.search')}
                 />
               </div>
@@ -64,7 +63,7 @@ const HeroSection: React.FC = () => {
                 <select
                   value={location}
                   onChange={e => setLocation(e.target.value)}
-                  className="w-full py-2 text-gray-700 outline-none text-sm bg-transparent"
+                  className="w-full py-2.5 text-gray-700 outline-none text-sm bg-transparent"
                   aria-label={t('landing.heroLocationLabel')}
                 >
                   <option value="all">{t('landing.heroLocationLabel')}: All</option>
@@ -73,54 +72,73 @@ const HeroSection: React.FC = () => {
                   <option value="arusha">Arusha</option>
                   <option value="mwanza">Mwanza</option>
                   <option value="morogoro">Morogoro</option>
-                  <option value="arusha">Zanzibar</option>
+                  <option value="zanzibar">Zanzibar</option>
                 </select>
               </div>
               <button
                 type="submit"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-tdop-accent hover:bg-tdop-goldDark text-tdop-navy font-semibold text-sm transition-colors"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-tdop-primary hover:bg-blue-700 text-white font-semibold text-sm transition-colors shadow-soft"
               >
                 {t('landing.heroBrowseBtn')}
                 <ArrowRight className="w-4 h-4" />
               </button>
             </form>
 
-            <div className="mt-4 flex flex-wrap items-center gap-3">
-              <span className="text-sm text-gray-300">{t('landing.heroQuickFilters')}</span>
+            <div className="mt-5 flex flex-wrap items-center gap-3">
               {quickFilters.map(f => (
                 <button
                   key={f.label}
                   onClick={() => navigate('/browse')}
-                  className="px-3 py-1.5 rounded-full bg-white/10 border border-white/20 text-white text-sm hover:bg-white/20 transition-colors"
+                  className="px-3.5 py-1.5 rounded-full bg-gray-100 text-gray-700 text-sm font-medium hover:bg-tdop-primary/10 hover:text-tdop-primary transition-colors"
                 >
                   {f.emoji} {f.label}
                 </button>
               ))}
             </div>
+
+            <div className="mt-8 flex flex-wrap items-center gap-5">
+              {[
+                { icon: CheckCircle2, text: t('landing.heroTrust1') || 'Verified listings' },
+                { icon: CheckCircle2, text: t('landing.heroTrust2') || 'Trusted organizations' },
+                { icon: CheckCircle2, text: t('landing.heroTrust3') || 'Free to use' },
+              ].map(item => (
+                <div key={item.text} className="flex items-center gap-1.5 text-sm text-gray-600">
+                  <item.icon className="w-4 h-4 text-tdop-secondary" />
+                  {item.text}
+                </div>
+              ))}
+            </div>
           </div>
 
-          <div className="hidden lg:grid grid-cols-2 gap-4 rotate-0 animate-slide-up">
-            <div className="col-span-2 rounded-3xl overflow-hidden shadow-navy ring-4 ring-white/10">
-              <img src={heroCollage[0]} alt="Team collaborating" className="w-full h-56 object-cover" />
-            </div>
-            <div className="rounded-2xl overflow-hidden shadow-navy ring-2 ring-white/10">
-              <img src={heroCollage[1]} alt="Students at work" className="w-full h-40 object-cover" />
-            </div>
-            <div className="rounded-2xl overflow-hidden shadow-navy ring-2 ring-white/10">
-              <img src={heroCollage[2]} alt="Graduation" className="w-full h-40 object-cover" />
-            </div>
-            <div className="col-span-2 flex items-center justify-around gap-3 bg-white/10 backdrop-blur border border-white/20 rounded-2xl p-4">
-              <div className="flex items-center gap-2 text-white text-sm">
-                <Building2 className="w-5 h-5 text-tdop-gold" />
-                {t('landing.statInstitutions')}
-              </div>
-              <div className="flex items-center gap-2 text-white text-sm">
-                <Users className="w-5 h-5 text-tdop-cyan" />
-                {t('landing.statUsers')}
-              </div>
-              <div className="flex items-center gap-2 text-white text-sm">
-                <Sparkles className="w-5 h-5 text-tdop-gold" />
-                {t('landing.aiMatches')}
+          <div className="hidden lg:block">
+            <div className="relative">
+              <div className="absolute -inset-4 bg-tdop-primary/5 rounded-3xl blur-2xl" />
+              <div className="relative bg-white rounded-3xl shadow-card border border-gray-100 p-8 space-y-5">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-tdop-primary/10 flex items-center justify-center">
+                    <Search className="w-5 h-5 text-tdop-primary" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-tdop-navy text-sm">Discover Opportunities</p>
+                    <p className="text-xs text-gray-500">Browse verified listings across Tanzania</p>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  {['Jobs & Employment', 'Internships & Training', 'Scholarships & Grants', 'Government Tenders'].map((item, i) => (
+                    <div key={item} className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-tdop-primary/5 transition-colors cursor-pointer" onClick={() => navigate('/browse')}>
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold ${i === 0 ? 'bg-tdop-primary/10 text-tdop-primary' : i === 1 ? 'bg-amber-100 text-amber-700' : i === 2 ? 'bg-emerald-100 text-emerald-700' : 'bg-teal-100 text-teal-700'}`}>
+                        {i + 1}
+                      </div>
+                      <span className="text-sm font-medium text-gray-700">{item}</span>
+                      <ArrowRight className="w-4 h-4 text-gray-400 ml-auto" />
+                    </div>
+                  ))}
+                </div>
+                <div className="pt-2 text-center">
+                  <button onClick={() => navigate('/browse')} className="text-sm font-semibold text-tdop-primary hover:text-blue-700 transition-colors">
+                    Browse all opportunities →
+                  </button>
+                </div>
               </div>
             </div>
           </div>

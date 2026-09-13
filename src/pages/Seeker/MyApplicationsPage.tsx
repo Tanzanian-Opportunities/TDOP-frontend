@@ -23,11 +23,11 @@ const MyApplicationsPage: React.FC = () => {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+        <h1 className="text-3xl font-bold text-tdop-navy flex items-center gap-2">
           <FileText className="w-8 h-8 text-tdop-primary" />
           {t('application.title')}
         </h1>
-        <p className="text-gray-500 dark:text-gray-400 mt-2">
+        <p className="text-gray-500 mt-2">
           {applications.length} {t('application.status')}
         </p>
       </div>
@@ -36,8 +36,8 @@ const MyApplicationsPage: React.FC = () => {
         <Card>
           <div className="text-center py-12">
             <FileText className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">{t('application.noApplications')}</h3>
-            <p className="text-gray-500 dark:text-gray-400 mb-4">{t('application.startApplying')}</p>
+            <h3 className="text-lg font-semibold text-tdop-navy mb-2">{t('application.noApplications')}</h3>
+            <p className="text-gray-500 mb-4">{t('application.startApplying')}</p>
             <Button asChild>
               <a href="/browse">{t('opportunities.browseTitle')}</a>
             </Button>
@@ -50,8 +50,8 @@ const MyApplicationsPage: React.FC = () => {
               <div className="p-6">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <h3 className="font-semibold text-gray-900 dark:text-white">{application.opportunityTitle}</h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">{application.company}</p>
+                    <h3 className="font-semibold text-tdop-navy">{application.opportunityTitle}</h3>
+                    <p className="text-sm text-gray-500">{application.company}</p>
                     <div className="flex items-center gap-2 mt-2">
                       <Badge variant={application.status}>{formatApplicationStatus(application.status)}</Badge>
                       <span className="text-xs text-gray-400 flex items-center gap-1">

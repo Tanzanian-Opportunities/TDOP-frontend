@@ -19,7 +19,7 @@ const OpportunityModerationPage: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+        <h1 className="text-3xl font-bold text-tdop-navy flex items-center gap-2">
           <AlertTriangle className="w-8 h-8 text-tdop-primary" />
           {t('admin.opportunities')}
         </h1>
@@ -30,7 +30,7 @@ const OpportunityModerationPage: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card padding={false}>
           <div className="p-4 border-b border-gray-100 dark:border-gray-700 bg-yellow-50 dark:bg-yellow-900/10">
-            <h2 className="font-semibold text-gray-900 dark:text-white">Pending Verification ({pendingOpps.length})</h2>
+            <h2 className="font-semibold text-tdop-navy">Pending Verification ({pendingOpps.length})</h2>
           </div>
           <div className="divide-y divide-gray-100 dark:divide-gray-700">
             {pendingOpps.length === 0 ? (
@@ -39,11 +39,11 @@ const OpportunityModerationPage: React.FC = () => {
               pendingOpps.slice(0, 10).map(opp => (
                 <div key={opp.id} className="flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50">
                   <div>
-                    <p className="font-medium text-gray-900 dark:text-white">{opp.title}</p>
+                    <p className="font-medium text-tdop-navy">{opp.title}</p>
                     <p className="text-sm text-gray-500">{opp.company}</p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Button variant="ghost" size="sm" className="text-green-600"><CheckCircle className="w-4 h-4 mr-1" />Approve</Button>
+                    <Button variant="ghost" size="sm" className="text-tdop-secondary"><CheckCircle className="w-4 h-4 mr-1" />Approve</Button>
                     <Button variant="ghost" size="sm" className="text-red-600"><XCircle className="w-4 h-4 mr-1" />Reject</Button>
                   </div>
                 </div>
@@ -54,7 +54,7 @@ const OpportunityModerationPage: React.FC = () => {
 
         <Card padding={false}>
           <div className="p-4 border-b border-gray-100 dark:border-gray-700 bg-red-50 dark:bg-red-900/10">
-            <h2 className="font-semibold text-gray-900 dark:text-white">Rejected</h2>
+            <h2 className="font-semibold text-tdop-navy">Rejected</h2>
           </div>
           <div className="divide-y divide-gray-100 dark:divide-gray-700">
             {rejectedOpps.length === 0 ? (
@@ -63,7 +63,7 @@ const OpportunityModerationPage: React.FC = () => {
               rejectedOpps.slice(0, 10).map(opp => (
                 <div key={opp.id} className="flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50">
                   <div>
-                    <p className="font-medium text-gray-900 dark:text-white">{opp.title}</p>
+                    <p className="font-medium text-tdop-navy">{opp.title}</p>
                     <p className="text-sm text-gray-500">{opp.company}</p>
                   </div>
                   <Badge variant="rejected">Rejected</Badge>

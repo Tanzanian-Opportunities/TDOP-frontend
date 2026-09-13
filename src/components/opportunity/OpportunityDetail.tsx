@@ -44,7 +44,7 @@ export const OpportunityDetail: React.FC = () => {
         <div className="p-6 border-b border-gray-100 dark:border-gray-700">
           <div className="flex items-start justify-between mb-4">
             <div className="flex-1">
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{opportunity.title}</h1>
+              <h1 className="text-2xl font-bold text-tdop-navy">{opportunity.title}</h1>
               <p className="text-lg text-gray-600 dark:text-gray-400 mt-1 flex items-center gap-2">
                 <Briefcase className="w-5 h-5" />
                 {opportunity.company}
@@ -75,32 +75,32 @@ export const OpportunityDetail: React.FC = () => {
         <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card>
             <p className="text-sm text-gray-500">{t('opportunities.salary')}</p>
-            <p className="text-xl font-bold text-gray-900 dark:text-white mt-1">
+            <p className="text-xl font-bold text-tdop-navy mt-1">
               {formatSalary(opportunity.salaryMin, opportunity.salaryMax)}
             </p>
           </Card>
           <Card>
             <p className="text-sm text-gray-500">{t('opportunities.typeLabel')}</p>
-            <p className="text-xl font-bold text-gray-900 dark:text-white mt-1 capitalize">
+            <p className="text-xl font-bold text-tdop-navy mt-1 capitalize">
               {t(`opportunities.type.${opportunity.type}`)}
             </p>
           </Card>
           <Card>
             <p className="text-sm text-gray-500">{t('opportunities.experience')}</p>
-            <p className="text-xl font-bold text-gray-900 dark:text-white mt-1 capitalize">
+            <p className="text-xl font-bold text-tdop-navy mt-1 capitalize">
               {opportunity.experienceLevel}
             </p>
           </Card>
         </div>
 
         <div className="p-6 space-y-4">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{t('opportunities.description')}</h2>
+          <h2 className="text-lg font-semibold text-tdop-navy">{t('opportunities.description')}</h2>
           <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{opportunity.description}</p>
         </div>
 
         <div className="px-6 pb-6 space-y-4">
           <div>
-            <h3 className="font-medium text-gray-900 dark:text-white mb-2">{t('opportunities.requirements')}</h3>
+            <h3 className="font-medium text-tdop-navy mb-2">{t('opportunities.requirements')}</h3>
             <ul className="space-y-1">
               {opportunity.requirements.map((req, i) => (
                 <li key={i} className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-300">
@@ -112,7 +112,7 @@ export const OpportunityDetail: React.FC = () => {
           </div>
 
           <div>
-            <h3 className="font-medium text-gray-900 dark:text-white mb-2">{t('opportunities.responsibilities')}</h3>
+            <h3 className="font-medium text-tdop-navy mb-2">{t('opportunities.responsibilities')}</h3>
             <ul className="space-y-1">
               {opportunity.responsibilities.map((resp, i) => (
                 <li key={i} className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-300">
@@ -125,7 +125,7 @@ export const OpportunityDetail: React.FC = () => {
 
           {opportunity.benefits.length > 0 && (
             <div>
-              <h3 className="font-medium text-gray-900 dark:text-white mb-2">{t('opportunities.benefits')}</h3>
+              <h3 className="font-medium text-tdop-navy mb-2">{t('opportunities.benefits')}</h3>
               <ul className="space-y-1">
                 {opportunity.benefits.map((benefit, i) => (
                   <li key={i} className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-300">

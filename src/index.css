@@ -21,6 +21,42 @@
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading;
   }
+
+  ::selection {
+    background: #DBEAFE;
+    color: #1E293B;
+  }
+
+  :focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.35);
+    outline-offset: 2px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #F1F5F9;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: 999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #94A3B8;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
 }
 
 @layer components {
@@ -29,7 +65,7 @@
   }
 
   .btn-primary {
-    @apply bg-tdop-primary text-white hover:bg-tdop-secondary;
+    @apply bg-tdop-primary text-white hover:bg-blue-700;
   }
 
   .btn-secondary {
@@ -61,7 +97,7 @@
   }
 
   .card {
-    @apply bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm;
+    @apply bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-card;
   }
 
   .skeleton {

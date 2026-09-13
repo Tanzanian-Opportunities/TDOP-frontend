@@ -19,11 +19,11 @@ const SavedOpportunitiesPage: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+        <h1 className="text-3xl font-bold text-tdop-navy flex items-center gap-2">
           <Bookmark className="w-8 h-8 text-tdop-primary" />
           {t('opportunities.savedTitle')}
         </h1>
-        <p className="text-gray-500 dark:text-gray-400 mt-2">
+        <p className="text-gray-500 mt-2">
           {total} {t('opportunities.saved')} {t('opportunities.title')}
         </p>
       </div>

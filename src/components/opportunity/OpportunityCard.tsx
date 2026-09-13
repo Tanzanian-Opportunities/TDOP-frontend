@@ -41,7 +41,7 @@ export const OpportunityCard: React.FC<OpportunityCardProps> = ({ opportunity, c
     <Card className={`hover:shadow-lg transition-shadow ${className}`}>
       <div className="flex items-start justify-between mb-3">
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-lg text-gray-900 dark:text-white truncate">
+          <h3 className="font-semibold text-lg text-tdop-navy truncate">
             <Link to={`/opportunities/${opportunity.id}`} className="hover:text-tdop-primary transition-colors">
               {opportunity.title}
             </Link>

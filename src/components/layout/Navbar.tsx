@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useNotifications } from '@/hooks/useNotifications';
 import { useThemeContext } from '@/context/ThemeContext';
@@ -13,9 +13,8 @@ const Navbar: React.FC = () => {
   const { unreadCount } = useNotifications();
   const { isDark, toggleTheme } = useThemeContext();
   const { t, i18n } = useTranslation();
-  const location = useLocation();
-  const [showUserMenu, setShowUserMenu] = useState(false);
-  const [showNotifDropdown, setShowNotifDropdown] = useState(false);
+  const location = window.location;
+  const [showUserMenu, setShowUserMenu] = React.useState(false);
 
   const currentLang = i18n.language.startsWith('sw') ? 'sw' : 'en';
 
@@ -41,7 +40,7 @@ const Navbar: React.FC = () => {
   ];
 
   return (
-    <nav className="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur border-b border-gray-200 dark:border-gray-700 shadow-sm">
+    <nav className="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur border-b border-gray-200 dark:border-gray-700">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-4">
           <Link to="/" className="flex items-center shrink-0" aria-label="TDOP home">
@@ -57,8 +56,8 @@ const Navbar: React.FC = () => {
                   to={link.to}
                   className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                     active
-                      ? 'text-tdop-primary dark:text-tdop-cyan bg-tdop-primary/10 dark:bg-tdop-cyan/10'
-                      : 'text-gray-600 dark:text-gray-300 hover:text-tdop-primary dark:hover:text-tdop-cyan hover:bg-gray-100 dark:hover:bg-gray-800'
+                      ? 'text-tdop-primary bg-tdop-primary/10'
+                      : 'text-gray-600 dark:text-gray-300 hover:text-tdop-primary hover:bg-gray-100 dark:hover:bg-gray-800'
                   }`}
                 >
                   {link.label}
@@ -93,18 +92,17 @@ const Navbar: React.FC = () => {
               className="p-2 rounded-lg hover:bg-gray-100 transition-colors hidden sm:block"
               aria-label="Toggle theme"
             >
-              {isDark ? <Sun className="w-5 h-5 text-tdop-gold" /> : <Moon className="w-5 h-5 text-gray-600" />}
+              {isDark ? <Sun className="w-5 h-5 text-tdop-accent" /> : <Moon className="w-5 h-5 text-gray-600" />}
             </button>
 
             {isAuthenticated && (
               <div className="relative">
                 <button
-                  onClick={() => setShowNotifDropdown(!showNotifDropdown)}
                   className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 relative transition-colors"
                 >
                   <Bell className="w-5 h-5 text-gray-600 dark:text-gray-300" />
                   {unreadCount > 0 && (
-                    <span className="absolute -top-1 -right-1 w-4 h-4 bg-tdop-gold text-tdop-navy text-xs rounded-full flex items-center justify-center font-bold">
+                    <span className="absolute -top-1 -right-1 w-4 h-4 bg-tdop-accent text-white text-xs rounded-full flex items-center justify-center font-bold">
                       {unreadCount}
                     </span>
                   )}
@@ -118,7 +116,7 @@ const Navbar: React.FC = () => {
                   onClick={() => setShowUserMenu(!showUserMenu)}
                   className="flex items-center gap-2 p-1 pr-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                 >
-                  <div className="w-8 h-8 bg-gradient-to-br from-tdop-royal to-tdop-cyan rounded-full flex items-center justify-center text-white text-sm font-medium">
+                  <div className="w-8 h-8 bg-tdop-primary rounded-full flex items-center justify-center text-white text-sm font-medium">
                     {user?.firstName?.[0] || 'U'}
                     {user?.lastName?.[0] || ''}
                   </div>
@@ -148,13 +146,13 @@ const Navbar: React.FC = () => {
               <div className="flex items-center gap-2">
                 <Link
                   to="/login"
-                  className="hidden sm:block px-4 py-2 text-sm font-medium text-tdop-primary dark:text-tdop-cyan border-2 border-tdop-primary dark:border-tdop-cyan rounded-lg hover:bg-tdop-primary dark:hover:bg-tdop-cyan hover:text-white dark:hover:text-tdop-navy transition-colors"
+                  className="hidden sm:block px-4 py-2 text-sm font-medium text-tdop-primary border border-tdop-primary/30 rounded-lg hover:bg-tdop-primary hover:text-white transition-colors"
                 >
                   {t('auth.login')}
                 </Link>
                 <Link
                   to="/register"
-                  className="px-4 py-2 text-sm font-semibold text-tdop-navy bg-tdop-accent hover:bg-tdop-goldDark rounded-lg shadow-gold transition-colors"
+                  className="px-4 py-2 text-sm font-semibold text-white bg-tdop-primary hover:bg-blue-700 rounded-lg shadow-soft transition-colors"
                 >
                   {t('nav.getStarted')}
                 </Link>

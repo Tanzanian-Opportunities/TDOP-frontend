@@ -30,10 +30,10 @@ const OrganizationDashboardPage: React.FC = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-3xl font-bold text-tdop-navy">
             {t('dashboard.welcome', { name: user?.firstName || 'Organization' })}
           </h1>
-          <p className="text-gray-500 dark:text-gray-400 mt-1">{t('organization.overview')}</p>
+          <p className="text-gray-500 mt-1">{t('organization.overview')}</p>
         </div>
         <Button asChild>
           <a href="/create-opportunity">
@@ -53,8 +53,8 @@ const OrganizationDashboardPage: React.FC = () => {
                   <Icon className="w-6 h-6" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">{stat.label}</p>
+                  <p className="text-2xl font-bold text-tdop-navy">{stat.value}</p>
+                  <p className="text-xs text-gray-500">{stat.label}</p>
                 </div>
               </div>
             </Card>
@@ -65,7 +65,7 @@ const OrganizationDashboardPage: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card padding={false}>
           <div className="p-6 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{t('organization.postOpportunity')}</h2>
+            <h2 className="text-lg font-semibold text-tdop-navy">{t('organization.postOpportunity')}</h2>
             <Button variant="outline" size="sm" asChild>
               <a href="/create-opportunity">{t('common.seeMore')}</a>
             </Button>
@@ -78,7 +78,7 @@ const OrganizationDashboardPage: React.FC = () => {
                 {myOpps.slice(0, 5).map(opp => (
                   <div key={opp.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                     <div>
-                      <p className="font-medium text-gray-900 dark:text-white text-sm">{opp.title}</p>
+                      <p className="font-medium text-tdop-navy text-sm">{opp.title}</p>
                       <p className="text-xs text-gray-500">{formatDate(opp.publishedAt)}</p>
                     </div>
                     <Badge variant={opp.status}>{opp.status}</Badge>
@@ -91,7 +91,7 @@ const OrganizationDashboardPage: React.FC = () => {
 
         <Card padding={false}>
           <div className="p-6 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{t('organization.viewApplicants')}</h2>
+            <h2 className="text-lg font-semibold text-tdop-navy">{t('organization.viewApplicants')}</h2>
             <Button variant="outline" size="sm" asChild>
               <a href="/applications">{t('common.seeMore')}</a>
             </Button>

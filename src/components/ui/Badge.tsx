@@ -1,5 +1,4 @@
 import React from 'react';
-import { getStatusColor } from '@/utils/formatRole';
 
 interface BadgeProps {
   children: React.ReactNode;
@@ -10,7 +9,20 @@ interface BadgeProps {
 
 export const Badge: React.FC<BadgeProps> = ({ children, variant, className = '', size = 'md' }) => {
   const sizeClasses = size === 'sm' ? 'px-2 py-0.5 text-xs' : 'px-2.5 py-1 text-xs';
-  const variantClass = variant ? getStatusColor(variant) : getStatusColor('pending');
+
+  const variantClasses: Record<string, string> = {
+    primary: 'bg-tdop-primary/10 text-tdop-primary',
+    secondary: 'bg-tdop-secondary/10 text-tdop-secondary',
+    accent: 'bg-tdop-accent/10 text-amber-700',
+    success: 'bg-emerald-50 text-emerald-700',
+    danger: 'bg-red-50 text-red-700',
+    warning: 'bg-amber-50 text-amber-700',
+    info: 'bg-blue-50 text-blue-700',
+    purple: 'bg-purple-50 text-purple-700',
+    gray: 'bg-gray-100 text-gray-600',
+  };
+
+  const variantClass = variantClasses[variant || 'gray'] || variantClasses.gray;
 
   return (
     <span className={`inline-flex items-center font-medium rounded-full ${sizeClasses} ${variantClass} ${className}`}>
