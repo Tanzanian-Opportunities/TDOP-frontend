@@ -29,7 +29,7 @@ export const opportunityApi = {
     return { success: true };
   },
   searchOpportunities: async (query: string): Promise<PaginatedApiResponse<Opportunity>> => {
-    const { data } = await axiosInstance.get('/opportunities/search', { params: { q: query } });
+    const { data } = await axiosInstance.get('/opportunities/search', { params: { keyword: query } });
     return data;
   },
   filterOpportunities: async (filters: OpportunityFilter): Promise<PaginatedApiResponse<Opportunity>> => {
@@ -37,19 +37,19 @@ export const opportunityApi = {
     return data;
   },
   saveOpportunity: async (id: string): Promise<ApiResponse<{ saved: boolean }>> => {
-    const { data } = await axiosInstance.post(`/opportunities/${id}/save`);
+    const { data } = await axiosInstance.post('/saved', null, { params: { oppId: id } });
     return data;
   },
   unsaveOpportunity: async (id: string): Promise<ApiResponse<{ saved: boolean }>> => {
-    const { data } = await axiosInstance.delete(`/opportunities/${id}/save`);
+    const { data } = await axiosInstance.delete('/saved', { params: { oppId: id } });
     return data;
   },
   getSavedOpportunities: async (): Promise<PaginatedApiResponse<Opportunity>> => {
-    const { data } = await axiosInstance.get('/opportunities/saved');
+    const { data } = await axiosInstance.get('/saved');
     return data;
   },
   compareOpportunities: async (ids: string[]): Promise<ApiResponse<Opportunity[]>> => {
-    const { data } = await axiosInstance.post('/opportunities/compare', { ids });
+    const { data } = await axiosInstance.post('/compare', { ids });
     return data;
   },
   getMyOpportunities: async (): Promise<PaginatedApiResponse<Opportunity>> => {

@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useOpportunities } from '@/hooks/useOpportunities';
 import { useApplications } from '@/hooks/useApplications';
 import { Card } from '@/components/ui/Card';
 import Sidebar from '@/components/layout/Sidebar';
-import { mockOpportunities, cardThumbnails } from '@/components/landing/mockData';
 import { useTranslation } from 'react-i18next';
+import { useQuery } from '@tanstack/react-query';
+import axiosInstance from '@/services/api/axiosInstance';
 import {
   Briefcase, Bookmark, FileText, Sparkles, CheckCircle2, Circle,
   MapPin, Calendar, ArrowRight, GraduationCap, BookOpen, Shield, TrendingUp, TrendingDown,
-  Zap, ExternalLink
+  Zap
 } from 'lucide-react';
 
 const metricIcons = [Briefcase, Bookmark, FileText, Sparkles];
@@ -24,40 +25,64 @@ const metricBg = [
 const SeekerDashboardPage: React.FC = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const { opportunities, isLoading } = useOpportunities();
+  const { opportunities, isLoading: oppLoading } = useOpportunities();
   const { applications } = useApplications();
 
-  const [checklist, setChecklist] = useState([true, true, true, false, false]);
-  const completion = Math.round((checklist.filter(Boolean).length / checklist.length) * 100);
+  const { data: savedData } = useQuery({
+    queryKey: ['saved-count'],
+    queryFn: async () => {
+      const { data } = await axiosInstance.get('/saved');
+      return data?.data || [];
+    },
+    refetchOnWindowFocus: false,
+  });
+
+  const { data: profileCompletion } = useQuery({
+    queryKey: ['profile-completion'],
+    queryFn: async () => {
+      const { data } = await axiosInstance.get('/profile/completion');
+      return data?.completion || 0;
+    },
+    refetchOnWindowFocus: false,
+  });
+
+  const { data: notificationsData } = useQuery({
+    queryKey: ['notifications-count'],
+    queryFn: async () => {
+      const { data } = await axiosInstance.get('/notifications');
+      return data?.data || [];
+    },
+    refetchOnWindowFocus: false,
+  });
+
+  const completion = typeof profileCompletion === 'number' ? profileCompletion : 0;
+  const savedCount = Array.isArray(savedData) ? savedData.length : 0;
+  const unreadNotifications = Array.isArray(notificationsData)
+    ? notificationsData.filter((n: any) => !n.read).length
+    : 0;
+
   const completionSteps = [
-    { key: 'completionStepPersonal', i: 0 },
-    { key: 'completionStepEducation', i: 1 },
-    { key: 'completionStepSkills', i: 2 },
-    { key: 'completionStepExperience', i: 3 },
-    { key: 'completionStepCv', i: 4 },
+    { key: 'completionStepPersonal', done: !!(user?.firstName && user?.lastName) },
+    { key: 'completionStepEducation', done: completion >= 33 },
+    { key: 'completionStepSkills', done: completion >= 50 },
+    { key: 'completionStepExperience', done: completion >= 67 },
+    { key: 'completionStepCv', done: completion >= 80 },
   ];
 
   const metrics = [
     { value: opportunities.length, label: t('dashboard.metricAvailable'), change: '+12', dir: 'up' as const },
-    { value: 0, label: t('dashboard.metricSaved'), change: '+2', dir: 'down' as const },
+    { value: savedCount, label: t('dashboard.metricSaved'), change: '+2', dir: savedCount > 0 ? ('up' as const) : ('down' as const) },
     { value: applications.length, label: t('dashboard.metricApplications'), change: '+5', dir: 'up' as const },
-    { value: opportunities.length || 12, label: t('dashboard.metricMatches'), change: '+9', dir: 'up' as const },
+    { value: unreadNotifications, label: t('dashboard.metricNotifications') || 'Notifications', change: unreadNotifications > 0 ? `+${unreadNotifications}` : '0', dir: unreadNotifications > 0 ? ('up' as const) : ('down' as const) },
   ];
 
-  const list = (opportunities.length > 0 ? opportunities : mockOpportunities).slice(0, 6);
+  const list = opportunities.slice(0, 6);
 
   const quickLinks = [
     { label: t('dashboard.quickLinkScholarships'), search: 'scholarships', icon: GraduationCap, color: 'bg-tdop-pastel-scholarships text-green-600' },
     { label: t('dashboard.quickLinkTraining'), search: 'training', icon: BookOpen, color: 'bg-tdop-pastel-training text-rose-600' },
     { label: t('dashboard.quickLinkGovernment'), search: 'government', icon: Shield, color: 'bg-tdop-pastel-tenders text-cyan-600' },
     { label: t('dashboard.quickLinkJobs'), search: 'jobs', icon: Briefcase, color: 'bg-tdop-pastel-jobs text-tdop-royalLight' },
-  ];
-
-  const trending = [
-    { label: t('dashboard.trendingRemote'), count: '2.4k', color: 'text-tdop-cyan' },
-    { label: t('dashboard.trendingGov'), count: '1.8k', color: 'text-tdop-goldDark' },
-    { label: t('dashboard.trendingScholar'), count: '1.2k', color: 'text-green-600' },
-    { label: t('dashboard.trendingAgri'), count: '890', color: 'text-amber-600' },
   ];
 
   return (
@@ -123,47 +148,47 @@ const SeekerDashboardPage: React.FC = () => {
                 {t('dashboard.viewAllRecommendations')} <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
-              {isLoading ? (
-                Array.from({ length: 3 }).map((_, i) => (
+            {oppLoading ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+                {Array.from({ length: 3 }).map((_, i) => (
                   <div key={i} className="rounded-2xl overflow-hidden">
                     <div className="skeleton h-36" />
                     <div className="p-4 space-y-2"><div className="skeleton h-4 w-32"/><div className="skeleton h-4 w-2/3"/></div>
                   </div>
-                ))
-              ) : (
-                list.map((opp, i) => (
+                ))}
+              </div>
+            ) : list.length === 0 ? (
+              <Card className="text-center py-12">
+                <Briefcase className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">{t('opportunities.noOpportunities') || 'No opportunities available yet'}</h3>
+                <p className="text-gray-500 mb-4">{t('dashboard.greetingSubtitle')}</p>
+                <Link to="/browse" className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-tdop-primary text-white text-sm font-medium">
+                  {t('opportunities.browseTitle')} <ArrowRight className="w-4 h-4" />
+                </Link>
+              </Card>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+                {list.map((opp) => (
                   <Link
                     key={opp.id}
                     to={`/opportunities/${opp.id}`}
                     className="group rounded-2xl border border-gray-100 hover:shadow-soft hover:-translate-y-1 transition-all overflow-hidden flex flex-col"
                   >
-                    <div className="relative h-36 overflow-hidden">
-                      <img
-                        src={opp.images?.[0] || cardThumbnails[i % cardThumbnails.length]}
-                        alt={opp.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        loading="lazy"
-                      />
-                      <span className="absolute top-2.5 left-2.5 px-2.5 py-1 rounded-full bg-tdop-gold text-tdop-navy text-xs font-semibold">
-                        {t(`landing.featuredBadge`)}
-                      </span>
-                    </div>
                     <div className="p-4 flex-1 flex flex-col">
                       <span className="text-xs font-semibold text-tdop-cyan uppercase">{opp.type}</span>
                       <h3 className="mt-0.5 font-semibold text-tdop-royal line-clamp-2">{opp.title}</h3>
                       <div className="mt-2 space-y-1 text-xs text-gray-500 flex-1">
-                        <p className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5 text-gray-400"/>{opp.company}</p>
-                        <p className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5 text-gray-400"/>{t('opportunities.deadline')}: {new Date(opp.applicationDeadline).toLocaleDateString()}</p>
+                        <p className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5 text-gray-400"/>{opp.location}</p>
+                        <p className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5 text-gray-400"/>{t('opportunities.deadline')}: {opp.deadline ? new Date(opp.deadline).toLocaleDateString() : 'N/A'}</p>
                       </div>
                       <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-tdop-primary group-hover:gap-2 transition-all">
                         {t('application.viewDetails')} <ArrowRight className="w-4 h-4" />
                       </span>
                     </div>
                   </Link>
-                ))
-              )}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </main>
 
@@ -176,16 +201,15 @@ const SeekerDashboardPage: React.FC = () => {
             <p className="text-xs text-gray-500 mb-4">{t('dashboard.completionSubtitle')}</p>
             <div className="space-y-2.5">
               {completionSteps.map(step => (
-                <button
+                <div
                   key={step.key}
-                  onClick={() => setChecklist(prev => { const n=[...prev]; n[step.i]=!n[step.i]; return n; })}
                   className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-left transition-colors ${
-                    checklist[step.i] ? 'bg-green-50 text-green-700' : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
+                    step.done ? 'bg-green-50 text-green-700' : 'bg-gray-50 text-gray-600'
                   }`}
                 >
-                  {checklist[step.i] ? <CheckCircle2 className="w-4 h-4 shrink-0 text-green-500"/> : <Circle className="w-4 h-4 shrink-0 text-gray-400"/>}
+                  {step.done ? <CheckCircle2 className="w-4 h-4 shrink-0 text-green-500"/> : <Circle className="w-4 h-4 shrink-0 text-gray-400"/>}
                   {t(`dashboard.${step.key}`)}
-                </button>
+                </div>
               ))}
             </div>
           </Card>
@@ -209,29 +233,6 @@ const SeekerDashboardPage: React.FC = () => {
                   </Link>
                 );
               })}
-            </div>
-          </Card>
-
-          <Card className="p-5">
-            <h3 className="font-display font-semibold text-tdop-royal mb-3">{t('dashboard.trendingTitle')}</h3>
-            <div className="space-y-2.5">
-              {trending.map(tag => (
-                <Link
-                  key={tag.label}
-                  to="/browse"
-                  className="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors group"
-                >
-                  <span className="flex items-center gap-2 text-sm text-gray-700">
-                    <span className="w-1.5 h-1.5 rounded-full bg-tdop-gold" />
-                    {tag.label}
-                  </span>
-                  <span className="flex items-center gap-1 text-xs font-semibold">
-                    <TrendingUp className={`w-3.5 h-3.5 ${tag.color}`} />
-                    <span className={tag.color}>{tag.count}</span>
-                    <ExternalLink className="w-3 h-3 text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </span>
-                </Link>
-              ))}
             </div>
           </Card>
         </aside>

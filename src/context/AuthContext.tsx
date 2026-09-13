@@ -8,6 +8,7 @@ interface AuthContextType extends AuthState {
   logout: () => Promise<void>;
   refreshSession: () => Promise<void>;
   updateUser: (user: Partial<User>) => void;
+  refreshUser: () => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -71,6 +72,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setState(prev => ({ ...prev, tokens }));
   }, []);
 
+  const refreshUser = useCallback(async () => {
+    try {
+      const response = await authApi.getMe();
+      if (response?.data) {
+        const backendUser = response.data as any;
+        const fullName = (backendUser.fullName || backendUser.email || '').trim();
+        const [firstName = '', ...rest] = fullName.split(/\s+/);
+        const user: User = {
+          id: String(backendUser.id || backendUser.email),
+          email: backendUser.email || '',
+          firstName,
+          lastName: rest.join(' ') || '',
+          role: (backendUser.role || 'seeker').toLowerCase() as any,
+          isActive: backendUser.enabled ?? true,
+          isVerified: backendUser.verified ?? false,
+          createdAt: backendUser.createdAt || new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
+        localStorage.setItem('tdop-user', JSON.stringify(user));
+        setState(prev => ({ ...prev, user }));
+      }
+    } catch {
+      // silently fail - user data from login is still valid
+    }
+  }, []);
+
   const updateUser = useCallback((user: Partial<User>) => {
     setState(prev => {
       if (!prev.user) return prev;
@@ -81,7 +108,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   return (
-    <AuthContext.Provider value={{ ...state, login, register, logout, refreshSession, updateUser }}>
+    <AuthContext.Provider value={{ ...state, login, register, logout, refreshSession, updateUser, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );

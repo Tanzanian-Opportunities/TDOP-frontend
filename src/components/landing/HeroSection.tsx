@@ -112,11 +112,11 @@ const HeroSection: React.FC = () => {
             <div className="col-span-2 flex items-center justify-around gap-3 bg-white/10 backdrop-blur border border-white/20 rounded-2xl p-4">
               <div className="flex items-center gap-2 text-white text-sm">
                 <Building2 className="w-5 h-5 text-tdop-gold" />
-                100+ {t('landing.statInstitutions')}
+                {t('landing.statInstitutions')}
               </div>
               <div className="flex items-center gap-2 text-white text-sm">
                 <Users className="w-5 h-5 text-tdop-cyan" />
-                50,000+ {t('landing.statUsers')}
+                {t('landing.statUsers')}
               </div>
               <div className="flex items-center gap-2 text-white text-sm">
                 <Sparkles className="w-5 h-5 text-tdop-gold" />

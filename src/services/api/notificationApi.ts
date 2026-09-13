@@ -1,15 +1,14 @@
 import axiosInstance from './axiosInstance';
 import { NotificationData } from '@/context/NotificationContext';
-import { PaginatedApiResponse } from '@/types/opportunity';
 import { ApiResponse } from '@/types/api';
 
 export const notificationApi = {
-  getNotifications: async (params?: { page?: number; limit?: number }): Promise<PaginatedApiResponse<NotificationData>> => {
+  getNotifications: async (params?: { page?: number; limit?: number }): Promise<ApiResponse<NotificationData[]>> => {
     const { data } = await axiosInstance.get('/notifications', { params });
     return data;
   },
   markAsRead: async (id: string): Promise<ApiResponse<unknown>> => {
-    const { data } = await axiosInstance.post(`/notifications/${id}/read`);
+    const { data } = await axiosInstance.put(`/notifications/${id}/read`);
     return data;
   },
   markAllAsRead: async (): Promise<ApiResponse<unknown>> => {

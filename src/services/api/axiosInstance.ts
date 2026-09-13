@@ -2,7 +2,7 @@ import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { AuthTokens } from '@/types/user';
 
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8080/api/v1',
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8081/api/v1',
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
@@ -48,15 +48,23 @@ axiosInstance.interceptors.response.use(
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
+      const storedTokens = getStoredTokens();
+      if (!storedTokens?.refreshToken) {
+        localStorage.removeItem('tdop-user');
+        localStorage.removeItem('tdop-tokens');
+        window.location.href = '/login';
+        return Promise.reject(error);
+      }
+
       if (!refreshPromise) {
         refreshPromise = (async () => {
           try {
             const res = await axios.post<any>(
-              `${import.meta.env.VITE_API_URL}/auth/refresh`,
-              {},
+              `${import.meta.env.VITE_API_URL || 'http://localhost:8081/api/v1'}/auth/refresh`,
+              { email: '' },
               {
                 headers: {
-                  Authorization: `Bearer ${getStoredTokens()?.refreshToken}`,
+                  Authorization: `Bearer ${storedTokens.refreshToken}`,
                 },
               }
             );

@@ -3,12 +3,12 @@ import { SeekerProfile, OrganizationProfile, ProfileUpdateData, OrganizationUpda
 import { ApiResponse } from '@/types/api';
 
 export const profileApi = {
-  getProfile: async (): Promise<ApiResponse<{ seekerProfile?: SeekerProfile; organizationProfile?: OrganizationProfile }>> => {
+  getProfile: async (): Promise<ApiResponse<SeekerProfile>> => {
     const { data } = await axiosInstance.get('/profile');
     return data;
   },
   getSeekerProfile: async (): Promise<ApiResponse<SeekerProfile>> => {
-    const { data } = await axiosInstance.get('/profile/seeker');
+    const { data } = await axiosInstance.get('/profile');
     return data;
   },
   getOrganizationProfile: async (): Promise<ApiResponse<OrganizationProfile>> => {
@@ -16,7 +16,7 @@ export const profileApi = {
     return data;
   },
   updateProfile: async (data: ProfileUpdateData): Promise<ApiResponse<SeekerProfile>> => {
-    const { data: response } = await axiosInstance.put('/profile/seeker', data);
+    const { data: response } = await axiosInstance.put('/profile', data);
     return response;
   },
   updateOrganizationProfile: async (data: OrganizationUpdateData): Promise<ApiResponse<OrganizationProfile>> => {
@@ -39,12 +39,28 @@ export const profileApi = {
     const { data } = await axiosInstance.delete(`/profile/education/${educationId}`);
     return data;
   },
-  addInterest: async (data: { category: string; subcategory: string }): Promise<ApiResponse<unknown>> => {
+  addInterest: async (data: { category: string; description: string }): Promise<ApiResponse<unknown>> => {
     const { data: response } = await axiosInstance.post('/profile/interests', data);
     return response;
   },
   removeInterest: async (interestId: string): Promise<ApiResponse<unknown>> => {
     const { data } = await axiosInstance.delete(`/profile/interests/${interestId}`);
+    return data;
+  },
+  addExperience: async (data: { company: string; title: string; location?: string; startDate?: string; endDate?: string; isCurrent?: boolean; description?: string }): Promise<ApiResponse<unknown>> => {
+    const { data: response } = await axiosInstance.post('/profile/experience', data);
+    return response;
+  },
+  removeExperience: async (experienceId: string): Promise<ApiResponse<unknown>> => {
+    const { data } = await axiosInstance.delete(`/profile/experience/${experienceId}`);
+    return data;
+  },
+  addCareerGoal: async (data: { title: string; description?: string; targetIndustry?: string; targetRole?: string; timeline?: string }): Promise<ApiResponse<unknown>> => {
+    const { data: response } = await axiosInstance.post('/profile/career-goals', data);
+    return response;
+  },
+  removeCareerGoal: async (goalId: string): Promise<ApiResponse<unknown>> => {
+    const { data } = await axiosInstance.delete(`/profile/career-goals/${goalId}`);
     return data;
   },
   uploadAvatar: async (file: File): Promise<ApiResponse<{ avatar: string }>> => {

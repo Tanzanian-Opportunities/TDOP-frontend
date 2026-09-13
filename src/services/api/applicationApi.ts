@@ -4,7 +4,9 @@ import { ApiResponse } from '@/types/api';
 
 export const applicationApi = {
   apply: async (data: ApplicationCreate): Promise<ApiResponse<Application>> => {
-    const { data: response } = await axiosInstance.post('/applications', data);
+    const { data: response } = await axiosInstance.post('/applications', null, {
+      params: { oppId: data.opportunityId },
+    });
     return response;
   },
   getApplications: async (params?: { page?: number; limit?: number }): Promise<ApplicationsList> => {
@@ -24,7 +26,7 @@ export const applicationApi = {
     return data;
   },
   getMyApplications: async (): Promise<ApplicationsList> => {
-    const { data } = await axiosInstance.get('/applications/my');
+    const { data } = await axiosInstance.get('/applications/me');
     return data;
   },
   getApplicants: async (opportunityId: string): Promise<ApiResponse<Application[]>> => {

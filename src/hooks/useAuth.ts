@@ -4,7 +4,7 @@ import { authApi } from '@/services/api/authApi';
 import { useNotificationContext } from '@/context/NotificationContext';
 
 export const useAuth = () => {
-  const { user, tokens, isAuthenticated, isLoading, login, register, logout, refreshSession, updateUser } = useAuthContext();
+  const { user, tokens, isAuthenticated, isLoading, login, register, logout, refreshSession, updateUser, refreshUser } = useAuthContext();
   const queryClient = useQueryClient();
   const { addNotification } = useNotificationContext();
 
@@ -40,7 +40,10 @@ export const useAuth = () => {
 
   const profileQuery = useQuery({
     queryKey: ['profile'],
-    queryFn: authApi.getMe,
+    queryFn: async () => {
+      const response = await authApi.getMe();
+      return response?.data || null;
+    },
     enabled: isAuthenticated,
     refetchOnWindowFocus: false,
   });
@@ -58,6 +61,7 @@ export const useAuth = () => {
     logout: logoutMutation.mutateAsync,
     refreshSession,
     updateUser,
+    refreshUser,
     profileLoading: profileQuery.isLoading,
     profileData: profileQuery.data,
   };
