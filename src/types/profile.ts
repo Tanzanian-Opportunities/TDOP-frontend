@@ -43,6 +43,8 @@ export interface SeekerProfile {
   githubUrl?: string;
   websiteUrl?: string;
   avatar?: string;
+  profileVisibility?: 'PUBLIC' | 'ORGANIZATIONS_ONLY' | 'PRIVATE';
+  notificationPreference?: 'ALL' | 'IMPORTANT_ONLY' | 'NONE';
   createdAt: string;
   updatedAt: string;
 }

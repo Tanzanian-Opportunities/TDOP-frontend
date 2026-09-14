@@ -69,4 +69,12 @@ export const profileApi = {
     const { data } = await axiosInstance.post('/profile/avatar', formData);
     return data;
   },
+  updateVisibility: async (visibility: string): Promise<ApiResponse<unknown>> => {
+    const { data } = await axiosInstance.put('/profile/visibility', { visibility });
+    return data;
+  },
+  updateNotificationPreference: async (preference: string): Promise<ApiResponse<unknown>> => {
+    const { data } = await axiosInstance.put('/profile/notification-preference', { preference });
+    return data;
+  },
 };
