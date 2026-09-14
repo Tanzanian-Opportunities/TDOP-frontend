@@ -53,7 +53,7 @@ const SeekerRecommendationsPage: React.FC = () => {
                 <h3 className="mt-1 font-display font-semibold text-tdop-navy line-clamp-2">{opp.title}</h3>
                 <div className="mt-3 space-y-1.5 text-sm text-gray-500 flex-1">
                   <p className="flex items-center gap-1.5"><MapPin className="w-4 h-4 text-gray-400" />{opp.location}</p>
-                  <p className="flex items-center gap-1.5"><Calendar className="w-4 h-4 text-gray-400" />{t('opportunities.deadline')}: {opp.deadline ? new Date(opp.deadline).toLocaleDateString() : 'N/A'}</p>
+                  <p className="flex items-center gap-1.5"><Calendar className="w-4 h-4 text-gray-400" />{t('opportunities.deadline')}: {opp.applicationDeadline ? new Date(opp.applicationDeadline).toLocaleDateString() : 'N/A'}</p>
                 </div>
                 <span className="mt-4 inline-flex items-center gap-1 text-tdop-primary text-sm font-medium group-hover:gap-2 transition-all">
                   {t('application.viewDetails')} <ArrowRight className="w-4 h-4" />

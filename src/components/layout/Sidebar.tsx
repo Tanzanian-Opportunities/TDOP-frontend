@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import {
 LayoutDashboard, Briefcase, Bookmark, FileText, Sparkles, FolderOpen, Building2,
 User, Settings, BarChart3, Users, Shield, Flag, UserCog, ChevronLeft, ChevronRight,
-CheckCircle, Eye, Clock, UsersRound, Wrench
+CheckCircle, Eye, Clock, UsersRound, Wrench, Bell
 } from 'lucide-react';
 import { useApplications } from '@/hooks/useApplications';
 import { useNotifications } from '@/hooks/useNotifications';
@@ -35,6 +35,7 @@ const seekerLinks: SidebarLink[] = [
 { to: '/applications', label: t('application.title'), icon: <FileText className="w-5 h-5" />, count: applications.length },
 { to: '/recommendations', label: t('nav.recommendations'), icon: <Sparkles className="w-5 h-5" /> },
 { to: '/documents', label: t('nav.documents'), icon: <FolderOpen className="w-5 h-5" /> },
+{ to: '/notifications', label: t('nav.notifications', 'Notifications'), icon: <Bell className="w-5 h-5" />, count: unreadCount },
 { to: '/profile', label: t('profile.title'), icon: <User className="w-5 h-5" /> },
 ];
 

@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import MobileMenu from './MobileMenu';
 import Logo from './Logo';
 import { Sun, Moon, Bell, Menu, ChevronDown, Languages } from 'lucide-react';
+import { Link as RouterLink } from 'react-router-dom';
 
 const Navbar: React.FC = () => {
  const { isAuthenticated, user, logout } = useAuth();
@@ -95,10 +96,12 @@ const Navbar: React.FC = () => {
  {isDark ? <Sun className="w-5 h-5 text-tdop-accent" /> : <Moon className="w-5 h-5 text-gray-600" />}
  </button>
 
- {isAuthenticated && (
+{isAuthenticated && (
  <div className="relative">
- <button
- className="p-2 rounded-lg hover:bg-gray-100 relative transition-colors"
+ <Link
+ to="/notifications"
+ className="p-2 rounded-lg hover:bg-gray-100 relative transition-colors block"
+ aria-label="Notifications"
  >
  <Bell className="w-5 h-5 text-gray-600" />
  {unreadCount > 0 && (
@@ -106,9 +109,9 @@ const Navbar: React.FC = () => {
  {unreadCount}
  </span>
  )}
- </button>
+ </Link>
  </div>
- )}
+)}
 
  {isAuthenticated ? (
  <div className="relative">

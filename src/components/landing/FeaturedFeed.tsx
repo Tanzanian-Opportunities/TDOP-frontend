@@ -27,12 +27,12 @@ const FeaturedCard: React.FC<{ opp: Opportunity; index: number }> = ({ opp, inde
           </p>
           <p className="flex items-center gap-1.5">
             <Calendar className="w-4 h-4 text-gray-400" />
-            {t('opportunities.deadline')}: {opp.deadline ? new Date(opp.deadline).toLocaleDateString() : 'N/A'}
+            {t('opportunities.deadline')}: {opp.applicationDeadline ? new Date(opp.applicationDeadline).toLocaleDateString() : 'N/A'}
           </p>
         </div>
         <div className="mt-4 flex items-center justify-between pt-4 border-t border-gray-100">
           <span className="text-sm font-semibold text-tdop-navy">
-            {opp.salaryRange || t('app.empty')}
+            {(opp.salaryMin || opp.salaryMax) ? `${opp.salaryMin || ''} - ${opp.salaryMax || ''}` : t('app.empty')}
           </span>
           <span className="inline-flex items-center gap-1 text-tdop-primary text-sm font-medium group-hover:gap-2 transition-all">
             {t('application.viewDetails')}

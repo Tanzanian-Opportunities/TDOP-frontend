@@ -10,7 +10,8 @@ import { useQuery } from '@tanstack/react-query';
 import axiosInstance from '@/services/api/axiosInstance';
 import {
   Briefcase, Bookmark, FileText, Sparkles, CheckCircle2, Circle,
-  MapPin, Calendar, ArrowRight, GraduationCap, BookOpen, Shield, TrendingUp, Zap
+  MapPin, Calendar, ArrowRight, GraduationCap, BookOpen, Shield, TrendingUp, Zap,
+  Clock, AlertTriangle
 } from 'lucide-react';
 
 const metricIcons = [Briefcase, Bookmark, FileText, Sparkles];
@@ -76,6 +77,16 @@ const SeekerDashboardPage: React.FC = () => {
   ];
 
   const list = opportunities.slice(0, 6);
+
+  const upcomingDeadlines = opportunities
+    .filter(opp => {
+      if (!opp.applicationDeadline) return false;
+      const d = new Date(opp.applicationDeadline);
+      const now = new Date();
+      return d > now && (d.getTime() - now.getTime()) <= 30 * 24 * 60 * 60 * 1000;
+    })
+    .sort((a, b) => new Date(a.applicationDeadline).getTime() - new Date(b.applicationDeadline).getTime())
+    .slice(0, 5);
 
   const quickLinks = [
     { label: t('dashboard.quickLinkScholarships'), search: 'scholarships', icon: GraduationCap, color: 'bg-emerald-50 text-tdop-secondary' },
@@ -174,7 +185,7 @@ const SeekerDashboardPage: React.FC = () => {
                       <h3 className="mt-0.5 font-semibold text-tdop-navy line-clamp-2">{opp.title}</h3>
                       <div className="mt-2 space-y-1 text-xs text-gray-500 flex-1">
                         <p className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5 text-gray-400"/>{opp.location}</p>
-                        <p className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5 text-gray-400"/>{t('opportunities.deadline')}: {opp.deadline ? new Date(opp.deadline).toLocaleDateString() : 'N/A'}</p>
+                        <p className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5 text-gray-400"/>{t('opportunities.deadline')}: {opp.applicationDeadline ? new Date(opp.applicationDeadline).toLocaleDateString() : 'N/A'}</p>
                       </div>
                       <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-tdop-primary group-hover:gap-2 transition-all">
                         {t('application.viewDetails')} <ArrowRight className="w-4 h-4" />
@@ -185,6 +196,52 @@ const SeekerDashboardPage: React.FC = () => {
               </div>
             )}
           </div>
+
+          {upcomingDeadlines.length > 0 && (
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="font-display text-lg font-semibold text-tdop-navy flex items-center gap-2">
+                  <Clock className="w-5 h-5 text-tdop-accent" />
+                  {t('dashboard.upcomingDeadlines', 'Upcoming Deadlines')}
+                </h2>
+              </div>
+              <div className="space-y-2">
+                {upcomingDeadlines.map(opp => {
+                  const daysLeft = Math.ceil((new Date(opp.applicationDeadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+                  const isUrgent = daysLeft <= 3;
+                  return (
+                    <Link
+                      key={opp.id}
+                      to={`/opportunities/${opp.id}`}
+                      className={`flex items-center justify-between p-4 rounded-xl border transition-all hover:shadow-soft ${
+                        isUrgent ? 'border-amber-200 bg-amber-50/50' : 'border-gray-100 bg-white'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
+                          isUrgent ? 'bg-amber-100 text-amber-600' : 'bg-tdop-primary/10 text-tdop-primary'
+                        }`}>
+                          {isUrgent ? <AlertTriangle className="w-5 h-5" /> : <Calendar className="w-5 h-5" />}
+                        </div>
+                        <div className="min-w-0">
+                          <h4 className="font-semibold text-sm text-tdop-navy truncate">{opp.title}</h4>
+                          <p className="text-xs text-gray-500">{opp.type} · {opp.location}</p>
+                        </div>
+                      </div>
+                      <div className="text-right shrink-0 ml-3">
+                        <p className={`text-sm font-bold ${isUrgent ? 'text-amber-600' : 'text-tdop-primary'}`}>
+                          {daysLeft} {daysLeft === 1 ? 'day' : 'days'}
+                        </p>
+                        <p className="text-xs text-gray-400">
+                          {new Date(opp.applicationDeadline).toLocaleDateString()}
+                        </p>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </main>
 
         <aside className="hidden xl:block w-80 shrink-0 space-y-6">

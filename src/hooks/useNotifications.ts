@@ -47,7 +47,7 @@ export const useNotifications = () => {
   return {
     notifications,
     unreadCount,
-    total: data?.pagination?.total || 0,
+    total: (data as any)?.pagination?.total || 0,
     isLoading,
     refetch,
     markAsRead,
