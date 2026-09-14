@@ -1,32 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
-import { UserProfile } from '@/components/profile/UserProfile';
 import { ProfileEdit } from '@/components/profile/ProfileEdit';
-import { Edit3, Shield, MapPin, Calendar } from 'lucide-react';
+import { profileApi } from '@/services/api/profileApi';
+import { Edit3, Shield, MapPin, Calendar, Building2, Globe, Users, Briefcase } from 'lucide-react';
 
 const OrganizationProfilePage: React.FC = () => {
   const { t } = useTranslation();
   const [isEditing, setIsEditing] = useState(false);
+  const [profile, setProfile] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-  const mockProfile = {
-    id: '1',
-    userId: '1',
-    organizationName: 'Tech Corp',
-    slug: 'tech-corp',
-    description: 'We are a leading technology company.',
-    mission: 'Empowering developers worldwide.',
-    location: 'San Francisco, CA',
-    isVerified: true,
-    verificationStatus: 'verified' as const,
-    industry: 'Technology',
-    companySize: '500+',
-    foundedYear: 2010,
-    createdAt: '2020-01-01',
-    updatedAt: '2024-01-01',
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
+  const fetchProfile = async () => {
+    try {
+      const { data } = await profileApi.getOrganizationProfile();
+      setProfile(data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const handleSave = () => {
+    setIsEditing(false);
+    fetchProfile();
+  };
+
+  if (loading) {
+    return (
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="animate-pulse space-y-4">
+          <div className="h-10 bg-gray-200 rounded w-1/3" />
+          <div className="h-64 bg-gray-200 rounded-2xl" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">
@@ -41,18 +57,85 @@ const OrganizationProfilePage: React.FC = () => {
       {isEditing ? (
         <ProfileEdit />
       ) : (
-        <UserProfile profile={mockProfile as any} isOrganization={true} />
-      )}
+        <>
+          {/* Profile Header */}
+          {profile && (
+            <Card>
+              <div className="space-y-4">
+                <div className="flex items-start gap-4">
+                  {profile.logo ? (
+                    <img src={profile.logo} alt={profile.organizationName} className="w-16 h-16 rounded-xl object-cover" />
+                  ) : (
+                    <div className="w-16 h-16 rounded-xl bg-tdop-primary/10 text-tdop-primary flex items-center justify-center">
+                      <Building2 className="w-8 h-8" />
+                    </div>
+                  )}
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3">
+                      <h2 className="text-xl font-bold text-tdop-navy">{profile.organizationName}</h2>
+                      {profile.isVerified && <Badge variant="success">Verified</Badge>}
+                    </div>
+                    <p className="text-gray-500 mt-1">{profile.description || 'No description yet'}</p>
+                  </div>
+                </div>
 
-      <Card>
-        <h2 className="text-lg font-semibold text-tdop-navy mb-4">{t('organization.verification')}</h2>
-        <div className="space-y-3">
-          <div className="flex items-center justify-between p-3 bg-gray-50 bg-gray-50 rounded-lg">
-            <span className="text-gray-600">{t('organization.verifiedStatus', { status: mockProfile.verificationStatus })}</span>
-            {mockProfile.isVerified && <Badge variant="verified">Verified</Badge>}
-          </div>
-        </div>
-      </Card>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  {profile.location && (
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                      <MapPin className="w-4 h-4 text-gray-400" />
+                      {profile.location}
+                    </div>
+                  )}
+                  {profile.industry && (
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                      <Briefcase className="w-4 h-4 text-gray-400" />
+                      {profile.industry}
+                    </div>
+                  )}
+                  {profile.companySize && (
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                      <Users className="w-4 h-4 text-gray-400" />
+                      {profile.companySize}
+                    </div>
+                  )}
+                  {profile.foundedYear && (
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                      <Calendar className="w-4 h-4 text-gray-400" />
+                      Est. {profile.foundedYear}
+                    </div>
+                  )}
+                </div>
+
+                {profile.mission && (
+                  <div className="p-4 bg-tdop-light rounded-xl">
+                    <h3 className="text-sm font-semibold text-tdop-navy mb-1">Mission</h3>
+                    <p className="text-sm text-gray-600">{profile.mission}</p>
+                  </div>
+                )}
+              </div>
+            </Card>
+          )}
+
+          {/* Verification Status */}
+          <Card>
+            <h2 className="text-lg font-semibold text-tdop-navy mb-4">{t('organization.verification')}</h2>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between p-3 bg-tdop-light rounded-xl">
+                <span className="text-gray-600">Status</span>
+                <Badge variant={profile?.isVerified ? 'success' : profile?.verificationStatus === 'rejected' ? 'danger' : 'warning'}>
+                  {profile?.verificationStatus || 'pending'}
+                </Badge>
+              </div>
+              {profile?.verifiedAt && (
+                <div className="flex items-center justify-between p-3 bg-tdop-light rounded-xl">
+                  <span className="text-gray-600">Verified on</span>
+                  <span className="text-sm text-tdop-navy">{new Date(profile.verifiedAt).toLocaleDateString()}</span>
+                </div>
+              )}
+            </div>
+          </Card>
+        </>
+      )}
     </div>
   );
 };

@@ -3,7 +3,7 @@ import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { adminApi } from '@/services/api/adminApi';
-import { Shield, Settings, Users, RefreshCw } from 'lucide-react';
+import { Shield, Settings, Users, RefreshCw, Search } from 'lucide-react';
 
 interface Config {
 id: number;

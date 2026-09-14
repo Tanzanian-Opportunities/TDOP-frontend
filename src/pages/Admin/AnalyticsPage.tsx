@@ -1,98 +1,206 @@
-import React from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/Card';
-import { Button } from '@/components/ui/Button';
+import { Badge } from '@/components/ui/Badge';
 import { adminApi } from '@/services/api/adminApi';
-import { formatDate } from '@/utils/formatDate';
-import { BarChart3, Calendar, TrendingUp, Users, Briefcase, FileText } from 'lucide-react';
+import { DashboardSection } from '@/components/dashboard/DashboardSection';
+import { StatCard } from '@/components/dashboard/StatCard';
+import { EmptyState } from '@/components/dashboard/EmptyState';
+import {
+  BarChart3, Calendar, TrendingUp, Users, Briefcase, FileText,
+  RefreshCw, Building2, CheckCircle, AlertTriangle,
+} from 'lucide-react';
+
+interface AnalyticsData {
+  users?: { total?: number; active?: number; newThisWeek?: number };
+  opportunities?: { total?: number; active?: number; newThisWeek?: number };
+  applications?: { total?: number; newThisWeek?: number };
+  organizations?: { total?: number; verified?: number };
+}
 
 const AnalyticsPage: React.FC = () => {
- const { t } = useTranslation();
- const [dateRange, setDateRange] = React.useState({ from: '', to: '' });
+  const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
+  const [dashboardStats, setDashboardStats] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo, setDateTo] = useState('');
 
- const mockAnalytics = {
- users: { total: 1250, active: 980 },
- opportunities: { total: 340, newThisWeek: 12 },
- applications: { total: 2100, thisWeek: 156 },
- };
+  useEffect(() => {
+    fetchData();
+  }, []);
 
- return (
- <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">
- <div className="flex items-center justify-between">
- <h1 className="text-3xl font-bold text-tdop-navy flex items-center gap-2">
- <BarChart3 className="w-8 h-8 text-tdop-primary" />
- {t('admin.analytics')}
- </h1>
- <div className="flex items-center gap-2">
- <Calendar className="w-5 h-5 text-gray-400" />
- <input
- type="date"
- value={dateRange.from}
- onChange={(e) => setDateRange(prev => ({ ...prev, from: e.target.value }))}
- className="px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm text-tdop-navy"
- />
- <span className="text-gray-400">to</span>
- <input
- type="date"
- value={dateRange.to}
- onChange={(e) => setDateRange(prev => ({ ...prev, to: e.target.value }))}
- className="px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm text-tdop-navy"
- />
- </div>
- </div>
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const [analyticsData, statsData] = await Promise.all([
+        adminApi.getAnalytics().catch(() => null),
+        adminApi.getDashboardStats().catch(() => null),
+      ]);
+      setAnalytics(analyticsData);
+      setDashboardStats(statsData);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
- <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
- <Card>
- <div className="flex items-center gap-4">
- <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center">
- <Users className="w-6 h-6" />
- </div>
- <div>
- <p className="text-2xl font-bold text-tdop-navy">{mockAnalytics.users.total}</p>
- <p className="text-sm text-gray-500">{t('admin.totalUsers')}</p>
- </div>
- </div>
- </Card>
- <Card>
- <div className="flex items-center gap-4">
- <div className="w-12 h-12 bg-green-100 text-green-600 rounded-xl flex items-center justify-center">
- <TrendingUp className="w-6 h-6" />
- </div>
- <div>
- <p className="text-2xl font-bold text-tdop-navy">{mockAnalytics.opportunities.total}</p>
- <p className="text-sm text-gray-500">{t('admin.totalOpportunities')}</p>
- </div>
- </div>
- </Card>
- <Card>
- <div className="flex items-center gap-4">
- <div className="w-12 h-12 bg-purple-100 text-purple-600 rounded-xl flex items-center justify-center">
- <FileText className="w-6 h-6" />
- </div>
- <div>
- <p className="text-2xl font-bold text-tdop-navy">{mockAnalytics.applications.total}</p>
- <p className="text-sm text-gray-500">{t('admin.totalApplications')}</p>
- </div>
- </div>
- </Card>
- </div>
+  const handleDateFilter = async () => {
+    if (!dateFrom && !dateTo) return fetchData();
+    try {
+      setLoading(true);
+      const data = await adminApi.getAnalytics({
+        dateFrom: dateFrom || undefined,
+        dateTo: dateTo || undefined,
+      });
+      setAnalytics(data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
- <Card padding={false}>
- <div className="p-6 border-b border-gray-100">
- <h2 className="text-lg font-semibold text-tdop-navy">{t('admin.dateRange')}</h2>
- </div>
- <div className="p-6">
- <div className="h-64 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400">
- <div className="text-center">
- <BarChart3 className="w-12 h-12 mx-auto mb-2" />
- <p>{t('admin.chartPlaceholder')}</p>
- <p className="text-xs mt-1">{t('admin.topOpportunities')}</p>
- </div>
- </div>
- </div>
- </Card>
- </div>
- );
+  if (loading && !analytics && !dashboardStats) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="animate-pulse space-y-6">
+          <div className="h-10 bg-gray-200 rounded w-1/3" />
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {[1, 2, 3, 4].map(i => <div key={i} className="h-24 bg-gray-200 rounded-2xl" />)}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const statCards = [
+    {
+      label: 'Total users',
+      value: dashboardStats?.totalUsers || analytics?.users?.total || 0,
+      icon: <Users className="w-5 h-5" />,
+      color: 'bg-tdop-primary/10 text-tdop-primary',
+      sub: analytics?.users?.active ? `${analytics.users.active} active` : undefined,
+    },
+    {
+      label: 'Organizations',
+      value: dashboardStats?.totalOrganizations || analytics?.organizations?.total || 0,
+      icon: <Building2 className="w-5 h-5" />,
+      color: 'bg-purple-50 text-purple-600',
+      sub: analytics?.organizations?.verified ? `${analytics.organizations.verified} verified` : undefined,
+    },
+    {
+      label: 'Opportunities',
+      value: dashboardStats?.totalOpportunities || analytics?.opportunities?.total || 0,
+      icon: <Briefcase className="w-5 h-5" />,
+      color: 'bg-emerald-50 text-tdop-secondary',
+      sub: analytics?.opportunities?.newThisWeek ? `${analytics.opportunities.newThisWeek} new this week` : undefined,
+    },
+    {
+      label: 'Applications',
+      value: dashboardStats?.totalApplications || analytics?.applications?.total || 0,
+      icon: <FileText className="w-5 h-5" />,
+      color: 'bg-amber-50 text-amber-600',
+      sub: analytics?.applications?.newThisWeek ? `${analytics.applications.newThisWeek} new this week` : undefined,
+    },
+  ];
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-tdop-navy flex items-center gap-2">
+            <BarChart3 className="w-8 h-8 text-tdop-primary" />
+            Analytics
+          </h1>
+          <p className="text-gray-500 mt-1">Platform performance and growth metrics</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-xl px-3 py-2">
+            <Calendar className="w-4 h-4 text-gray-400" />
+            <input
+              type="date"
+              value={dateFrom}
+              onChange={(e) => setDateFrom(e.target.value)}
+              className="text-sm text-tdop-navy border-none outline-none"
+            />
+            <span className="text-gray-400">to</span>
+            <input
+              type="date"
+              value={dateTo}
+              onChange={(e) => setDateTo(e.target.value)}
+              className="text-sm text-tdop-navy border-none outline-none"
+            />
+          </div>
+          <button
+            onClick={handleDateFilter}
+            className="px-3 py-2 bg-tdop-primary text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition-colors"
+          >
+            Filter
+          </button>
+          <button
+            onClick={fetchData}
+            className="p-2 border border-gray-200 rounded-xl text-gray-500 hover:bg-gray-50 transition-colors"
+          >
+            <RefreshCw className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+
+      {/* Stat Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {statCards.map(stat => (
+          <StatCard
+            key={stat.label}
+            value={stat.value}
+            label={stat.label}
+            icon={stat.icon}
+            color={stat.color}
+            trend="neutral"
+          />
+        ))}
+      </div>
+
+      {/* Summary Cards */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <DashboardSection title="User growth" icon={<Users className="w-4 h-4" />}>
+          <div className="p-6 space-y-4">
+            <div className="flex items-center justify-between p-3 bg-tdop-light rounded-xl">
+              <span className="text-sm text-gray-600">Total registered</span>
+              <span className="font-bold text-tdop-navy">{statCards[0].value}</span>
+            </div>
+            <div className="flex items-center justify-between p-3 bg-tdop-light rounded-xl">
+              <span className="text-sm text-gray-600">Active users</span>
+              <span className="font-bold text-tdop-navy">{analytics?.users?.active || '—'}</span>
+            </div>
+            <div className="flex items-center justify-between p-3 bg-tdop-light rounded-xl">
+              <span className="text-sm text-gray-600">New this week</span>
+              <span className="font-bold text-tdop-secondary">{analytics?.users?.newThisWeek || '—'}</span>
+            </div>
+          </div>
+        </DashboardSection>
+
+        <DashboardSection title="Platform activity" icon={<TrendingUp className="w-4 h-4" />}>
+          <div className="p-6 space-y-4">
+            <div className="flex items-center justify-between p-3 bg-tdop-light rounded-xl">
+              <span className="text-sm text-gray-600">Active opportunities</span>
+              <span className="font-bold text-tdop-navy">{dashboardStats?.activeOpportunities || '—'}</span>
+            </div>
+            <div className="flex items-center justify-between p-3 bg-tdop-light rounded-xl">
+              <span className="text-sm text-gray-600">Verified organizations</span>
+              <span className="font-bold text-tdop-secondary">{dashboardStats?.verifiedOrganizations || '—'}</span>
+            </div>
+            <div className="flex items-center justify-between p-3 bg-tdop-light rounded-xl">
+              <span className="text-sm text-gray-600">Pending moderation</span>
+              <span className={`font-bold ${dashboardStats?.pendingModeration ? 'text-amber-600' : 'text-tdop-secondary'}`}>
+                {dashboardStats?.pendingModeration || 0}
+              </span>
+            </div>
+          </div>
+        </DashboardSection>
+      </div>
+    </div>
+  );
 };
 
 export default AnalyticsPage;

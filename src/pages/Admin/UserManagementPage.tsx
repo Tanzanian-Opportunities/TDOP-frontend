@@ -3,7 +3,7 @@ import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { adminApi } from '@/services/api/adminApi';
-import { Users, Shield, Ban, RefreshCw } from 'lucide-react';
+import { Users, Shield, Ban, RefreshCw, Search } from 'lucide-react';
 
 interface User {
 id: number;
@@ -89,28 +89,34 @@ return (
 
 return (
 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">
-<div className="flex items-center justify-between">
+<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<div>
 <h1 className="text-3xl font-bold text-tdop-navy flex items-center gap-2">
 <Users className="w-8 h-8 text-tdop-primary" />
 User Management
 </h1>
+<p className="text-gray-500 mt-1">Manage platform users and roles</p>
+</div>
 <Button onClick={fetchUsers} variant="outline" size="sm">
 <RefreshCw className="w-4 h-4 mr-1" /> Refresh
 </Button>
 </div>
 
-<div className="flex flex-col sm:flex-row items-center gap-4">
+<div className="flex flex-col sm:flex-row items-center gap-3">
+<div className="relative flex-1 max-w-sm">
+<Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
 <input
 type="text"
 placeholder="Search users..."
 value={searchQuery}
 onChange={(e) => setSearchQuery(e.target.value)}
-className="flex-1 px-4 py-2 border rounded-lg"
+className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm text-tdop-navy placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-tdop-primary/20 focus:border-tdop-primary"
 />
+</div>
 <select
 value={filterRole}
 onChange={(e) => setFilterRole(e.target.value)}
-className="px-4 py-2 border rounded-lg"
+className="px-3 py-2.5 rounded-xl border border-gray-200 bg-white text-sm text-tdop-navy focus:outline-none focus:ring-2 focus:ring-tdop-primary/20 focus:border-tdop-primary"
 >
 <option value="">All Roles</option>
 <option value="SEEKER">Seeker</option>
