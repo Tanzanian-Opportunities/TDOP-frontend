@@ -1,6 +1,5 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  darkMode: 'class',
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -12,17 +11,7 @@ export default {
           primary: '#2563EB',
           secondary: '#0D9488',
           accent: '#F59E0B',
-          royal: '#2563EB',
-          royalLight: '#3B82F6',
-          gold: '#F59E0B',
-          goldDark: '#D97706',
-          cyan: '#0D9488',
-          teal: '#0D9488',
           navy: '#1E293B',
-          success: '#0D9488',
-          danger: '#DC2626',
-          warning: '#F59E0B',
-          dark: '#0F172A',
           light: '#F8FAFC',
           pastel: {
             jobs: '#EFF6FF',
@@ -33,18 +22,6 @@ export default {
             events: '#FEF9C3',
             training: '#FCE7F3',
           },
-          gray: {
-            50: '#F8FAFC',
-            100: '#F1F5F9',
-            200: '#E2E8F0',
-            300: '#CBD5E1',
-            400: '#94A3B8',
-            500: '#64748B',
-            600: '#475569',
-            700: '#334155',
-            800: '#1E293B',
-            900: '#0F172A',
-          },
         },
       },
       fontFamily: {
@@ -54,7 +31,6 @@ export default {
       },
       boxShadow: {
         'soft': '0 4px 24px rgba(37, 99, 235, 0.08)',
-        'navy': '0 10px 40px rgba(30, 41, 59, 0.15)',
         'gold': '0 6px 20px rgba(245, 158, 11, 0.25)',
         'card': '0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.03)',
       },

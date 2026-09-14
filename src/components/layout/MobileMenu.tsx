@@ -42,7 +42,7 @@ const MobileMenu: React.FC = () => {
  )}
  <div className={`fixed top-0 right-0 h-full w-72 bg-white shadow-xl z-50 transform transition-transform duration-300 lg:hidden ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
  <div className="flex items-center justify-between p-4 border-b border-gray-200">
- <span className="font-heading font-bold text-lg text-tdop-dark">Menu</span>
+  <span className="font-heading font-bold text-lg text-tdop-navy">Menu</span>
  <button onClick={() => setIsOpen(false)} className="p-1 rounded-lg hover:bg-gray-100">
  <X className="w-5 h-5 text-gray-600" />
  </button>

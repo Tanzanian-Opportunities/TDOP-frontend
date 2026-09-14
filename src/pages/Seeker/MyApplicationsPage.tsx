@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useApplications } from '@/hooks/useApplications';
 import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/Card';
@@ -6,7 +7,7 @@ import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { formatDate } from '@/utils/formatDate';
 import { formatApplicationStatus } from '@/utils/formatRole';
-import { FileText, ArrowLeft, Clock } from 'lucide-react';
+import { FileText, Clock, ArrowRight } from 'lucide-react';
 
 const MyApplicationsPage: React.FC = () => {
   const { applications, isLoading, withdraw } = useApplications();
@@ -35,7 +36,7 @@ const MyApplicationsPage: React.FC = () => {
       {applications.length === 0 ? (
         <Card>
           <div className="text-center py-12">
-            <FileText className="w-16 h-16 text-gray-300  mx-auto mb-4" />
+            <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-tdop-navy mb-2">{t('application.noApplications')}</h3>
             <p className="text-gray-500 mb-4">{t('application.startApplying')}</p>
             <Button asChild>
@@ -61,6 +62,11 @@ const MyApplicationsPage: React.FC = () => {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
+                    <Button variant="outline" size="sm" asChild>
+                      <Link to={`/applications/${application.id}`} className="inline-flex items-center gap-1">
+                        {t('application.timeline', 'Timeline')} <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
+                    </Button>
                     <Button variant="outline" size="sm" asChild>
                       <a href={`/opportunities/${application.opportunityId}`}>{t('application.viewDetails')}</a>
                     </Button>

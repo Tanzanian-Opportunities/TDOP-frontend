@@ -22,6 +22,8 @@ import SeekerProfilePage from '@/pages/Seeker/SeekerProfilePage';
 import SeekerDashboardPage from '@/pages/Seeker/SeekerDashboardPage';
 import SeekerRecommendationsPage from '@/pages/Seeker/SeekerRecommendationsPage';
 import SeekerDocumentsPage from '@/pages/Seeker/SeekerDocumentsPage';
+import SeekerNotificationsPage from '@/pages/Seeker/SeekerNotificationsPage';
+import ApplicationDetailPage from '@/pages/Seeker/ApplicationDetailPage';
 import OrganizationDashboardPage from '@/pages/Organization/OrganizationDashboardPage';
 import CreateOpportunityPage from '@/pages/Organization/CreateOpportunityPage';
 import EditOpportunityPage from '@/pages/Organization/EditOpportunityPage';
@@ -59,7 +61,9 @@ const AppRoutes: React.FC = () => {
         <Route path="/recommendations" element={<SeekerRecommendationsPage />} />
         <Route path="/documents" element={<SeekerDocumentsPage />} />
         <Route path="/applications" element={<SeekerMyApplicationsPage />} />
+        <Route path="/applications/:id" element={<ApplicationDetailPage />} />
         <Route path="/saved" element={<SavedOpportunitiesPage />} />
+        <Route path="/notifications" element={<SeekerNotificationsPage />} />
         <Route path="/profile" element={<SeekerProfilePage />} />
 
         <Route element={<RoleGate allowedRoles={['organization', 'admin']} />}>
