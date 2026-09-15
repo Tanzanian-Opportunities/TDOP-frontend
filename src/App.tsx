@@ -8,6 +8,8 @@ import { NotificationProvider } from '@/context/NotificationContext';
 import Layout from '@/components/layout/Layout';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import RoleGate from '@/components/auth/RoleGate';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
+import WelcomeOnboarding from '@/components/WelcomeOnboarding';
 import LoginPage from '@/pages/LoginPage';
 import RegisterPage from '@/pages/RegisterPage';
 import ForgotPasswordPage from '@/pages/ForgotPasswordPage';
@@ -46,53 +48,55 @@ const queryClient = new QueryClient();
 
 const AppRoutes: React.FC = () => {
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
-        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-        <Route path="/reset-password" element={<ResetPasswordPage />} />
-      <Route path="/opportunities/:id" element={<OpportunityDetailPage />} />
+    <ErrorBoundary>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
+        <Route path="/opportunities/:id" element={<OpportunityDetailPage />} />
 
-      <Route path="/browse" element={<BrowseOpportunitiesPage />} />
-      <Route path="/organizations" element={<BrowseOrganizationsPage />} />
-      <Route path="/compare" element={<ComparePage />} />
+        <Route path="/browse" element={<BrowseOpportunitiesPage />} />
+        <Route path="/organizations" element={<BrowseOrganizationsPage />} />
+        <Route path="/compare" element={<ComparePage />} />
 
-      <Route element={<ProtectedRoute />}>
-        <Route path="/dashboard" element={<SeekerDashboardPage />} />
-        <Route path="/recommendations" element={<SeekerRecommendationsPage />} />
-        <Route path="/documents" element={<SeekerDocumentsPage />} />
-        <Route path="/applications" element={<SeekerMyApplicationsPage />} />
-        <Route path="/applications/:id" element={<ApplicationDetailPage />} />
-        <Route path="/saved" element={<SavedOpportunitiesPage />} />
-        <Route path="/notifications" element={<SeekerNotificationsPage />} />
-        <Route path="/profile" element={<SeekerProfilePage />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard" element={<SeekerDashboardPage />} />
+          <Route path="/recommendations" element={<SeekerRecommendationsPage />} />
+          <Route path="/documents" element={<SeekerDocumentsPage />} />
+          <Route path="/applications" element={<SeekerMyApplicationsPage />} />
+          <Route path="/applications/:id" element={<ApplicationDetailPage />} />
+          <Route path="/saved" element={<SavedOpportunitiesPage />} />
+          <Route path="/notifications" element={<SeekerNotificationsPage />} />
+          <Route path="/profile" element={<SeekerProfilePage />} />
 
-        <Route element={<RoleGate allowedRoles={['organization', 'admin']} />}>
-          <Route path="/my-jobs" element={<OrganizationDashboardPage />} />
-          <Route path="/create-opportunity" element={<CreateOpportunityPage />} />
-          <Route path="/edit-opportunity/:id" element={<EditOpportunityPage />} />
-          <Route path="/organization/applications" element={<OrgMyApplicationsPage />} />
-          <Route path="/organization/profile" element={<OrganizationProfilePage />} />
-          <Route path="/organization/verification" element={<VerificationPage />} />
-          <Route path="/organization/team" element={<OrganizationTeamPage />} />
+          <Route element={<RoleGate allowedRoles={['organization', 'admin']} />}>
+            <Route path="/my-jobs" element={<OrganizationDashboardPage />} />
+            <Route path="/create-opportunity" element={<CreateOpportunityPage />} />
+            <Route path="/edit-opportunity/:id" element={<EditOpportunityPage />} />
+            <Route path="/organization/applications" element={<OrgMyApplicationsPage />} />
+            <Route path="/organization/profile" element={<OrganizationProfilePage />} />
+            <Route path="/organization/verification" element={<VerificationPage />} />
+            <Route path="/organization/team" element={<OrganizationTeamPage />} />
+          </Route>
+
+          <Route element={<RoleGate allowedRoles={['admin', 'verification_officer', 'moderator', 'super_admin']} />}>
+            <Route path="/admin" element={<AdminDashboardPage />} />
+            <Route path="/admin/users" element={<UserManagementPage />} />
+            <Route path="/admin/opportunities" element={<OpportunityModerationPage />} />
+            <Route path="/admin/analytics" element={<AnalyticsPage />} />
+            <Route path="/admin/reports" element={<ReportsPage />} />
+            <Route path="/admin/audit-log" element={<AuditLogPage />} />
+            <Route path="/admin/verification" element={<VerificationOfficerPage />} />
+            <Route path="/admin/moderation" element={<ModerationPage />} />
+            <Route path="/admin/config" element={<PlatformConfigPage />} />
+          </Route>
         </Route>
 
-        <Route element={<RoleGate allowedRoles={['admin', 'verification_officer', 'moderator', 'super_admin']} />}>
-          <Route path="/admin" element={<AdminDashboardPage />} />
-          <Route path="/admin/users" element={<UserManagementPage />} />
-          <Route path="/admin/opportunities" element={<OpportunityModerationPage />} />
-          <Route path="/admin/analytics" element={<AnalyticsPage />} />
-          <Route path="/admin/reports" element={<ReportsPage />} />
-          <Route path="/admin/audit-log" element={<AuditLogPage />} />
-          <Route path="/admin/verification" element={<VerificationOfficerPage />} />
-          <Route path="/admin/moderation" element={<ModerationPage />} />
-          <Route path="/admin/config" element={<PlatformConfigPage />} />
-        </Route>
-      </Route>
-
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </ErrorBoundary>
   );
 };
 
@@ -106,6 +110,7 @@ const App: React.FC = () => {
               <Layout>
                 <AppRoutes />
               </Layout>
+              <WelcomeOnboarding />
             </BrowserRouter>
           </NotificationProvider>
         </ThemeProvider>

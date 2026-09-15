@@ -40,7 +40,11 @@ export const Toast: React.FC<ToastProps> = ({ notification, onDismiss, className
   }, [notification.id, onDismiss]);
 
   return (
-    <div className={`flex items-start gap-3 p-4 rounded-lg border-l-4 ${colorMap[notification.type]} shadow-lg animate-slide-down ${className}`}>
+    <div
+      role="alert"
+      aria-live="assertive"
+      className={`flex items-start gap-3 p-4 rounded-lg border-l-4 ${colorMap[notification.type]} shadow-lg animate-slide-down ${className}`}
+    >
       <Icon className={`w-5 h-5 flex-shrink-0 ${textColorMap[notification.type]}`} />
       <div className="flex-1 min-w-0">
         <p className="text-sm font-semibold text-tdop-navy">{notification.title}</p>

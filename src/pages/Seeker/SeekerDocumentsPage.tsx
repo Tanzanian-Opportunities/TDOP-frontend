@@ -41,7 +41,7 @@ const SeekerDocumentsPage: React.FC = () => {
       fileType: selectedFile.type || 'application/octet-stream',
       fileSize: selectedFile.size,
       documentType: uploadType,
-    });
+    }, selectedFile);
     setShowUploadForm(false);
     setUploadName('');
     setUploadType('cv');

@@ -40,7 +40,7 @@ const Navbar: React.FC = () => {
  ];
 
  return (
- <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-gray-200">
+ <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-gray-200" role="navigation" aria-label="Main navigation">
  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
  <div className="flex items-center justify-between h-16 gap-4">
  <Link to="/" className="flex items-center shrink-0" aria-label="TDOP home">

@@ -37,7 +37,7 @@ const Footer: React.FC = () => {
   ];
 
   return (
-    <footer id="help" className="bg-tdop-navy text-gray-300 mt-16">
+    <footer id="help" className="bg-tdop-navy text-gray-300 mt-16" role="contentinfo">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           <div className="lg:col-span-2">

@@ -33,7 +33,18 @@ export const documentApi = {
     return data;
   },
 
-  uploadDocument: async (doc: DocumentCreate): Promise<ApiResponse<UserDocument>> => {
+  uploadDocument: async (doc: DocumentCreate, file?: File): Promise<ApiResponse<UserDocument>> => {
+    if (file) {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('name', doc.name);
+      formData.append('documentType', doc.documentType);
+      if (doc.description) formData.append('description', doc.description);
+      const { data } = await axiosInstance.post('/documents', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      return data;
+    }
     const { data } = await axiosInstance.post('/documents', doc);
     return data;
   },

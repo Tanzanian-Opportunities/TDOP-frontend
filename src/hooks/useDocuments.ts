@@ -12,7 +12,7 @@ export const useDocuments = () => {
   });
 
   const uploadMutation = useMutation({
-    mutationFn: (doc: DocumentCreate) => documentApi.uploadDocument(doc),
+    mutationFn: ({ doc, file }: { doc: DocumentCreate; file?: File }) => documentApi.uploadDocument(doc, file),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['documents'] });
     },
@@ -25,8 +25,8 @@ export const useDocuments = () => {
     },
   });
 
-  const upload = useCallback(async (doc: DocumentCreate) => {
-    return uploadMutation.mutateAsync(doc);
+  const upload = useCallback(async (doc: DocumentCreate, file?: File) => {
+    return uploadMutation.mutateAsync({ doc, file });
   }, [uploadMutation]);
 
   const removeDocument = useCallback(async (id: string) => {
