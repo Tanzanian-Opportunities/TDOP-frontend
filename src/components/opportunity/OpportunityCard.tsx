@@ -63,8 +63,8 @@ export const OpportunityCard: React.FC<OpportunityCardProps> = ({ opportunity, c
  </div>
 
  <div className="flex flex-wrap gap-2 mb-3">
- <Badge variant={opportunity.status === 'open' ? 'verified' : opportunity.status}>{typeLabels[opportunity.type]}</Badge>
- {opportunity.isVerified && <Badge variant="verified">{t('opportunities.verified')}</Badge>}
+  <Badge variant={opportunity.status === 'open' ? 'success' : opportunity.status === 'pending' ? 'warning' : 'gray'}>{typeLabels[opportunity.type]}</Badge>
+  {opportunity.isVerified && <Badge variant="success">{t('opportunities.verified')}</Badge>}
  {opportunity.isFeatured && <Badge variant="warning">{t('opportunities.featured')}</Badge>}
  {opportunity.isRemote && <Badge variant="info">{t('opportunities.remote')}</Badge>}
  </div>

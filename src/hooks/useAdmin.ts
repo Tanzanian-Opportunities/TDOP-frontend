@@ -13,14 +13,14 @@ export const useAdmin = () => {
     refetchOnWindowFocus: false,
   });
 
-  const verifyUserMutation = useMutation({
-    mutationFn: (id: string) => adminApi.verifyUser(id),
+  const suspendUserMutation = useMutation({
+    mutationFn: (id: string) => adminApi.suspendUser(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin/users'] });
-      addNotification({ type: 'success', title: 'Verified', message: 'User verified.' });
+      addNotification({ type: 'success', title: 'Suspended', message: 'User suspended.' });
     },
     onError: () => {
-      addNotification({ type: 'error', title: 'Error', message: 'Failed to verify user.' });
+      addNotification({ type: 'error', title: 'Error', message: 'Failed to suspend user.' });
     },
   });
 
@@ -28,6 +28,6 @@ export const useAdmin = () => {
     users: usersQuery.data?.data || [],
     total: usersQuery.data?.pagination?.total || 0,
     isLoading: usersQuery.isLoading,
-    verifyUser: verifyUserMutation.mutateAsync,
+    suspendUser: suspendUserMutation.mutateAsync,
   };
 };

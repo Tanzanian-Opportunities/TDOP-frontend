@@ -114,8 +114,8 @@ const EditOpportunityPage: React.FC = () => {
           <ArrowLeft className="w-5 h-5 text-gray-600" />
         </button>
         <div>
-          <h1 className="text-3xl font-bold text-tdop-navy">{t('nav.create')}</h1>
-          <p className="text-gray-500 mt-1">Edit opportunity #{id}</p>
+          <h1 className="text-3xl font-bold text-tdop-navy">Edit Opportunity</h1>
+          <p className="text-gray-500 mt-1">Update opportunity details</p>
         </div>
       </div>
 

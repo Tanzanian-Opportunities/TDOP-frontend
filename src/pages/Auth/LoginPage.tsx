@@ -19,7 +19,7 @@ const LoginPage: React.FC = () => {
     e.preventDefault();
     setError('');
     try {
-      await login(email, password);
+      await login({ email, password });
       navigate('/dashboard');
     } catch (err: any) {
       setError(err?.response?.data?.message || t('auth.loginError') || 'Invalid credentials');

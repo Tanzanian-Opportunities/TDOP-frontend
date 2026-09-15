@@ -1,152 +1,286 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useOpportunities } from '@/hooks/useOpportunities';
 import { useAuth } from '@/hooks/useAuth';
 import { useApplications } from '@/hooks/useApplications';
+import { useDocuments } from '@/hooks/useDocuments';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { formatSalary } from '@/utils/formatSalary';
 import { formatDate } from '@/utils/formatDate';
 import { useTranslation } from 'react-i18next';
-import { MapPin, Briefcase, Clock, Calendar, Users, Check, FileText, Mail, ArrowLeft } from 'lucide-react';
+import { MapPin, Briefcase, Clock, Calendar, Users, Check, FileText, ArrowLeft, X, ChevronRight, AlertCircle } from 'lucide-react';
 
 export const OpportunityDetail: React.FC = () => {
- const { id } = useParams<{ id: string }>();
- const { opportunities, isLoading } = useOpportunities();
- const { isAuthenticated, isSeeker } = useAuth();
- const { apply, isApplying } = useApplications();
- const { t } = useTranslation();
+  const { id } = useParams<{ id: string }>();
+  const { opportunities, isLoading } = useOpportunities();
+  const { isAuthenticated, isSeeker } = useAuth();
+  const { apply, isApplying } = useApplications();
+  const { documents } = useDocuments();
+  const { t } = useTranslation();
+  const [showApplyModal, setShowApplyModal] = useState(false);
+  const [coverLetter, setCoverLetter] = useState('');
+  const [selectedDocs, setSelectedDocs] = useState<string[]>([]);
+  const [applyError, setApplyError] = useState('');
 
- const opportunity = opportunities.find(opp => opp.id === id);
+  const opportunity = opportunities.find(opp => opp.id === id);
 
- if (isLoading || !opportunity) {
- return (
- <div className="flex items-center justify-center min-h-[60vh]">
- <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-tdop-primary" />
- </div>
- );
- }
+  if (isLoading || !opportunity) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-tdop-primary" />
+      </div>
+    );
+  }
 
- const handleApply = async () => {
- await apply({ opportunityId: opportunity.id, resumeUrl: '' });
- };
+  const isExpired = opportunity.applicationDeadline && new Date(opportunity.applicationDeadline) < new Date();
 
- return (
- <div className="max-w-4xl mx-auto space-y-6 animate-slide-up">
- <div className="flex items-center gap-3">
- <Link to="/browse" className="p-2 rounded-lg hover:bg-gray-100 transition-colors">
- <ArrowLeft className="w-5 h-5 text-gray-600" />
- </Link>
- </div>
+  const handleApply = async () => {
+    setApplyError('');
+    try {
+      await apply({
+        opportunityId: opportunity.id,
+        resumeUrl: selectedDocs[0] || '',
+        coverLetter: coverLetter || undefined,
+      });
+      setShowApplyModal(false);
+      setCoverLetter('');
+      setSelectedDocs([]);
+    } catch (err: any) {
+      setApplyError(err?.message || 'Failed to submit application.');
+    }
+  };
 
- <Card padding={false}>
- <div className="p-6 border-b border-gray-100">
- <div className="flex items-start justify-between mb-4">
- <div className="flex-1">
- <h1 className="text-2xl font-bold text-tdop-navy">{opportunity.title}</h1>
- <p className="text-lg text-gray-600 mt-1 flex items-center gap-2">
- <Briefcase className="w-5 h-5" />
- {opportunity.company}
- </p>
- </div>
- <div className="flex gap-2">
- {opportunity.isVerified && <Badge variant="verified">{t('opportunities.verified')}</Badge>}
- {opportunity.isFeatured && <Badge variant="warning">{t('opportunities.featured')}</Badge>}
- </div>
- </div>
+  const toggleDoc = (docUrl: string) => {
+    setSelectedDocs(prev =>
+      prev.includes(docUrl) ? prev.filter(u => u !== docUrl) : [...prev, docUrl]
+    );
+  };
 
- <div className="flex flex-wrap items-center gap-4">
- <div className="flex items-center gap-2 text-sm text-gray-500">
- <MapPin className="w-4 h-4" />
- {opportunity.location}{opportunity.isRemote ? ` (${t('opportunities.remote')})` : ''}
- </div>
- <div className="flex items-center gap-2 text-sm text-gray-500">
- <Calendar className="w-4 h-4" />
- {formatDate(opportunity.applicationDeadline, 'MMM d, yyyy')}
- </div>
- <div className="flex items-center gap-2 text-sm text-gray-500">
- <Users className="w-4 h-4" />
- {t('opportunities.applyCount', { count: opportunity.applicationsCount })}
- </div>
- </div>
- </div>
+  const daysLeft = opportunity.applicationDeadline
+    ? Math.ceil((new Date(opportunity.applicationDeadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
+    : null;
 
- <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-4">
- <Card>
- <p className="text-sm text-gray-500">{t('opportunities.salary')}</p>
- <p className="text-xl font-bold text-tdop-navy mt-1">
- {formatSalary(opportunity.salaryMin, opportunity.salaryMax)}
- </p>
- </Card>
- <Card>
- <p className="text-sm text-gray-500">{t('opportunities.typeLabel')}</p>
- <p className="text-xl font-bold text-tdop-navy mt-1 capitalize">
- {t(`opportunities.type.${opportunity.type}`)}
- </p>
- </Card>
- <Card>
- <p className="text-sm text-gray-500">{t('opportunities.experience')}</p>
- <p className="text-xl font-bold text-tdop-navy mt-1 capitalize">
- {opportunity.experienceLevel}
- </p>
- </Card>
- </div>
+  return (
+    <div className="max-w-4xl mx-auto space-y-6 animate-slide-up">
+      <div className="flex items-center gap-3">
+        <Link to="/browse" className="p-2 rounded-lg hover:bg-gray-100 transition-colors">
+          <ArrowLeft className="w-5 h-5 text-gray-600" />
+        </Link>
+        <span className="text-sm text-gray-500">Back to opportunities</span>
+      </div>
 
- <div className="p-6 space-y-4">
- <h2 className="text-lg font-semibold text-tdop-navy">{t('opportunities.description')}</h2>
- <p className="text-gray-600 leading-relaxed">{opportunity.description}</p>
- </div>
+      <Card padding={false}>
+        <div className="p-6 border-b border-gray-100">
+          <div className="flex items-start justify-between mb-4">
+            <div className="flex-1">
+              <h1 className="text-2xl font-bold text-tdop-navy">{opportunity.title}</h1>
+              <p className="text-lg text-gray-600 mt-1 flex items-center gap-2">
+                <Briefcase className="w-5 h-5" />
+                {opportunity.company}
+              </p>
+            </div>
+            <div className="flex gap-2">
+              {opportunity.isVerified && <Badge variant="success">{t('opportunities.verified')}</Badge>}
+              {opportunity.isFeatured && <Badge variant="warning">{t('opportunities.featured')}</Badge>}
+            </div>
+          </div>
 
- <div className="px-6 pb-6 space-y-4">
- <div>
- <h3 className="font-medium text-tdop-navy mb-2">{t('opportunities.requirements')}</h3>
- <ul className="space-y-1">
- {opportunity.requirements.map((req, i) => (
- <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
- <Check className="w-4 h-4 text-tdop-primary mt-0.5 flex-shrink-0" />
- {req}
- </li>
- ))}
- </ul>
- </div>
+          <div className="flex flex-wrap items-center gap-4">
+            <div className="flex items-center gap-2 text-sm text-gray-500">
+              <MapPin className="w-4 h-4" />
+              {opportunity.location}{opportunity.isRemote ? ` (${t('opportunities.remote')})` : ''}
+            </div>
+            {opportunity.applicationDeadline && (
+              <div className={`flex items-center gap-2 text-sm ${daysLeft !== null && daysLeft <= 3 ? 'text-amber-600 font-medium' : 'text-gray-500'}`}>
+                <Calendar className="w-4 h-4" />
+                {daysLeft !== null && daysLeft <= 3 ? (
+                  <span className="flex items-center gap-1">
+                    <AlertCircle className="w-3.5 h-3.5" />
+                    {daysLeft <= 0 ? 'Deadline passed' : `${daysLeft} day${daysLeft !== 1 ? 's' : ''} left`}
+                  </span>
+                ) : (
+                  formatDate(opportunity.applicationDeadline, 'MMM d, yyyy')
+                )}
+              </div>
+            )}
+            <div className="flex items-center gap-2 text-sm text-gray-500">
+              <Users className="w-4 h-4" />
+              {t('opportunities.applyCount', { count: opportunity.applicationsCount })}
+            </div>
+          </div>
+        </div>
 
- <div>
- <h3 className="font-medium text-tdop-navy mb-2">{t('opportunities.responsibilities')}</h3>
- <ul className="space-y-1">
- {opportunity.responsibilities.map((resp, i) => (
- <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
- <Check className="w-4 h-4 text-tdop-primary mt-0.5 flex-shrink-0" />
- {resp}
- </li>
- ))}
- </ul>
- </div>
+        <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Card>
+            <p className="text-sm text-gray-500">{t('opportunities.salary')}</p>
+            <p className="text-xl font-bold text-tdop-navy mt-1">
+              {formatSalary(opportunity.salaryMin, opportunity.salaryMax, opportunity.salaryCurrency)}
+            </p>
+          </Card>
+          <Card>
+            <p className="text-sm text-gray-500">{t('opportunities.typeLabel')}</p>
+            <p className="text-xl font-bold text-tdop-navy mt-1 capitalize">
+              {t(`opportunities.type.${opportunity.type}`)}
+            </p>
+          </Card>
+          <Card>
+            <p className="text-sm text-gray-500">{t('opportunities.experience')}</p>
+            <p className="text-xl font-bold text-tdop-navy mt-1 capitalize">
+              {opportunity.experienceLevel}
+            </p>
+          </Card>
+        </div>
 
- {opportunity.benefits.length > 0 && (
- <div>
- <h3 className="font-medium text-tdop-navy mb-2">{t('opportunities.benefits')}</h3>
- <ul className="space-y-1">
- {opportunity.benefits.map((benefit, i) => (
- <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
- <Check className="w-4 h-4 text-tdop-primary mt-0.5 flex-shrink-0" />
- {benefit}
- </li>
- ))}
- </ul>
- </div>
- )}
- </div>
- </Card>
+        <div className="p-6 space-y-4">
+          <h2 className="text-lg font-semibold text-tdop-navy">{t('opportunities.description')}</h2>
+          <p className="text-gray-600 leading-relaxed">{opportunity.description}</p>
+        </div>
 
- {isAuthenticated && isSeeker && (
- <div className="sticky bottom-4 flex items-center justify-center gap-4">
- <Button size="lg" onClick={handleApply} loading={isApplying} className="w-full md:w-auto">
- <FileText className="w-5 h-5 mr-2" />
- {t('opportunities.applyNow')}
- </Button>
- </div>
- )}
- </div>
- );
+        <div className="px-6 pb-6 space-y-4">
+          {opportunity.requirements.length > 0 && (
+            <div>
+              <h3 className="font-medium text-tdop-navy mb-2">{t('opportunities.requirements')}</h3>
+              <ul className="space-y-1">
+                {opportunity.requirements.map((req, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
+                    <Check className="w-4 h-4 text-tdop-primary mt-0.5 flex-shrink-0" />
+                    {req}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {opportunity.responsibilities.length > 0 && (
+            <div>
+              <h3 className="font-medium text-tdop-navy mb-2">{t('opportunities.responsibilities')}</h3>
+              <ul className="space-y-1">
+                {opportunity.responsibilities.map((resp, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
+                    <Check className="w-4 h-4 text-tdop-primary mt-0.5 flex-shrink-0" />
+                    {resp}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {opportunity.benefits.length > 0 && (
+            <div>
+              <h3 className="font-medium text-tdop-navy mb-2">{t('opportunities.benefits')}</h3>
+              <ul className="space-y-1">
+                {opportunity.benefits.map((benefit, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
+                    <Check className="w-4 h-4 text-tdop-primary mt-0.5 flex-shrink-0" />
+                    {benefit}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </Card>
+
+      {isAuthenticated && isSeeker && (
+        <div className="sticky bottom-4 flex items-center justify-center gap-4">
+          {isExpired ? (
+            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 px-6 py-4 text-center">
+              <p className="text-gray-500 font-medium">This opportunity is no longer accepting applications.</p>
+            </div>
+          ) : (
+            <Button size="lg" onClick={() => setShowApplyModal(true)} className="w-full md:w-auto">
+              <FileText className="w-5 h-5 mr-2" />
+              {t('opportunities.applyNow')}
+            </Button>
+          )}
+        </div>
+      )}
+
+      {showApplyModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between p-6 border-b border-gray-100">
+              <div>
+                <h2 className="text-lg font-bold text-tdop-navy">Apply for {opportunity.title}</h2>
+                <p className="text-sm text-gray-500 mt-0.5">at {opportunity.company}</p>
+              </div>
+              <button onClick={() => setShowApplyModal(false)} className="p-2 rounded-lg hover:bg-gray-100">
+                <X className="w-5 h-5 text-gray-400" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-5">
+              {applyError && (
+                <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-600">
+                  <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
+                  {applyError}
+                </div>
+              )}
+
+              <div>
+                <label className="block text-sm font-medium text-tdop-navy mb-2">
+                  Cover letter <span className="text-gray-400 font-normal">(optional)</span>
+                </label>
+                <textarea
+                  value={coverLetter}
+                  onChange={(e) => setCoverLetter(e.target.value)}
+                  rows={5}
+                  placeholder="Tell the employer why you're a great fit for this role..."
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-tdop-navy placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-tdop-primary/20 focus:border-tdop-primary resize-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-tdop-navy mb-2">
+                  Attach documents <span className="text-gray-400 font-normal">(optional)</span>
+                </label>
+                {documents.length === 0 ? (
+                  <div className="text-center py-6 border-2 border-dashed border-gray-200 rounded-xl">
+                    <FileText className="w-8 h-8 text-gray-300 mx-auto mb-2" />
+                    <p className="text-sm text-gray-500">No documents uploaded yet.</p>
+                    <Link to="/documents" className="text-sm text-tdop-primary hover:underline mt-1 inline-block">
+                      Upload documents
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="space-y-2 max-h-40 overflow-y-auto">
+                    {documents.map((doc: any) => (
+                      <label
+                        key={doc.id}
+                        className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${
+                          selectedDocs.includes(doc.fileUrl)
+                            ? 'border-tdop-primary bg-tdop-primary/5'
+                            : 'border-gray-200 hover:bg-gray-50'
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selectedDocs.includes(doc.fileUrl)}
+                          onChange={() => toggleDoc(doc.fileUrl)}
+                          className="w-4 h-4 rounded border-gray-300 text-tdop-primary focus:ring-tdop-primary"
+                        />
+                        <FileText className="w-4 h-4 text-gray-400 shrink-0" />
+                        <span className="text-sm text-tdop-navy truncate flex-1">{doc.name || doc.fileName}</span>
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-100">
+              <Button variant="ghost" onClick={() => setShowApplyModal(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleApply} loading={isApplying}>
+                Submit application
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 };

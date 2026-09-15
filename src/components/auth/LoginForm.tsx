@@ -22,7 +22,19 @@ const LoginForm: React.FC = () => {
       setError('');
       setLoading(true);
       await login({ email, password });
-      navigate('/dashboard');
+      try {
+        const stored = JSON.parse(localStorage.getItem('tdop-user') || '{}');
+        const role = stored?.role;
+        if (role === 'organization' || role === 'organization_admin' || role === 'organization_member') {
+          navigate('/my-jobs');
+        } else if (role === 'admin' || role === 'super_admin' || role === 'moderator' || role === 'verification_officer') {
+          navigate('/admin');
+        } else {
+          navigate('/dashboard');
+        }
+      } catch {
+        navigate('/dashboard');
+      }
     } catch (err: any) {
       setError(err?.message || t('auth.loginFailed'));
     } finally {

@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Search, MapPin, ArrowRight, BadgeCheck, CheckCircle2 } from 'lucide-react';
-import { heroImage } from './mockData';
+
+const heroImage = 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80';
 
 const HeroSection: React.FC = () => {
   const { t } = useTranslation();

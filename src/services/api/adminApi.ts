@@ -59,7 +59,7 @@ export const adminApi = {
     });
     return data;
   },
-  getModerationQueue: async (): Promise<any> => {
+  getOpportunityModerationQueue: async (): Promise<any> => {
     const { data } = await axiosInstance.get('/admin/opportunities/moderation-queue');
     return data;
   },

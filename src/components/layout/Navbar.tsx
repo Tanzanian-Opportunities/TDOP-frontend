@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next';
 import MobileMenu from './MobileMenu';
 import Logo from './Logo';
 import { Sun, Moon, Bell, Menu, ChevronDown, Languages } from 'lucide-react';
-import { Link as RouterLink } from 'react-router-dom';
 
 const Navbar: React.FC = () => {
  const { isAuthenticated, user, logout } = useAuth();

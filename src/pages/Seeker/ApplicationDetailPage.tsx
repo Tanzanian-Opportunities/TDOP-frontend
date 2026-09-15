@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axiosInstance from '@/services/api/axiosInstance';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { formatDate } from '@/utils/formatDate';
 import { formatApplicationStatus } from '@/utils/formatRole';
+import { useNotificationContext } from '@/context/NotificationContext';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, Clock, CheckCircle2, Circle, FileText, Building2, MapPin, Calendar } from 'lucide-react';
+import { ArrowLeft, Clock, CheckCircle2, Circle, FileText, Building2, Calendar, AlertTriangle, X } from 'lucide-react';
 
 const statusColors: Record<string, string> = {
   APPLIED: 'bg-tdop-primary/10 text-tdop-primary',
@@ -18,11 +19,18 @@ const statusColors: Record<string, string> = {
   ACCEPTED: 'bg-emerald-50 text-emerald-600',
   REJECTED: 'bg-red-50 text-red-600',
   WITHDRAWN: 'bg-gray-100 text-gray-600',
+  PENDING: 'bg-tdop-primary/10 text-tdop-primary',
+  SUBMITTED: 'bg-blue-50 text-blue-600',
 };
+
+const withdrawableStatuses = ['PENDING', 'SUBMITTED', 'APPLIED', 'UNDER_REVIEW'];
 
 const ApplicationDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
+  const { addNotification } = useNotificationContext();
+  const queryClient = useQueryClient();
+  const [showWithdrawModal, setShowWithdrawModal] = useState(false);
 
   const { data: appData, isLoading } = useQuery({
     queryKey: ['application', id],
@@ -32,6 +40,21 @@ const ApplicationDetailPage: React.FC = () => {
     },
     enabled: !!id,
     refetchOnWindowFocus: false,
+  });
+
+  const withdrawMutation = useMutation({
+    mutationFn: async () => {
+      await axiosInstance.put(`/applications/${id}/withdraw`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['application', id] });
+      queryClient.invalidateQueries({ queryKey: ['applications'] });
+      addNotification({ type: 'info', title: 'Application withdrawn', message: 'Your application has been withdrawn.' });
+      setShowWithdrawModal(false);
+    },
+    onError: () => {
+      addNotification({ type: 'error', title: 'Error', message: 'Failed to withdraw application.' });
+    },
   });
 
   if (isLoading) {
@@ -56,6 +79,7 @@ const ApplicationDetailPage: React.FC = () => {
     );
   }
 
+  const canWithdraw = withdrawableStatuses.includes(appData.status?.toUpperCase());
   const history = appData.statusHistory || [];
   const sortedHistory = [...history].sort((a: any, b: any) =>
     new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -76,6 +100,11 @@ const ApplicationDetailPage: React.FC = () => {
           </div>
           <div className="flex items-center gap-3">
             <Badge variant={appData.status}>{formatApplicationStatus(appData.status)}</Badge>
+            {canWithdraw && (
+              <Button variant="ghost" size="sm" onClick={() => setShowWithdrawModal(true)} className="text-white/80 hover:text-white hover:bg-white/10">
+                Withdraw
+              </Button>
+            )}
           </div>
         </div>
       </div>
@@ -160,6 +189,35 @@ const ApplicationDetailPage: React.FC = () => {
           </Card>
         </div>
       </div>
+
+      {showWithdrawModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md">
+            <div className="flex items-center justify-between p-6 border-b border-gray-100">
+              <h2 className="text-lg font-bold text-tdop-navy">Withdraw Application</h2>
+              <button onClick={() => setShowWithdrawModal(false)} className="p-2 rounded-lg hover:bg-gray-100">
+                <X className="w-5 h-5 text-gray-400" />
+              </button>
+            </div>
+            <div className="p-6">
+              <div className="flex items-start gap-3 p-4 bg-amber-50 rounded-xl mb-4">
+                <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+                <p className="text-sm text-amber-800">
+                  Are you sure you want to withdraw your application for <strong>{appData.opportunityTitle}</strong>? This action cannot be undone.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-100">
+              <Button variant="ghost" onClick={() => setShowWithdrawModal(false)}>
+                Keep application
+              </Button>
+              <Button variant="danger" onClick={() => withdrawMutation.mutate()} loading={withdrawMutation.isPending}>
+                Withdraw
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

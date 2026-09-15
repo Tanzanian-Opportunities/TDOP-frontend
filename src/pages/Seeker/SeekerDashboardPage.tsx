@@ -4,6 +4,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useOpportunities } from '@/hooks/useOpportunities';
 import { useApplications } from '@/hooks/useApplications';
 import { useNotifications } from '@/hooks/useNotifications';
+import { useDocuments } from '@/hooks/useDocuments';
 import { useQuery } from '@tanstack/react-query';
 import axiosInstance from '@/services/api/axiosInstance';
 import Sidebar from '@/components/layout/Sidebar';
@@ -16,6 +17,7 @@ import {
   Briefcase, Bookmark, FileText, Sparkles, MapPin, Calendar,
   ArrowRight, GraduationCap, BookOpen, Shield, CheckCircle2, Circle,
   Clock, AlertTriangle, Bell, TrendingUp, Zap, ChevronRight,
+  Target, Award, Upload, Eye, ChevronRight as ChevronRightIcon,
 } from 'lucide-react';
 
 const SeekerDashboardPage: React.FC = () => {
@@ -23,6 +25,7 @@ const SeekerDashboardPage: React.FC = () => {
   const { opportunities, isLoading: oppLoading } = useOpportunities();
   const { applications } = useApplications();
   const { notifications, unreadCount } = useNotifications();
+  const { documents } = useDocuments();
 
   const { data: savedData } = useQuery({
     queryKey: ['saved-count'],
@@ -42,15 +45,33 @@ const SeekerDashboardPage: React.FC = () => {
     refetchOnWindowFocus: false,
   });
 
+  const { data: careerGoals } = useQuery({
+    queryKey: ['career-goals'],
+    queryFn: async () => {
+      const { data } = await axiosInstance.get('/profile/career-goals');
+      return data?.data || null;
+    },
+    refetchOnWindowFocus: false,
+  });
+
+  const { data: skills } = useQuery({
+    queryKey: ['profile-skills'],
+    queryFn: async () => {
+      const { data } = await axiosInstance.get('/profile/skills');
+      return data?.data || [];
+    },
+    refetchOnWindowFocus: false,
+  });
+
   const completion = typeof profileCompletion === 'number' ? profileCompletion : 0;
   const savedCount = Array.isArray(savedData) ? savedData.length : 0;
 
   const completionSteps = [
-    { key: 'Personal info', done: !!(user?.firstName && user?.lastName) },
-    { key: 'Education', done: completion >= 33 },
-    { key: 'Skills', done: completion >= 50 },
-    { key: 'Experience', done: completion >= 67 },
-    { key: 'CV uploaded', done: completion >= 80 },
+    { key: 'Personal info', done: !!(user?.firstName && user?.lastName), to: '/profile' },
+    { key: 'Education', done: completion >= 33, to: '/profile' },
+    { key: 'Skills', done: completion >= 50, to: '/profile' },
+    { key: 'Experience', done: completion >= 67, to: '/profile' },
+    { key: 'CV uploaded', done: completion >= 80, to: '/documents' },
   ];
 
   const upcomingDeadlines = opportunities
@@ -64,6 +85,10 @@ const SeekerDashboardPage: React.FC = () => {
     .slice(0, 5);
 
   const recommendations = opportunities.slice(0, 3);
+
+  const activeApplications = applications.filter((app: any) =>
+    ['pending', 'under_review', 'shortlisted'].includes(app.status)
+  ).slice(0, 5);
 
   const quickLinks = [
     { label: 'Scholarships', search: 'scholarships', icon: GraduationCap, color: 'bg-emerald-50 text-tdop-secondary' },
@@ -166,7 +191,7 @@ const SeekerDashboardPage: React.FC = () => {
                   {completionSteps.map(step => (
                     <Link
                       key={step.key}
-                      to="/profile"
+                      to={step.to}
                       className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-left transition-colors ${
                         step.done
                           ? 'bg-emerald-50 text-emerald-700'
@@ -236,6 +261,165 @@ const SeekerDashboardPage: React.FC = () => {
               )}
             </DashboardSection>
           </div>
+
+          {/* Skills & Career Goals */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <DashboardSection title="My skills" icon={<Target className="w-4 h-4 text-purple-500" />} action={{ label: 'Edit', to: '/profile' }}>
+              {skills.length === 0 ? (
+                <EmptyState
+                  icon={<Award className="w-8 h-8 text-gray-300" />}
+                  title="No skills added"
+                  description="Add skills to get better recommendations."
+                />
+              ) : (
+                <div className="p-4">
+                  <div className="flex flex-wrap gap-2">
+                    {skills.slice(0, 8).map((skill: any, i: number) => (
+                      <span key={i} className="px-3 py-1.5 bg-tdop-primary/10 text-tdop-primary text-xs font-medium rounded-full">
+                        {typeof skill === 'string' ? skill : skill.name}
+                      </span>
+                    ))}
+                    {skills.length > 8 && (
+                      <span className="px-3 py-1.5 bg-gray-100 text-gray-500 text-xs font-medium rounded-full">
+                        +{skills.length - 8} more
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )}
+            </DashboardSection>
+
+            <DashboardSection title="Career goals" icon={<TrendingUp className="w-4 h-4 text-emerald-500" />} action={{ label: 'Edit', to: '/profile' }}>
+              {!careerGoals ? (
+                <EmptyState
+                  icon={<Target className="w-8 h-8 text-gray-300" />}
+                  title="No career goals set"
+                  description="Set goals to get matched with relevant opportunities."
+                />
+              ) : (
+                <div className="p-4 space-y-2">
+                  {careerGoals.desiredRoles && (
+                    <div className="flex items-start gap-2 text-sm">
+                      <Briefcase className="w-4 h-4 text-gray-400 mt-0.5 shrink-0" />
+                      <span className="text-gray-600">{careerGoals.desiredRoles}</span>
+                    </div>
+                  )}
+                  {careerGoals.desiredLocations && (
+                    <div className="flex items-start gap-2 text-sm">
+                      <MapPin className="w-4 h-4 text-gray-400 mt-0.5 shrink-0" />
+                      <span className="text-gray-600">{careerGoals.desiredLocations}</span>
+                    </div>
+                  )}
+                  {careerGoals.industries && (
+                    <div className="flex items-start gap-2 text-sm">
+                      <Briefcase className="w-4 h-4 text-gray-400 mt-0.5 shrink-0" />
+                      <span className="text-gray-600">{careerGoals.industries}</span>
+                    </div>
+                  )}
+                </div>
+              )}
+            </DashboardSection>
+          </div>
+
+          {/* Documents & Saved Opportunities */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <DashboardSection title="My documents" icon={<FileText className="w-4 h-4 text-tdop-primary" />} action={{ label: 'Manage', to: '/documents' }}>
+              {documents.length === 0 ? (
+                <EmptyState
+                  icon={<Upload className="w-8 h-8 text-gray-300" />}
+                  title="No documents uploaded"
+                  description="Upload your CV and certificates to apply faster."
+                />
+              ) : (
+                <div className="space-y-2 p-4">
+                  {documents.slice(0, 3).map((doc: any) => (
+                    <div key={doc.id} className="flex items-center gap-3 p-2.5 rounded-xl bg-gray-50">
+                      <div className="w-9 h-9 rounded-xl bg-tdop-primary/10 text-tdop-primary flex items-center justify-center shrink-0">
+                        <FileText className="w-4 h-4" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-tdop-navy truncate">{doc.name || doc.fileName}</p>
+                        <p className="text-xs text-gray-400">{doc.fileType || 'Document'}</p>
+                      </div>
+                    </div>
+                  ))}
+                  {documents.length > 3 && (
+                    <Link to="/documents" className="text-xs text-tdop-primary hover:underline font-medium flex items-center gap-1">
+                      View all {documents.length} documents <ChevronRight className="w-3 h-3" />
+                    </Link>
+                  )}
+                </div>
+              )}
+            </DashboardSection>
+
+            <DashboardSection title="Saved opportunities" icon={<Bookmark className="w-4 h-4 text-amber-500" />} action={{ label: 'View all', to: '/saved' }} empty={savedCount === 0}>
+              {savedCount === 0 ? (
+                <EmptyState
+                  icon={<Bookmark className="w-8 h-8 text-gray-300" />}
+                  title="No saved opportunities"
+                  description="Save opportunities you're interested in."
+                />
+              ) : (
+                <div className="space-y-2 p-4">
+                  {Array.isArray(savedData) && savedData.slice(0, 3).map((opp: any) => (
+                    <Link
+                      key={opp.id}
+                      to={`/opportunities/${opp.id}`}
+                      className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-gray-50 transition-colors"
+                    >
+                      <div className="w-9 h-9 rounded-xl bg-emerald-50 text-tdop-secondary flex items-center justify-center shrink-0">
+                        <Bookmark className="w-4 h-4" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-tdop-navy truncate">{opp.title}</p>
+                        <p className="text-xs text-gray-400">{opp.company}</p>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-gray-300 shrink-0" />
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </DashboardSection>
+          </div>
+
+          {/* Active Applications */}
+          <DashboardSection
+            title="Active applications"
+            icon={<FileText className="w-4 h-4 text-amber-500" />}
+            action={activeApplications.length > 0 ? { label: 'View all', to: '/applications' } : undefined}
+            empty={activeApplications.length === 0}
+          >
+            {activeApplications.length === 0 ? (
+              <EmptyState
+                icon={<FileText className="w-8 h-8 text-gray-300" />}
+                title="No active applications"
+                description="Apply to opportunities to track your progress here."
+              />
+            ) : (
+              <div className="space-y-2 p-4">
+                {activeApplications.map((app: any) => (
+                  <Link
+                    key={app.id}
+                    to={`/applications/${app.id}`}
+                    className="flex items-center gap-3 p-3 rounded-xl border border-gray-100 hover:border-tdop-primary/20 hover:shadow-soft transition-all"
+                  >
+                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${
+                      app.status === 'shortlisted' ? 'bg-emerald-50 text-tdop-secondary'
+                      : app.status === 'under_review' ? 'bg-amber-50 text-amber-600'
+                      : 'bg-tdop-primary/10 text-tdop-primary'
+                    }`}>
+                      <Eye className="w-4 h-4" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-tdop-navy truncate">{app.opportunityTitle || `Application #${app.id}`}</p>
+                      <p className="text-xs text-gray-400 capitalize">{app.status?.replace(/_/g, ' ')}</p>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-gray-300 shrink-0" />
+                  </Link>
+                ))}
+              </div>
+            )}
+          </DashboardSection>
 
           {/* Recommendations */}
           <DashboardSection

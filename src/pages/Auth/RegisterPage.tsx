@@ -38,7 +38,7 @@ const RegisterPage: React.FC = () => {
         lastName: form.lastName,
         email: form.email,
         password: form.password,
-        role: form.role,
+        role: form.role.toLowerCase() as any,
       });
       navigate('/dashboard');
     } catch (err: any) {

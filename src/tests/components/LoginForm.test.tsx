@@ -97,6 +97,7 @@ describe('LoginForm', () => {
       register: vi.fn(),
       logout: vi.fn(),
       refreshSession: vi.fn(),
+      refreshUser: vi.fn(),
       updateUser: vi.fn(),
       user: null,
       tokens: null,
