@@ -84,7 +84,16 @@ const SeekerDashboardPage: React.FC = () => {
     .sort((a, b) => new Date(a.applicationDeadline).getTime() - new Date(b.applicationDeadline).getTime())
     .slice(0, 5);
 
-  const recommendations = opportunities.slice(0, 3);
+  const { data: recommendationsData } = useQuery({
+    queryKey: ['recommendations'],
+    queryFn: async () => {
+      const { data } = await axiosInstance.get('/recommendations');
+      return data?.data || [];
+    },
+    refetchOnWindowFocus: false,
+  });
+
+  const recommendations = Array.isArray(recommendationsData) ? recommendationsData : [];
 
   const activeApplications = applications.filter((app: any) =>
     ['pending', 'under_review', 'shortlisted'].includes(app.status)

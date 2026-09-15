@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { useNotifications } from '@/hooks/useNotifications';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import { Bell, CheckCheck, Info, CheckCircle2, AlertTriangle, XCircle, Clock, ExternalLink } from 'lucide-react';
+import { Bell, CheckCheck, Info, CheckCircle2, AlertTriangle, XCircle, Clock, ExternalLink, Filter } from 'lucide-react';
 
 const iconMap: Record<string, React.ElementType> = {
   info: Info,
@@ -19,6 +19,24 @@ const colorMap: Record<string, string> = {
   warning: 'bg-amber-50 text-amber-600',
   error: 'bg-red-50 text-red-600',
 };
+
+type CategoryFilter = 'all' | 'application' | 'opportunity' | 'profile' | 'system';
+
+const categoryFilters: { value: CategoryFilter; label: string }[] = [
+  { value: 'all', label: 'All' },
+  { value: 'application', label: 'Applications' },
+  { value: 'opportunity', label: 'Opportunities' },
+  { value: 'profile', label: 'Profile' },
+  { value: 'system', label: 'System' },
+];
+
+function categorizeNotification(title: string, message: string): CategoryFilter {
+  const combined = `${title} ${message}`.toLowerCase();
+  if (combined.includes('application') || combined.includes('applied') || combined.includes('shortlist') || combined.includes('interview')) return 'application';
+  if (combined.includes('opportunity') || combined.includes('recommendation') || combined.includes('deadline') || combined.includes('new ')) return 'opportunity';
+  if (combined.includes('profile') || combined.includes('skill') || combined.includes('document') || combined.includes('avatar')) return 'profile';
+  return 'system';
+}
 
 function getDeepLink(title: string, message: string): string | null {
   const combined = `${title} ${message}`.toLowerCase();
@@ -38,6 +56,12 @@ function getDeepLink(title: string, message: string): string | null {
 const SeekerNotificationsPage: React.FC = () => {
   const { t } = useTranslation();
   const { notifications, unreadCount, isLoading, markAsRead, markAllAsRead } = useNotifications();
+  const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>('all');
+
+  const filtered = useMemo(() => {
+    if (categoryFilter === 'all') return notifications;
+    return notifications.filter((n: any) => categorizeNotification(n.title || '', n.message || '') === categoryFilter);
+  }, [notifications, categoryFilter]);
 
   if (isLoading) {
     return (
@@ -53,31 +77,56 @@ const SeekerNotificationsPage: React.FC = () => {
         <div>
           <h1 className="text-3xl font-bold text-tdop-navy flex items-center gap-2">
             <Bell className="w-8 h-8 text-tdop-primary" />
-            {t('notifications.title', 'Notifications')}
+            Notifications
           </h1>
           <p className="text-gray-500 mt-1">
             {unreadCount > 0
-              ? t('notifications.unreadCount', { count: unreadCount, defaultValue: `${unreadCount} unread notification(s)` })
-              : t('notifications.allRead', 'All caught up!')}
+              ? `${unreadCount} unread notification(s)`
+              : 'All caught up!'}
           </p>
         </div>
         {unreadCount > 0 && (
           <Button variant="outline" size="sm" onClick={() => markAllAsRead()}>
             <CheckCheck className="w-4 h-4 mr-1.5" />
-            {t('notifications.markAllRead', 'Mark all read')}
+            Mark all read
           </Button>
         )}
       </div>
 
+      {notifications.length > 0 && (
+        <div className="flex items-center gap-2 overflow-x-auto pb-1">
+          <Filter className="w-4 h-4 text-gray-400 shrink-0" />
+          {categoryFilters.map(f => (
+            <button
+              key={f.value}
+              onClick={() => setCategoryFilter(f.value)}
+              className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
+                categoryFilter === f.value
+                  ? 'bg-tdop-primary text-white'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+      )}
+
       {notifications.length === 0 ? (
         <Card className="text-center py-16">
           <Bell className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-tdop-navy mb-2">{t('notifications.empty', 'No notifications yet')}</h3>
-          <p className="text-gray-500">{t('notifications.emptyHint', 'You\'ll see updates about your applications and saved opportunities here.')}</p>
+          <h3 className="text-lg font-semibold text-tdop-navy mb-2">No notifications yet</h3>
+          <p className="text-gray-500">You'll see updates about your applications and saved opportunities here.</p>
+        </Card>
+      ) : filtered.length === 0 ? (
+        <Card className="text-center py-12">
+          <Filter className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+          <h3 className="text-lg font-semibold text-tdop-navy mb-2">No matching notifications</h3>
+          <p className="text-gray-500">Try a different filter.</p>
         </Card>
       ) : (
         <div className="space-y-3">
-          {notifications.map((notif: any) => {
+          {filtered.map((notif: any) => {
             const Icon = iconMap[notif.type] || Info;
             const iconColor = colorMap[notif.type] || colorMap.info;
             const timeAgo = notif.createdAt
@@ -86,6 +135,7 @@ const SeekerNotificationsPage: React.FC = () => {
               ? formatTimeAgo(new Date(notif.timestamp))
               : '';
             const deepLink = getDeepLink(notif.title || '', notif.message || '');
+            const category = categorizeNotification(notif.title || '', notif.message || '');
 
             return (
               <Card
@@ -95,9 +145,7 @@ const SeekerNotificationsPage: React.FC = () => {
               >
                 <div
                   className="p-4 flex items-start gap-4"
-                  onClick={() => {
-                    if (!notif.read) markAsRead(notif.id);
-                  }}
+                  onClick={() => { if (!notif.read) markAsRead(notif.id); }}
                 >
                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${iconColor}`}>
                     <Icon className="w-5 h-5" />
@@ -119,6 +167,7 @@ const SeekerNotificationsPage: React.FC = () => {
                           {timeAgo}
                         </span>
                       )}
+                      <span className="text-xs text-gray-300 capitalize">{category}</span>
                       {deepLink && (
                         <Link
                           to={deepLink}
@@ -132,12 +181,9 @@ const SeekerNotificationsPage: React.FC = () => {
                   </div>
                   {!notif.read && (
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        markAsRead(notif.id);
-                      }}
+                      onClick={(e) => { e.stopPropagation(); markAsRead(notif.id); }}
                       className="text-xs text-tdop-primary hover:text-blue-700 font-medium shrink-0 mt-1"
-                      title={t('notifications.markRead', 'Mark as read')}
+                      title="Mark as read"
                     >
                       <CheckCheck className="w-4 h-4" />
                     </button>

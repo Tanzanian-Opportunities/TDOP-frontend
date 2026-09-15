@@ -13,6 +13,9 @@ export interface OpportunityFilter {
   dateTo?: string;
   experience?: string;
   skills?: string[];
+  category?: string;
+  educationLevel?: string;
+  verified?: boolean;
   page?: number;
   limit?: number;
   sortBy?: ApplicationSort;

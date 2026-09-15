@@ -36,8 +36,12 @@ export const UserProfile: React.FC<UserProfileProps> = ({ profile, isOrganizatio
       <Card padding={false}>
         <div className="p-6 border-b border-gray-100">
           <div className="flex items-start gap-4">
-            <div className="w-20 h-20 bg-tdop-primary rounded-full flex items-center justify-center text-white text-2xl font-bold flex-shrink-0">
-              {isOrganization ? (profile as OrganizationProfile).organizationName?.[0] : (profile as SeekerProfile).headline?.[0] || 'U'}
+            <div className="w-20 h-20 bg-tdop-primary rounded-full flex items-center justify-center text-white text-2xl font-bold flex-shrink-0 overflow-hidden">
+              {(profile as SeekerProfile).avatar || (profile as any).avatar ? (
+                <img src={(profile as any).avatar} alt="Profile photo" className="w-full h-full object-cover" />
+              ) : (
+                <span>{isOrganization ? (profile as OrganizationProfile).organizationName?.[0] : (profile as SeekerProfile).headline?.[0] || 'U'}</span>
+              )}
             </div>
             <div className="flex-1 min-w-0">
               <h1 className="text-2xl font-bold text-tdop-navy">{getName()}</h1>

@@ -1,30 +1,65 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { useOpportunities } from '@/hooks/useOpportunities';
 import { useAuth } from '@/hooks/useAuth';
 import { useApplications } from '@/hooks/useApplications';
 import { useDocuments } from '@/hooks/useDocuments';
+import { useNotificationContext } from '@/context/NotificationContext';
+import { reportApi } from '@/services/api/reportApi';
+import axiosInstance from '@/services/api/axiosInstance';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { formatSalary } from '@/utils/formatSalary';
 import { formatDate } from '@/utils/formatDate';
 import { useTranslation } from 'react-i18next';
-import { MapPin, Briefcase, Clock, Calendar, Users, Check, FileText, ArrowLeft, X, ChevronRight, AlertCircle } from 'lucide-react';
+import {
+  MapPin, Briefcase, Clock, Calendar, Users, Check, FileText,
+  ArrowLeft, X, AlertCircle, Share2, Flag, Bookmark, ExternalLink,
+  Shield, ChevronRight, Sparkles, Eye, AlertTriangle,
+} from 'lucide-react';
 
 export const OpportunityDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { opportunities, isLoading } = useOpportunities();
-  const { isAuthenticated, isSeeker } = useAuth();
+  const { user, isAuthenticated, isSeeker } = useAuth();
   const { apply, isApplying } = useApplications();
   const { documents } = useDocuments();
+  const { addNotification } = useNotificationContext();
   const { t } = useTranslation();
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [coverLetter, setCoverLetter] = useState('');
   const [selectedDocs, setSelectedDocs] = useState<string[]>([]);
   const [applyError, setApplyError] = useState('');
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [reportReason, setReportReason] = useState('');
+  const [reportDescription, setReportDescription] = useState('');
+  const [reportSubmitted, setReportSubmitted] = useState(false);
 
   const opportunity = opportunities.find(opp => opp.id === id);
+
+  const { data: relatedData } = useQuery({
+    queryKey: ['related-opportunities', id],
+    queryFn: async () => {
+      if (!opportunity) return [];
+      const { data } = await axiosInstance.get('/opportunities', {
+        params: { type: opportunity.type, limit: 4 }
+      });
+      return (data?.data || []).filter((o: any) => o.id !== id).slice(0, 3);
+    },
+    enabled: !!opportunity,
+    refetchOnWindowFocus: false,
+  });
+
+  const { data: profileCompletion } = useQuery({
+    queryKey: ['profile-completion'],
+    queryFn: async () => {
+      const { data } = await axiosInstance.get('/profile/completion');
+      return data?.completion || 0;
+    },
+    refetchOnWindowFocus: false,
+  });
 
   if (isLoading || !opportunity) {
     return (
@@ -35,6 +70,27 @@ export const OpportunityDetail: React.FC = () => {
   }
 
   const isExpired = opportunity.applicationDeadline && new Date(opportunity.applicationDeadline) < new Date();
+  const completion = typeof profileCompletion === 'number' ? profileCompletion : 0;
+
+  const eligibilityChecks = [
+    {
+      label: 'Education level',
+      met: !!opportunity.educationLevel,
+      detail: opportunity.educationLevel || 'Not specified',
+    },
+    {
+      label: 'Experience level',
+      met: !!opportunity.experienceLevel,
+      detail: opportunity.experienceLevel || 'Not specified',
+    },
+    {
+      label: 'Skills match',
+      met: opportunity.skills?.length > 0,
+      detail: opportunity.skills?.length ? `${opportunity.skills.length} skills required` : 'No specific skills required',
+    },
+  ];
+
+  const metCount = eligibilityChecks.filter(c => c.met).length;
 
   const handleApply = async () => {
     setApplyError('');
@@ -47,28 +103,65 @@ export const OpportunityDetail: React.FC = () => {
       setShowApplyModal(false);
       setCoverLetter('');
       setSelectedDocs([]);
+      addNotification({ type: 'success', title: 'Application submitted', message: `Applied for ${opportunity.title}` });
     } catch (err: any) {
       setApplyError(err?.message || 'Failed to submit application.');
     }
   };
 
+  const handleShare = async () => {
+    const url = window.location.href;
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: opportunity.title, text: `Check out this opportunity: ${opportunity.title}`, url });
+      } catch {}
+    } else {
+      await navigator.clipboard.writeText(url);
+      addNotification({ type: 'info', title: 'Link copied', message: 'Opportunity link copied to clipboard.' });
+    }
+  };
+
+  const handleReport = async () => {
+    if (!reportReason) return;
+    try {
+      await reportApi.createReport({
+        type: reportReason,
+        targetType: 'opportunity',
+        targetId: opportunity.id,
+        reason: reportReason,
+        description: reportDescription || undefined,
+      });
+      setReportSubmitted(true);
+      setTimeout(() => { setShowReportModal(false); setReportSubmitted(false); setReportReason(''); setReportDescription(''); }, 2000);
+    } catch {
+      addNotification({ type: 'error', title: 'Error', message: 'Failed to submit report.' });
+    }
+  };
+
   const toggleDoc = (docUrl: string) => {
-    setSelectedDocs(prev =>
-      prev.includes(docUrl) ? prev.filter(u => u !== docUrl) : [...prev, docUrl]
-    );
+    setSelectedDocs(prev => prev.includes(docUrl) ? prev.filter(u => u !== docUrl) : [...prev, docUrl]);
   };
 
   const daysLeft = opportunity.applicationDeadline
     ? Math.ceil((new Date(opportunity.applicationDeadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
     : null;
 
+  const related = relatedData || [];
+
   return (
     <div className="max-w-4xl mx-auto space-y-6 animate-slide-up">
-      <div className="flex items-center gap-3">
-        <Link to="/browse" className="p-2 rounded-lg hover:bg-gray-100 transition-colors">
-          <ArrowLeft className="w-5 h-5 text-gray-600" />
+      <div className="flex items-center justify-between">
+        <Link to="/browse" className="inline-flex items-center gap-1.5 text-tdop-primary text-sm font-medium hover:gap-2.5 transition-all">
+          <ArrowLeft className="w-4 h-4" /> Back to opportunities
         </Link>
-        <span className="text-sm text-gray-500">Back to opportunities</span>
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="sm" onClick={handleShare}>
+            <Share2 className="w-4 h-4 mr-1" /> Share
+          </Button>
+          <Button variant="ghost" size="sm" onClick={() => setShowReportModal(true)} className="text-gray-500 hover:text-red-600">
+            <Flag className="w-4 h-4 mr-1" /> Report
+          </Button>
+        </div>
       </div>
 
       <Card padding={false}>
@@ -82,15 +175,22 @@ export const OpportunityDetail: React.FC = () => {
               </p>
             </div>
             <div className="flex gap-2">
-              {opportunity.isVerified && <Badge variant="success">{t('opportunities.verified')}</Badge>}
-              {opportunity.isFeatured && <Badge variant="warning">{t('opportunities.featured')}</Badge>}
+              {opportunity.isVerified && (
+                <div className="group relative">
+                  <Badge variant="success"><Shield className="w-3 h-3 mr-1 inline" />Verified</Badge>
+                  <div className="absolute right-0 top-full mt-2 w-64 p-3 bg-white rounded-xl shadow-lg border border-gray-100 text-xs text-gray-600 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-10">
+                    This opportunity has been verified by TDOP. The organization and listing details have been reviewed.
+                  </div>
+                </div>
+              )}
+              {opportunity.isFeatured && <Badge variant="warning">Featured</Badge>}
             </div>
           </div>
 
           <div className="flex flex-wrap items-center gap-4">
             <div className="flex items-center gap-2 text-sm text-gray-500">
               <MapPin className="w-4 h-4" />
-              {opportunity.location}{opportunity.isRemote ? ` (${t('opportunities.remote')})` : ''}
+              {opportunity.location}{opportunity.isRemote ? ' (Remote)' : ''}
             </div>
             {opportunity.applicationDeadline && (
               <div className={`flex items-center gap-2 text-sm ${daysLeft !== null && daysLeft <= 3 ? 'text-amber-600 font-medium' : 'text-gray-500'}`}>
@@ -107,74 +207,79 @@ export const OpportunityDetail: React.FC = () => {
             )}
             <div className="flex items-center gap-2 text-sm text-gray-500">
               <Users className="w-4 h-4" />
-              {t('opportunities.applyCount', { count: opportunity.applicationsCount })}
+              {opportunity.applicationsCount} applicants
             </div>
+            {opportunity.category && (
+              <Badge variant="gray">{opportunity.category}</Badge>
+            )}
           </div>
         </div>
 
         <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card>
-            <p className="text-sm text-gray-500">{t('opportunities.salary')}</p>
+            <p className="text-sm text-gray-500">Salary</p>
             <p className="text-xl font-bold text-tdop-navy mt-1">
               {formatSalary(opportunity.salaryMin, opportunity.salaryMax, opportunity.salaryCurrency)}
             </p>
           </Card>
           <Card>
-            <p className="text-sm text-gray-500">{t('opportunities.typeLabel')}</p>
-            <p className="text-xl font-bold text-tdop-navy mt-1 capitalize">
-              {t(`opportunities.type.${opportunity.type}`)}
-            </p>
+            <p className="text-sm text-gray-500">Type</p>
+            <p className="text-xl font-bold text-tdop-navy mt-1 capitalize">{opportunity.type}</p>
           </Card>
           <Card>
-            <p className="text-sm text-gray-500">{t('opportunities.experience')}</p>
-            <p className="text-xl font-bold text-tdop-navy mt-1 capitalize">
-              {opportunity.experienceLevel}
-            </p>
+            <p className="text-sm text-gray-500">Experience</p>
+            <p className="text-xl font-bold text-tdop-navy mt-1 capitalize">{opportunity.experienceLevel}</p>
           </Card>
         </div>
 
         <div className="p-6 space-y-4">
-          <h2 className="text-lg font-semibold text-tdop-navy">{t('opportunities.description')}</h2>
+          <h2 className="text-lg font-semibold text-tdop-navy">Description</h2>
           <p className="text-gray-600 leading-relaxed">{opportunity.description}</p>
         </div>
+
+        {opportunity.skills?.length > 0 && (
+          <div className="px-6 pb-4">
+            <h3 className="font-medium text-tdop-navy mb-2">Required skills</h3>
+            <div className="flex flex-wrap gap-2">
+              {opportunity.skills.map((skill, i) => (
+                <span key={i} className="px-3 py-1 bg-tdop-primary/10 text-tdop-primary text-xs font-medium rounded-full">{skill}</span>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="px-6 pb-6 space-y-4">
           {opportunity.requirements.length > 0 && (
             <div>
-              <h3 className="font-medium text-tdop-navy mb-2">{t('opportunities.requirements')}</h3>
+              <h3 className="font-medium text-tdop-navy mb-2">Requirements</h3>
               <ul className="space-y-1">
                 {opportunity.requirements.map((req, i) => (
                   <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
-                    <Check className="w-4 h-4 text-tdop-primary mt-0.5 flex-shrink-0" />
-                    {req}
+                    <Check className="w-4 h-4 text-tdop-primary mt-0.5 flex-shrink-0" />{req}
                   </li>
                 ))}
               </ul>
             </div>
           )}
-
           {opportunity.responsibilities.length > 0 && (
             <div>
-              <h3 className="font-medium text-tdop-navy mb-2">{t('opportunities.responsibilities')}</h3>
+              <h3 className="font-medium text-tdop-navy mb-2">Responsibilities</h3>
               <ul className="space-y-1">
                 {opportunity.responsibilities.map((resp, i) => (
                   <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
-                    <Check className="w-4 h-4 text-tdop-primary mt-0.5 flex-shrink-0" />
-                    {resp}
+                    <Check className="w-4 h-4 text-tdop-primary mt-0.5 flex-shrink-0" />{resp}
                   </li>
                 ))}
               </ul>
             </div>
           )}
-
           {opportunity.benefits.length > 0 && (
             <div>
-              <h3 className="font-medium text-tdop-navy mb-2">{t('opportunities.benefits')}</h3>
+              <h3 className="font-medium text-tdop-navy mb-2">Benefits</h3>
               <ul className="space-y-1">
                 {opportunity.benefits.map((benefit, i) => (
                   <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
-                    <Check className="w-4 h-4 text-tdop-primary mt-0.5 flex-shrink-0" />
-                    {benefit}
+                    <Check className="w-4 h-4 text-tdop-primary mt-0.5 flex-shrink-0" />{benefit}
                   </li>
                 ))}
               </ul>
@@ -183,6 +288,61 @@ export const OpportunityDetail: React.FC = () => {
         </div>
       </Card>
 
+      {/* Eligibility Match */}
+      {isAuthenticated && isSeeker && (
+        <Card>
+          <div className="flex items-center gap-2 mb-3">
+            <Sparkles className="w-5 h-5 text-tdop-primary" />
+            <h3 className="font-semibold text-tdop-navy">Your match</h3>
+          </div>
+          <div className="space-y-2">
+            {eligibilityChecks.map((check, i) => (
+              <div key={i} className="flex items-center gap-3 text-sm">
+                <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${check.met ? 'bg-emerald-100 text-tdop-secondary' : 'bg-gray-100 text-gray-400'}`}>
+                  <Check className="w-3 h-3" />
+                </div>
+                <span className="text-gray-700">{check.label}</span>
+                <span className="text-gray-400 text-xs ml-auto">{check.detail}</span>
+              </div>
+            ))}
+          </div>
+          {completion < 80 && (
+            <div className="mt-3 p-3 bg-amber-50 rounded-xl text-sm text-amber-700 flex items-start gap-2">
+              <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0" />
+              <span>Complete your profile to improve your match score. <Link to="/profile" className="underline font-medium">Edit profile</Link></span>
+            </div>
+          )}
+        </Card>
+      )}
+
+      {/* Related Opportunities */}
+      {related.length > 0 && (
+        <Card>
+          <h3 className="font-semibold text-tdop-navy mb-3">Related opportunities</h3>
+          <div className="space-y-2">
+            {related.map((rel: any) => (
+              <Link
+                key={rel.id}
+                to={`/opportunities/${rel.id}`}
+                className="flex items-center justify-between p-3 rounded-xl border border-gray-100 hover:border-tdop-primary/20 hover:shadow-soft transition-all"
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-9 h-9 rounded-xl bg-tdop-primary/10 text-tdop-primary flex items-center justify-center shrink-0">
+                    <Briefcase className="w-4 h-4" />
+                  </div>
+                  <div className="min-w-0">
+                    <h4 className="font-medium text-sm text-tdop-navy truncate">{rel.title}</h4>
+                    <p className="text-xs text-gray-400">{rel.company} · {rel.location}</p>
+                  </div>
+                </div>
+                <ChevronRight className="w-4 h-4 text-gray-300 shrink-0" />
+              </Link>
+            ))}
+          </div>
+        </Card>
+      )}
+
+      {/* Apply CTA */}
       {isAuthenticated && isSeeker && (
         <div className="sticky bottom-4 flex items-center justify-center gap-4">
           {isExpired ? (
@@ -192,21 +352,22 @@ export const OpportunityDetail: React.FC = () => {
           ) : (
             <Button size="lg" onClick={() => setShowApplyModal(true)} className="w-full md:w-auto">
               <FileText className="w-5 h-5 mr-2" />
-              {t('opportunities.applyNow')}
+              Apply now
             </Button>
           )}
         </div>
       )}
 
+      {/* Apply Modal */}
       {showApplyModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" role="dialog" aria-modal="true" aria-label="Apply for opportunity">
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between p-6 border-b border-gray-100">
               <div>
                 <h2 className="text-lg font-bold text-tdop-navy">Apply for {opportunity.title}</h2>
                 <p className="text-sm text-gray-500 mt-0.5">at {opportunity.company}</p>
               </div>
-              <button onClick={() => setShowApplyModal(false)} className="p-2 rounded-lg hover:bg-gray-100">
+              <button onClick={() => setShowApplyModal(false)} className="p-2 rounded-lg hover:bg-gray-100" aria-label="Close">
                 <X className="w-5 h-5 text-gray-400" />
               </button>
             </div>
@@ -214,8 +375,17 @@ export const OpportunityDetail: React.FC = () => {
             <div className="p-6 space-y-5">
               {applyError && (
                 <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-600">
-                  <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
-                  {applyError}
+                  <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />{applyError}
+                </div>
+              )}
+
+              {completion < 60 && (
+                <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-700 flex items-start gap-2">
+                  <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0" />
+                  <div>
+                    <p className="font-medium">Your profile is incomplete ({completion}%)</p>
+                    <p className="mt-1">A complete profile improves your chances. <Link to="/profile" className="underline" onClick={() => setShowApplyModal(false)}>Complete profile</Link></p>
+                  </div>
                 </div>
               )}
 
@@ -240,9 +410,7 @@ export const OpportunityDetail: React.FC = () => {
                   <div className="text-center py-6 border-2 border-dashed border-gray-200 rounded-xl">
                     <FileText className="w-8 h-8 text-gray-300 mx-auto mb-2" />
                     <p className="text-sm text-gray-500">No documents uploaded yet.</p>
-                    <Link to="/documents" className="text-sm text-tdop-primary hover:underline mt-1 inline-block">
-                      Upload documents
-                    </Link>
+                    <Link to="/documents" className="text-sm text-tdop-primary hover:underline mt-1 inline-block">Upload documents</Link>
                   </div>
                 ) : (
                   <div className="space-y-2 max-h-40 overflow-y-auto">
@@ -250,17 +418,10 @@ export const OpportunityDetail: React.FC = () => {
                       <label
                         key={doc.id}
                         className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${
-                          selectedDocs.includes(doc.fileUrl)
-                            ? 'border-tdop-primary bg-tdop-primary/5'
-                            : 'border-gray-200 hover:bg-gray-50'
+                          selectedDocs.includes(doc.fileUrl) ? 'border-tdop-primary bg-tdop-primary/5' : 'border-gray-200 hover:bg-gray-50'
                         }`}
                       >
-                        <input
-                          type="checkbox"
-                          checked={selectedDocs.includes(doc.fileUrl)}
-                          onChange={() => toggleDoc(doc.fileUrl)}
-                          className="w-4 h-4 rounded border-gray-300 text-tdop-primary focus:ring-tdop-primary"
-                        />
+                        <input type="checkbox" checked={selectedDocs.includes(doc.fileUrl)} onChange={() => toggleDoc(doc.fileUrl)} className="w-4 h-4 rounded border-gray-300 text-tdop-primary focus:ring-tdop-primary" />
                         <FileText className="w-4 h-4 text-gray-400 shrink-0" />
                         <span className="text-sm text-tdop-navy truncate flex-1">{doc.name || doc.fileName}</span>
                       </label>
@@ -271,13 +432,69 @@ export const OpportunityDetail: React.FC = () => {
             </div>
 
             <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-100">
-              <Button variant="ghost" onClick={() => setShowApplyModal(false)}>
-                Cancel
-              </Button>
-              <Button onClick={handleApply} loading={isApplying}>
-                Submit application
-              </Button>
+              <Button variant="ghost" onClick={() => setShowApplyModal(false)}>Cancel</Button>
+              <Button onClick={handleApply} loading={isApplying}>Submit application</Button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Report Modal */}
+      {showReportModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" role="dialog" aria-modal="true" aria-label="Report opportunity">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md">
+            <div className="flex items-center justify-between p-6 border-b border-gray-100">
+              <h2 className="text-lg font-bold text-tdop-navy">Report opportunity</h2>
+              <button onClick={() => setShowReportModal(false)} className="p-2 rounded-lg hover:bg-gray-100" aria-label="Close">
+                <X className="w-5 h-5 text-gray-400" />
+              </button>
+            </div>
+            <div className="p-6 space-y-4">
+              {reportSubmitted ? (
+                <div className="text-center py-6">
+                  <div className="w-12 h-12 rounded-full bg-emerald-100 text-tdop-secondary flex items-center justify-center mx-auto mb-3">
+                    <Check className="w-6 h-6" />
+                  </div>
+                  <p className="font-medium text-tdop-navy">Report submitted</p>
+                  <p className="text-sm text-gray-500 mt-1">Thank you for helping keep TDOP safe.</p>
+                </div>
+              ) : (
+                <>
+                  <div>
+                    <label className="block text-sm font-medium text-tdop-navy mb-2">Reason</label>
+                    <select
+                      value={reportReason}
+                      onChange={(e) => setReportReason(e.target.value)}
+                      className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm text-tdop-navy focus:outline-none focus:ring-2 focus:ring-tdop-primary/20 focus:border-tdop-primary"
+                    >
+                      <option value="">Select a reason</option>
+                      <option value="scam">Suspected scam or fraud</option>
+                      <option value="misleading">Misleading information</option>
+                      <option value="expired">Expired opportunity</option>
+                      <option value="duplicate">Duplicate listing</option>
+                      <option value="inappropriate">Inappropriate content</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-tdop-navy mb-2">Additional details <span className="text-gray-400 font-normal">(optional)</span></label>
+                    <textarea
+                      value={reportDescription}
+                      onChange={(e) => setReportDescription(e.target.value)}
+                      rows={3}
+                      placeholder="Provide any additional context..."
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-tdop-navy placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-tdop-primary/20 focus:border-tdop-primary resize-none"
+                    />
+                  </div>
+                </>
+              )}
+            </div>
+            {!reportSubmitted && (
+              <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-100">
+                <Button variant="ghost" onClick={() => setShowReportModal(false)}>Cancel</Button>
+                <Button variant="danger" onClick={handleReport} disabled={!reportReason}>Submit report</Button>
+              </div>
+            )}
           </div>
         </div>
       )}
