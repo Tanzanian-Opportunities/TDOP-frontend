@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useNotifications } from '@/hooks/useNotifications';
 import { useThemeContext } from '@/context/ThemeContext';
@@ -14,7 +14,7 @@ const Navbar: React.FC = () => {
  const { unreadCount } = useNotifications();
  const { isDark, toggleTheme } = useThemeContext();
  const { t, i18n } = useTranslation();
- const location = window.location;
+ const location = useLocation();
  const [showUserMenu, setShowUserMenu] = React.useState(false);
 
  const currentLang = i18n.language.startsWith('sw') ? 'sw' : 'en';
