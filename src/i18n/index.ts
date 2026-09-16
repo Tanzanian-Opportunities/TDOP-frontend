@@ -13,7 +13,7 @@ i18n
   .init({
     lng: localStorage.getItem('tdop-language') || 'en',
     fallbackLng,
-    debug: import.meta.env.DEV,
+    debug: import.meta.env.DEV && import.meta.env.MODE !== 'test',
     interpolation: {
       escapeValue: false,
     },

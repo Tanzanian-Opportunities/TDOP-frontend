@@ -60,7 +60,12 @@ describe('authApi', () => {
     };
     const result = await authApi.register(data);
 
-    expect(mockPost).toHaveBeenCalledWith('/auth/register', data);
+    expect(mockPost).toHaveBeenCalledWith('/auth/register', {
+      email: 'new@example.com',
+      password: 'password123',
+      fullName: 'New User',
+      role: 'SEEKER',
+    });
     expect(result.data?.user).toEqual(mockUser);
   });
 
@@ -96,7 +101,7 @@ describe('authApi', () => {
     const result = await authApi.forgotPassword('test@example.com');
 
     expect(mockPost).toHaveBeenCalledWith('/auth/forgot-password', { email: 'test@example.com' });
-    expect(result.data?.success).toBe(true);
+    expect(result.success).toBe(true);
   });
 
   it('resetPassword posts token and new password', async () => {
@@ -108,7 +113,7 @@ describe('authApi', () => {
       token: 'reset-token-123',
       password: 'newpassword123',
     });
-    expect(result.data?.success).toBe(true);
+    expect(result.success).toBe(true);
   });
 
   it('login handles error response', async () => {

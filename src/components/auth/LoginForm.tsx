@@ -67,10 +67,11 @@ const LoginForm: React.FC = () => {
             )}
 
             <div>
-              <label className="block text-sm font-medium text-tdop-navy mb-1.5">{t('auth.emailOrPhone')}</label>
+              <label htmlFor="emailOrPhone" className="block text-sm font-medium text-tdop-navy mb-1.5">{t('auth.emailOrPhone')}</label>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
+                  id="emailOrPhone"
                   type="text"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
@@ -83,10 +84,11 @@ const LoginForm: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-tdop-navy mb-1.5">{t('auth.password')}</label>
+              <label htmlFor="password" className="block text-sm font-medium text-tdop-navy mb-1.5">{t('auth.password')}</label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
+                  id="password"
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={e => setPassword(e.target.value)}

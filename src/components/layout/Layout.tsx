@@ -9,8 +9,8 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
  const { notifications, removeNotification } = useNotificationContext();
 
  return (
- <div className="min-h-screen flex flex-col bg-white">
- <SkipToContent />
+<div className="min-h-screen flex flex-col bg-white dark:bg-gray-950">
+  <SkipToContent />
  <Navbar />
  <main id="main-content" className="flex-1" role="main">{children}</main>
  <Footer />
