@@ -5,34 +5,29 @@ import axiosInstance from '@/services/api/axiosInstance';
 import { Building2, Briefcase, Users, MapPin } from 'lucide-react';
 
 interface PlatformStats {
-  organizations: number;
-  opportunities: number;
-  users: number;
+  totalOrganizations: number;
+  monthlyOpportunities: number;
+  totalUsers: number;
 }
 
 const ImpactStats: React.FC = () => {
   const { t } = useTranslation();
 
-  const { data: stats } = useQuery({
-    queryKey: ['platform-stats'],
+  const { data: stats, isLoading } = useQuery({
+    queryKey: ['public-stats'],
     queryFn: async (): Promise<PlatformStats> => {
-      try {
-        const { data } = await axiosInstance.get('/opportunities');
-        const opportunities = Array.isArray(data?.data) ? data.data.length : 0;
-        return { organizations: 0, opportunities, users: 0 };
-      } catch {
-        return { organizations: 0, opportunities: 0, users: 0 };
-      }
+      const { data } = await axiosInstance.get('/public/stats');
+      return data;
     },
     refetchOnWindowFocus: false,
     staleTime: 60000,
   });
 
   const statItems = [
-    { value: stats?.organizations || 0, labelKey: 'statInstitutions', icon: Building2 },
-    { value: stats?.opportunities || 0, labelKey: 'statOpportunities', icon: Briefcase },
-    { value: stats?.users || 0, labelKey: 'statUsers', icon: Users },
-    { value: 'All', labelKey: 'statCoverage', icon: MapPin, sub: 'Tanzania' },
+    { value: stats?.totalOrganizations ?? null, labelKey: 'statInstitutions', icon: Building2 },
+    { value: stats?.monthlyOpportunities ?? null, labelKey: 'statOpportunities', icon: Briefcase },
+    { value: stats?.totalUsers ?? null, labelKey: 'statUsers', icon: Users },
+    { value: null, labelKey: 'statCoverage', icon: MapPin, sub: 'Tanzania' },
   ];
 
   return (
@@ -40,10 +35,10 @@ const ImpactStats: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
           <span className="text-xs font-semibold uppercase tracking-widest text-tdop-primary">
-            {t('landing.impactSubtitle') || 'Our Impact'}
+            {t('landing.impactSubtitle')}
           </span>
           <h2 className="mt-2 font-display text-3xl sm:text-4xl font-bold text-tdop-navy">
-            {t('landing.impactTitle') || 'Growing With Tanzania'}
+            {t('landing.impactTitle')}
           </h2>
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
@@ -55,7 +50,7 @@ const ImpactStats: React.FC = () => {
                   <Icon className="w-7 h-7 text-tdop-primary" />
                 </div>
                 <p className="mt-4 font-display text-3xl lg:text-4xl font-extrabold text-tdop-navy">
-                  {typeof stat.value === 'number' && stat.value === 0 ? '—' : stat.value}
+                  {isLoading ? '—' : stat.value === null ? t('landing.statAll') : stat.value}
                 </p>
                 <p className="mt-1 text-sm text-gray-500">
                   {t(`landing.${stat.labelKey}`)}
