@@ -2,7 +2,7 @@ import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { AuthTokens } from '@/types/user';
 
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8081/api/v1',
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8080/api/v1',
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ axiosInstance.interceptors.response.use(
         refreshPromise = (async () => {
           try {
             const res = await axios.post<any>(
-              `${import.meta.env.VITE_API_URL || 'http://localhost:8081/api/v1'}/auth/refresh`,
+              `${import.meta.env.VITE_API_URL || 'http://localhost:8080/api/v1'}/auth/refresh`,
               { email: '' },
               {
                 headers: {

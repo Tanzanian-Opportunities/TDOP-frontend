@@ -30,17 +30,37 @@ cp .env.example .env
 npm run dev
 ```
 
-The app runs at `http://localhost:3000` by default. The backend API is expected at the URL in `.env` (default `http://localhost:8081/api/v1`) — see [TDOP Backend](../TDOP-backend/README.md).
+The app runs at `http://localhost:3000` by default. The backend API is expected at the URL in `.env` (default `http://localhost:8080/api/v1`) — see [TDOP Backend](../TDOP-backend/README.md).
 
 ## Demo Accounts
 
 On the Sign In page you can use the one-click **"Try it"** buttons, or type these credentials manually:
 
-| Role | Email | Password |
+### Admins
+
+| Email | Password |
+|---|---|
+| `admin@tdop.go.tz` | `admin123` |
+| `superadmin@tdop.go.tz` | `superadmin` |
+| `admin2024@tdop.go.tz` | `admin2024` |
+
+### Seekers (all `seeker123`)
+
+| Email | Name |
+|---|---|
+| `john.mwangi@email.com` | John Mwangi |
+| `amina.hassan@email.com` | Amina Hassan |
+| `peter.okech@email.com` | Peter Okech |
+| `fatima.bakari@email.com` | Fatima Bakari |
+| `david.mwinyi@email.com` | David Mwinyi |
+
+### Organizations (all `org123`)
+
+| Email | Name | Verified |
 |---|---|---|
-| Administrator | `admin@tdop.go.tz` | `admin123` |
-| Organization | `info@tanzgold.com` | `org123` |
-| Job Seeker | `john.mwangi@email.com` | `seeker123` |
+| `info@tanzgold.com` | Tanzania Gold Mining Ltd | Yes |
+| `contact@safaricomTZ.com` | Safaricom Tanzania PLC | No |
+| `hr@crdbbank.com` | CRDB Bank PLC | No |
 
 ## Scripts
 
@@ -71,7 +91,7 @@ src/
 
 | Variable | Default | Purpose |
 |---|---|---|
-| `VITE_API_URL` | `http://localhost:8081/api/v1` | Backend API base URL |
+| `VITE_API_URL` | `http://localhost:8080/api/v1` | Backend API base URL |
 | `VITE_APP_NAME` | `TDOP` | App display name |
 | `VITE_APP_URL` | `http://localhost:3000` | Public app URL |
 
