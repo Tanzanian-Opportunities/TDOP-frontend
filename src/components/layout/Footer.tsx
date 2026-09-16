@@ -22,10 +22,10 @@ const Footer: React.FC = () => {
       { to: '/profile', label: t('common.resumeTips') },
     ],
     support: [
-      { to: '/#help', label: t('common.contactUs') },
-      { to: '/#help', label: t('footer.linkHelp') },
-      { to: '/#help', label: t('common.privacyPolicy') },
-      { to: '/#help', label: t('common.termsOfService') },
+      { to: '/contact', label: t('common.contactUs') },
+      { to: '/help', label: t('footer.linkHelp') },
+      { to: '/privacy', label: t('common.privacyPolicy') },
+      { to: '/terms', label: t('common.termsOfService') },
     ],
   };
 

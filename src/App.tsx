@@ -43,6 +43,10 @@ import VerificationOfficerPage from '@/pages/Admin/VerificationOfficerPage';
 import ModerationPage from '@/pages/Admin/ModerationPage';
 import PlatformConfigPage from '@/pages/Admin/PlatformConfigPage';
 import OrganizationTeamPage from '@/pages/Organization/TeamManagementPage';
+import ContactPage from '@/pages/Support/ContactPage';
+import HelpCenterPage from '@/pages/Support/HelpCenterPage';
+import PrivacyPage from '@/pages/Support/PrivacyPage';
+import TermsPage from '@/pages/Support/TermsPage';
 
 const queryClient = new QueryClient();
 
@@ -60,6 +64,10 @@ const AppRoutes: React.FC = () => {
         <Route path="/browse" element={<BrowseOpportunitiesPage />} />
         <Route path="/organizations" element={<BrowseOrganizationsPage />} />
         <Route path="/compare" element={<ComparePage />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/help" element={<HelpCenterPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/terms" element={<TermsPage />} />
 
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<SeekerDashboardPage />} />
