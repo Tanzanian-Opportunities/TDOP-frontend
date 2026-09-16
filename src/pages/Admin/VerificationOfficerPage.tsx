@@ -6,6 +6,7 @@ import { adminApi } from '@/services/api/adminApi';
 import { DashboardSection } from '@/components/dashboard/DashboardSection';
 import { StatCard } from '@/components/dashboard/StatCard';
 import { EmptyState } from '@/components/dashboard/EmptyState';
+import { PageError } from '@/components/ui/PageStates';
 import { CheckCircle, XCircle, Clock, FileText, AlertTriangle, Search, ArrowRight } from 'lucide-react';
 
 interface VerificationRequest {
@@ -20,6 +21,7 @@ interface VerificationRequest {
 const VerificationOfficerPage: React.FC = () => {
   const [requests, setRequests] = useState<VerificationRequest[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [stats, setStats] = useState({ pending: 0 });
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('all');
@@ -38,6 +40,7 @@ const VerificationOfficerPage: React.FC = () => {
       setStats(statsData);
     } catch (err) {
       console.error(err);
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -100,6 +103,8 @@ const VerificationOfficerPage: React.FC = () => {
       </div>
     );
   }
+
+  if (error) return <PageError message="Failed to load verification queue. Please try again." onRetry={() => {}} />;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">

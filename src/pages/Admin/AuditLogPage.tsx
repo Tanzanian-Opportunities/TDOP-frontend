@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
+import { PageError } from '@/components/ui/PageStates';
 import { adminApi } from '@/services/api/adminApi';
 import { ScrollText, Shield, Edit, Trash2, User, Clock, Search, RefreshCw } from 'lucide-react';
 
@@ -19,6 +20,7 @@ timestamp: string;
 const AuditLogPage: React.FC = () => {
 const [logs, setLogs] = useState<AuditLog[]>([]);
 const [loading, setLoading] = useState(true);
+const [error, setError] = useState(false);
 const [filter, setFilter] = useState('');
 
 useEffect(() => {
@@ -31,6 +33,7 @@ const data = await adminApi.getAuditLog();
 setLogs(Array.isArray(data) ? data : []);
 } catch (err) {
 console.error(err);
+setError(true);
 } finally {
 setLoading(false);
 }
@@ -69,6 +72,8 @@ return (
 </div>
 );
 }
+
+if (error) return <PageError message="Failed to load audit logs. Please try again." onRetry={() => {}} />;
 
 return (
 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">

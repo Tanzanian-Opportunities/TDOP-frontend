@@ -5,12 +5,13 @@ import { useQuery } from '@tanstack/react-query';
 import axiosInstance from '@/services/api/axiosInstance';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
+import { PageError } from '@/components/ui/PageStates';
 import { Sparkles, MapPin, Calendar, ArrowRight, BadgeCheck, Percent, Tag } from 'lucide-react';
 
 const SeekerRecommendationsPage: React.FC = () => {
   const { t } = useTranslation();
 
-  const { data: recommendations, isLoading } = useQuery({
+  const { data: recommendations, isLoading, isError, refetch } = useQuery({
     queryKey: ['recommendations'],
     queryFn: async () => {
       const { data } = await axiosInstance.get('/recommendations');
@@ -20,6 +21,8 @@ const SeekerRecommendationsPage: React.FC = () => {
   });
 
   const list = Array.isArray(recommendations) ? recommendations : [];
+
+  if (isError) return <PageError message="Failed to load recommendations. Please try again." onRetry={() => refetch()} />;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">

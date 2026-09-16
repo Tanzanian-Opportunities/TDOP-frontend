@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
+import { PageError } from '@/components/ui/PageStates';
 import axiosInstance from '@/services/api/axiosInstance';
 import { Users, UserPlus, Mail, Shield, X, Search } from 'lucide-react';
 
@@ -25,6 +26,7 @@ const OrganizationTeamPage: React.FC = () => {
 const [members, setMembers] = useState<TeamMember[]>([]);
 const [invitations, setInvitations] = useState<Invitation[]>([]);
 const [loading, setLoading] = useState(true);
+const [error, setError] = useState(false);
 const [showInviteForm, setShowInviteForm] = useState(false);
 const [inviteEmail, setInviteEmail] = useState('');
 const [inviteRole, setInviteRole] = useState('MEMBER');
@@ -44,6 +46,7 @@ setMembers(Array.isArray(membersRes.data) ? membersRes.data : []);
 setInvitations(Array.isArray(invitationsRes.data) ? invitationsRes.data : []);
 } catch (err) {
 console.error(err);
+setError(true);
 } finally {
 setLoading(false);
 }
@@ -96,6 +99,8 @@ return (
 </div>
 );
 }
+
+if (error) return <PageError message="Failed to load team data. Please try again." onRetry={() => {}} />;
 
 return (
 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">

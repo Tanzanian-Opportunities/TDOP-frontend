@@ -11,16 +11,20 @@ import { CareerGoalList } from '@/components/profile/CareerGoalList';
 import { profileApi } from '@/services/api/profileApi';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
+import { PageLoading, PageError } from '@/components/ui/PageStates';
 import { useTranslation } from 'react-i18next';
 import { Edit3 } from 'lucide-react';
 
 const SeekerProfilePage: React.FC = () => {
-  const { user, profileData } = useAuth();
+  const { user, profileData, isLoading } = useAuth();
   const { t } = useTranslation();
   const [isEditing, setIsEditing] = useState(false);
   const queryClient = useQueryClient();
 
   const invalidate = () => queryClient.invalidateQueries({ queryKey: ['profile'] });
+
+  if (isLoading) return <PageLoading text="Loading profile..." />;
+  if (!user) return <PageError message="You are not signed in." />;
 
   const handleAddSkill = async (data: { name: string; category: string; level: string }) => {
     await profileApi.addSkill(data);

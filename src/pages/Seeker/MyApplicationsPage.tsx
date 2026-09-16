@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useApplications } from '@/hooks/useApplications';
+import { PageError } from '@/components/ui/PageStates';
 import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -23,7 +24,7 @@ const statusFilters: { value: StatusFilter; label: string }[] = [
 ];
 
 const MyApplicationsPage: React.FC = () => {
-  const { applications, isLoading, withdraw } = useApplications();
+  const { applications, isLoading, isError, withdraw } = useApplications();
   const { t } = useTranslation();
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -54,6 +55,8 @@ const MyApplicationsPage: React.FC = () => {
       </div>
     );
   }
+
+  if (isError) return <PageError message="Failed to load applications. Please try again." onRetry={() => {}} />;
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">

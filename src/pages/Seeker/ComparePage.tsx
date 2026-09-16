@@ -5,14 +5,19 @@ import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
+import { PageLoading, PageError, PageEmpty } from '@/components/ui/PageStates';
 import { Scale, ArrowRight } from 'lucide-react';
 
 const ComparePage: React.FC = () => {
   const { t } = useTranslation();
-  const { opportunities, savedOpportunities, isLoading } = useOpportunities();
+  const { opportunities, savedOpportunities, isLoading, isError } = useOpportunities();
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const allOpps = [...savedOpportunities, ...opportunities];
+
+  if (isLoading) return <PageLoading text="Loading opportunities..." />;
+  if (isError) return <PageError message="Failed to load opportunities." onRetry={() => {}} />;
+  if (allOpps.length === 0) return <PageEmpty title="No opportunities to compare" description="Browse and save opportunities first to compare them." action={{ label: 'Browse Opportunities', to: '/browse' }} />;
 
   const toggleSelect = (id: string) => {
     setSelectedIds(prev => {

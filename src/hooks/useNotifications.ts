@@ -8,7 +8,7 @@ export const useNotifications = () => {
   const queryClient = useQueryClient();
   const { addNotification } = useNotificationContext();
 
-  const { data, isLoading, refetch } = useQuery({
+  const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ['notifications'],
     queryFn: () => notificationApi.getNotifications(),
     refetchInterval: 30000,
@@ -49,6 +49,7 @@ export const useNotifications = () => {
     unreadCount,
     total: (data as any)?.pagination?.total || 0,
     isLoading,
+    isError,
     refetch,
     markAsRead,
     markAllAsRead,

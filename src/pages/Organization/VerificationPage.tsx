@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
+import { PageError } from '@/components/ui/PageStates';
 import { profileApi } from '@/services/api/profileApi';
 import { formatDate } from '@/utils/formatDate';
 import { FileText, FileCheck, Clock, Upload, CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
@@ -11,6 +12,7 @@ const VerificationPage: React.FC = () => {
   const { t } = useTranslation();
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
@@ -24,6 +26,7 @@ const VerificationPage: React.FC = () => {
       setProfile(data);
     } catch (err) {
       console.error(err);
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -87,6 +90,8 @@ const VerificationPage: React.FC = () => {
       </div>
     );
   }
+
+  if (error) return <PageError message="Failed to load verification data. Please try again." onRetry={() => {}} />;
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">

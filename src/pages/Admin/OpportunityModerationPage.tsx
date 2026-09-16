@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { DashboardSection } from '@/components/dashboard/DashboardSection';
 import { EmptyState } from '@/components/dashboard/EmptyState';
+import { PageError } from '@/components/ui/PageStates';
 import { adminApi } from '@/services/api/adminApi';
 import { useNotificationContext } from '@/context/NotificationContext';
 import { CheckCircle, XCircle, AlertTriangle, Search, Clock, Eye } from 'lucide-react';
@@ -25,6 +26,7 @@ const OpportunityModerationPage: React.FC = () => {
   const { addNotification } = useNotificationContext();
   const [items, setItems] = useState<ModerationItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
@@ -37,6 +39,7 @@ const OpportunityModerationPage: React.FC = () => {
       setItems(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error(err);
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -80,6 +83,8 @@ const OpportunityModerationPage: React.FC = () => {
       </div>
     );
   }
+
+  if (error) return <PageError message="Failed to load opportunities for moderation. Please try again." onRetry={() => {}} />;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">

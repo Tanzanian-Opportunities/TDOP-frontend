@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
+import { PageError } from '@/components/ui/PageStates';
 import { adminApi } from '@/services/api/adminApi';
 import { Flag, AlertTriangle, CheckCircle, XCircle, Clock } from 'lucide-react';
 
@@ -22,6 +23,7 @@ createdAt: string;
 const ReportsPage: React.FC = () => {
 const [reports, setReports] = useState<Report[]>([]);
 const [loading, setLoading] = useState(true);
+const [error, setError] = useState(false);
 const [stats, setStats] = useState({ total: 0, pending: 0, reviewed: 0, actioned: 0 });
 const [tab, setTab] = useState<'pending' | 'all'>('pending');
 
@@ -39,6 +41,7 @@ setReports(Array.isArray(reportsData) ? reportsData : []);
 setStats(statsData);
 } catch (err) {
 console.error(err);
+setError(true);
 } finally {
 setLoading(false);
 }
@@ -90,6 +93,8 @@ return (
 </div>
 );
 }
+
+if (error) return <PageError message="Failed to load reports. Please try again." onRetry={() => {}} />;
 
 return (
 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">

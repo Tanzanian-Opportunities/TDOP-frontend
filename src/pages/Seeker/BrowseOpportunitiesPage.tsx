@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { useOpportunities } from '@/hooks/useOpportunities';
+import { PageError } from '@/components/ui/PageStates';
 import { OpportunityCardList } from '@/components/opportunity/OpportunityCardList';
 import { OpportunityFilters } from '@/components/opportunity/OpportunityFilters';
 import { SearchBar } from '@/components/ui/SearchBar';
@@ -19,7 +20,7 @@ const sortLabels: Record<SortOption, string> = {
 const BrowseOpportunitiesPage: React.FC = () => {
   const { t } = useTranslation();
   const location = useLocation();
-  const { opportunities, isLoading, total, search, filters, setFilter, clearFilters } = useOpportunities();
+  const { opportunities, isLoading, isError, total, search, filters, setFilter, clearFilters } = useOpportunities();
   const [searchInput, setSearchInput] = React.useState('');
   const [sortBy, setSortBy] = React.useState<SortOption>('newest');
 
@@ -68,6 +69,8 @@ const BrowseOpportunitiesPage: React.FC = () => {
         });
     }
   }, [opportunities, sortBy]);
+
+  if (isError) return <PageError message="Failed to load opportunities. Please try again." onRetry={() => {}} />;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">

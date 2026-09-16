@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDocuments } from '@/hooks/useDocuments';
+import { PageError } from '@/components/ui/PageStates';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Select } from '@/components/ui/Select';
@@ -27,7 +28,7 @@ const fileTypeIcons: Record<string, React.ElementType> = {
 
 const SeekerDocumentsPage: React.FC = () => {
   const { t } = useTranslation();
-  const { documents, isLoading, upload, removeDocument, isUploading } = useDocuments();
+  const { documents, isLoading, isError, upload, removeDocument, isUploading } = useDocuments();
   const [showUploadForm, setShowUploadForm] = useState(false);
   const [uploadName, setUploadName] = useState('');
   const [uploadType, setUploadType] = useState('cv');
@@ -66,6 +67,8 @@ const SeekerDocumentsPage: React.FC = () => {
       </div>
     );
   }
+
+  if (isError) return <PageError message="Failed to load documents. Please try again." onRetry={() => {}} />;
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">

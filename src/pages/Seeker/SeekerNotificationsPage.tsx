@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { useNotifications } from '@/hooks/useNotifications';
+import { PageError } from '@/components/ui/PageStates';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Bell, CheckCheck, Info, CheckCircle2, AlertTriangle, XCircle, Clock, ExternalLink, Filter } from 'lucide-react';
@@ -55,7 +56,7 @@ function getDeepLink(title: string, message: string): string | null {
 
 const SeekerNotificationsPage: React.FC = () => {
   const { t } = useTranslation();
-  const { notifications, unreadCount, isLoading, markAsRead, markAllAsRead } = useNotifications();
+  const { notifications, unreadCount, isLoading, isError, markAsRead, markAllAsRead } = useNotifications();
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>('all');
 
   const filtered = useMemo(() => {
@@ -70,6 +71,8 @@ const SeekerNotificationsPage: React.FC = () => {
       </div>
     );
   }
+
+  if (isError) return <PageError message="Failed to load notifications. Please try again." onRetry={() => {}} />;
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">

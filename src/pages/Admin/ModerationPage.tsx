@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
-import { adminApi } from '@/services/api/adminApi';
 import { DashboardSection } from '@/components/dashboard/DashboardSection';
 import { StatCard } from '@/components/dashboard/StatCard';
 import { EmptyState } from '@/components/dashboard/EmptyState';
+import { PageError } from '@/components/ui/PageStates';
 import { CheckCircle, XCircle, Eye, AlertTriangle, Archive, Search, Building2, MapPin } from 'lucide-react';
 
 interface ModerationItem {
@@ -22,6 +22,7 @@ interface ModerationItem {
 const ModerationPage: React.FC = () => {
   const [items, setItems] = useState<ModerationItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('all');
 
@@ -35,6 +36,7 @@ const ModerationPage: React.FC = () => {
       setItems(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error(err);
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -102,6 +104,8 @@ const ModerationPage: React.FC = () => {
       </div>
     );
   }
+
+  if (error) return <PageError message="Failed to load moderation queue. Please try again." onRetry={() => {}} />;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">

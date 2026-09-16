@@ -8,7 +8,7 @@ export const useApplications = () => {
   const queryClient = useQueryClient();
   const { addNotification } = useNotificationContext();
 
-  const { data, isLoading, refetch } = useQuery({
+  const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ['applications'],
     queryFn: () => applicationApi.getMyApplications(),
     refetchOnWindowFocus: false,
@@ -58,6 +58,7 @@ export const useApplications = () => {
     applications: (data as ApplicationsList | null)?.applications || (Array.isArray(data) ? data : []),
     total: (data as ApplicationsList | null)?.total || 0,
     isLoading,
+    isError,
     refetch,
     apply,
     updateApplication,

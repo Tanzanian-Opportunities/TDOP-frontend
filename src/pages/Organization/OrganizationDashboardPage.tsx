@@ -9,6 +9,7 @@ import { ActivityItem } from '@/components/dashboard/ActivityItem';
 import { QuickAction } from '@/components/dashboard/QuickAction';
 import { EmptyState } from '@/components/dashboard/EmptyState';
 import { Badge } from '@/components/ui/Badge';
+import { PageLoading } from '@/components/ui/PageStates';
 import { formatDate } from '@/utils/formatDate';
 import {
   Briefcase, Users, FileText, Eye, Plus, CheckCircle, Clock,
@@ -27,8 +28,10 @@ const statusBadge: Record<string, string> = {
 
 const OrganizationDashboardPage: React.FC = () => {
   const { user } = useAuth();
-  const { opportunities, total } = useOpportunities();
-  const { applications, total: totalApplicants } = useApplications();
+  const { opportunities, total, isLoading: oppLoading } = useOpportunities();
+  const { applications, total: totalApplicants, isLoading: appLoading } = useApplications();
+
+  if (oppLoading || appLoading) return <PageLoading text="Loading dashboard..." />;
 
   const totalViews = opportunities.reduce((acc: number, o: any) => acc + (o.views || 0), 0);
 

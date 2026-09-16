@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { DashboardSection } from '@/components/dashboard/DashboardSection';
 import { EmptyState } from '@/components/dashboard/EmptyState';
+import { PageError } from '@/components/ui/PageStates';
 import { applicationApi } from '@/services/api/applicationApi';
 import { formatDate } from '@/utils/formatDate';
 import { FileText, Eye, Clock, Search, ArrowRight } from 'lucide-react';
@@ -34,6 +35,7 @@ const OrgMyApplicationsPage: React.FC = () => {
   const { t } = useTranslation();
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
@@ -47,6 +49,7 @@ const OrgMyApplicationsPage: React.FC = () => {
       setApplications(list);
     } catch (err) {
       console.error(err);
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -75,6 +78,8 @@ const OrgMyApplicationsPage: React.FC = () => {
       </div>
     );
   }
+
+  if (error) return <PageError message="Failed to load applications. Please try again." onRetry={() => {}} />;
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">

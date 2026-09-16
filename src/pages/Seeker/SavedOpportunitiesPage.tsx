@@ -1,11 +1,12 @@
 import React from 'react';
 import { useOpportunities } from '@/hooks/useOpportunities';
+import { PageError } from '@/components/ui/PageStates';
 import { OpportunityCardList } from '@/components/opportunity/OpportunityCardList';
 import { useTranslation } from 'react-i18next';
 import { Bookmark } from 'lucide-react';
 
 const SavedOpportunitiesPage: React.FC = () => {
-  const { savedOpportunities, isLoading, total, unsaveOpportunity } = useOpportunities();
+  const { savedOpportunities, isLoading, isError, total, unsaveOpportunity } = useOpportunities();
   const { t } = useTranslation();
 
   if (isLoading) {
@@ -15,6 +16,8 @@ const SavedOpportunitiesPage: React.FC = () => {
       </div>
     );
   }
+
+  if (isError) return <PageError message="Failed to load saved opportunities. Please try again." onRetry={() => {}} />;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">

@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { ProfileEdit } from '@/components/profile/ProfileEdit';
+import { PageError } from '@/components/ui/PageStates';
 import { profileApi } from '@/services/api/profileApi';
 import { Edit3, Shield, MapPin, Calendar, Building2, Globe, Users, Briefcase } from 'lucide-react';
 
@@ -12,6 +13,7 @@ const OrganizationProfilePage: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     fetchProfile();
@@ -23,6 +25,7 @@ const OrganizationProfilePage: React.FC = () => {
       setProfile(data);
     } catch (err) {
       console.error(err);
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -43,6 +46,8 @@ const OrganizationProfilePage: React.FC = () => {
       </div>
     );
   }
+
+  if (error) return <PageError message="Failed to load organization profile. Please try again." onRetry={() => {}} />;
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">

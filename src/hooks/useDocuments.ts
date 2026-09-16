@@ -5,7 +5,7 @@ import { documentApi, DocumentCreate, UserDocument } from '@/services/api/docume
 export const useDocuments = () => {
   const queryClient = useQueryClient();
 
-  const { data, isLoading, refetch } = useQuery({
+  const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ['documents'],
     queryFn: () => documentApi.getDocuments(),
     refetchOnWindowFocus: false,
@@ -38,6 +38,7 @@ export const useDocuments = () => {
   return {
     documents,
     isLoading,
+    isError,
     refetch,
     upload,
     removeDocument,

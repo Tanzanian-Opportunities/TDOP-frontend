@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
+import { PageError } from '@/components/ui/PageStates';
 import { adminApi } from '@/services/api/adminApi';
 import { DashboardSection } from '@/components/dashboard/DashboardSection';
 import { StatCard } from '@/components/dashboard/StatCard';
@@ -21,6 +22,7 @@ const AnalyticsPage: React.FC = () => {
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [dashboardStats, setDashboardStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
 
@@ -39,6 +41,7 @@ const AnalyticsPage: React.FC = () => {
       setDashboardStats(statsData);
     } catch (err) {
       console.error(err);
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -72,6 +75,8 @@ const AnalyticsPage: React.FC = () => {
       </div>
     );
   }
+
+  if (error) return <PageError message="Failed to load analytics. Please try again." onRetry={() => {}} />;
 
   const statCards = [
     {

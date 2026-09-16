@@ -7,6 +7,7 @@ import { useNotifications } from '@/hooks/useNotifications';
 import { useDocuments } from '@/hooks/useDocuments';
 import { useQuery } from '@tanstack/react-query';
 import axiosInstance from '@/services/api/axiosInstance';
+import { PageError } from '@/components/ui/PageStates';
 import Sidebar from '@/components/layout/Sidebar';
 import { DashboardSection } from '@/components/dashboard/DashboardSection';
 import { StatCard } from '@/components/dashboard/StatCard';
@@ -27,7 +28,7 @@ const SeekerDashboardPage: React.FC = () => {
   const { notifications, unreadCount } = useNotifications();
   const { documents } = useDocuments();
 
-  const { data: savedData } = useQuery({
+  const { data: savedData, isError: savedError } = useQuery({
     queryKey: ['saved-count'],
     queryFn: async () => {
       const { data } = await axiosInstance.get('/saved');
@@ -105,6 +106,8 @@ const SeekerDashboardPage: React.FC = () => {
     { label: 'Government', search: 'government', icon: Shield, color: 'bg-teal-50 text-teal-600' },
     { label: 'Jobs', search: 'jobs', icon: Briefcase, color: 'bg-blue-50 text-tdop-primary' },
   ];
+
+  if (savedError) return <PageError message="Failed to load dashboard. Please try again." onRetry={() => {}} />;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

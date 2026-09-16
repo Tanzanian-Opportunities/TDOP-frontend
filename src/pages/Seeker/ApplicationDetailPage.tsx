@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/Button';
 import { formatDate } from '@/utils/formatDate';
 import { formatApplicationStatus } from '@/utils/formatRole';
 import { useNotificationContext } from '@/context/NotificationContext';
+import { PageError } from '@/components/ui/PageStates';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, Clock, CheckCircle2, Circle, FileText, Building2, Calendar, AlertTriangle, X } from 'lucide-react';
 
@@ -32,7 +33,7 @@ const ApplicationDetailPage: React.FC = () => {
   const queryClient = useQueryClient();
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
 
-  const { data: appData, isLoading } = useQuery({
+  const { data: appData, isLoading, isError, refetch } = useQuery({
     queryKey: ['application', id],
     queryFn: async () => {
       const { data } = await axiosInstance.get(`/applications/${id}`);
@@ -56,6 +57,8 @@ const ApplicationDetailPage: React.FC = () => {
       addNotification({ type: 'error', title: 'Error', message: 'Failed to withdraw application.' });
     },
   });
+
+  if (isError) return <PageError message="Failed to load application. Please try again." onRetry={() => refetch()} />;
 
   if (isLoading) {
     return (
