@@ -116,7 +116,7 @@ const SeekerDashboardPage: React.FC = () => {
 
         <main className="flex-1 min-w-0 space-y-6">
           {/* Welcome Hero */}
-          <div className="rounded-3xl bg-gradient-to-r from-tdop-primary to-blue-700 p-8 text-white relative overflow-hidden">
+          <div className="rounded-3xl bg-gradient-to-r from-tdop-primary to-blue-700 p-5 sm:p-8 text-white relative overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" />
             <div className="relative">
               <h1 className="font-display text-3xl font-extrabold">
@@ -127,7 +127,7 @@ const SeekerDashboardPage: React.FC = () => {
                   ? 'Complete your profile to unlock better recommendations.'
                   : 'Your profile is ready. Find your next opportunity.'}
               </p>
-              <div className="mt-4 flex items-center gap-6">
+              <div className="mt-4 flex flex-wrap items-center gap-3 sm:gap-6">
                 <div className="flex items-center gap-2 bg-white/10 rounded-xl px-4 py-2">
                   <TrendingUp className="w-4 h-4 text-tdop-accent" />
                   <span className="text-sm font-medium">{applications.length} applications</span>

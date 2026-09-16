@@ -129,7 +129,7 @@ const MyApplicationsPage: React.FC = () => {
         <div className="space-y-4">
           {filtered.map(application => (
             <Card key={application.id} padding={false}>
-              <div className="p-6">
+              <div className="p-4 sm:p-6">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <h3 className="font-semibold text-tdop-navy">{application.opportunityTitle}</h3>
@@ -142,7 +142,7 @@ const MyApplicationsPage: React.FC = () => {
                       </span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <Button variant="outline" size="sm" asChild>
                       <Link to={`/applications/${application.id}`} className="inline-flex items-center gap-1">
                         Timeline <ArrowRight className="w-3.5 h-3.5" />

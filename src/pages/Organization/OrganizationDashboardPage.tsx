@@ -51,7 +51,7 @@ const OrganizationDashboardPage: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">
       {/* Welcome Hero */}
-      <div className="rounded-3xl bg-gradient-to-r from-tdop-primary to-blue-700 p-8 text-white relative overflow-hidden">
+      <div className="rounded-3xl bg-gradient-to-r from-tdop-primary to-blue-700 p-5 sm:p-8 text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" />
         <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
