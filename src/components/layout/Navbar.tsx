@@ -27,7 +27,7 @@ const navLinks = [
   { to: '/', label: t('nav.home') },
   { to: '/browse', label: t('nav.opportunities') },
   { to: '/organizations', label: t('nav.organizations') },
-  { to: '/#about', label: t('nav.about') },
+  { to: '/about', label: t('nav.about') },
   { to: '/#help', label: t('nav.help') },
   ...(isAuthenticated ? [{ to: '/dashboard', label: t('nav.dashboard') }] : []),
   ];
@@ -44,7 +44,7 @@ const navLinks = [
 
  <div className="hidden lg:flex items-center gap-1">
  {navLinks.map(link => {
- const active = link.to === currentPath || (link.to !== '/' && link.to !== '/#about' && link.to !== '/#help' && location.pathname.startsWith(link.to));
+ const active = link.to === currentPath || (link.to !== '/' && link.to !== '/#help' && location.pathname.startsWith(link.to));
  return (
  <Link
  key={link.to + link.label}

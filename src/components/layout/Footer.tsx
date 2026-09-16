@@ -99,7 +99,7 @@ const Footer: React.FC = () => {
             © {new Date().getFullYear()} {t('app.name')} — {t('common.allRightsReserved')}
           </p>
           <p className="text-sm text-gray-500">
-            {t('footer.linkAbout')} · Tanzania Digital Opportunity Platform
+            <Link to="/about" className="hover:text-tdop-primary transition-colors">{t('footer.linkAbout')}</Link> · Tanzania Digital Opportunity Platform
           </p>
         </div>
       </div>

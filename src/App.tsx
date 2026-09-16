@@ -47,6 +47,7 @@ import ContactPage from '@/pages/Support/ContactPage';
 import HelpCenterPage from '@/pages/Support/HelpCenterPage';
 import PrivacyPage from '@/pages/Support/PrivacyPage';
 import TermsPage from '@/pages/Support/TermsPage';
+import AboutPage from '@/pages/Support/AboutPage';
 
 const queryClient = new QueryClient();
 
@@ -68,6 +69,7 @@ const AppRoutes: React.FC = () => {
         <Route path="/help" element={<HelpCenterPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/terms" element={<TermsPage />} />
+        <Route path="/about" element={<AboutPage />} />
 
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<SeekerDashboardPage />} />
