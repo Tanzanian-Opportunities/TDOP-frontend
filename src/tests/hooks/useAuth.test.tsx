@@ -5,6 +5,11 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/useAuth';
 import { AuthContext } from '@/context/AuthContext';
 
+vi.mock('@/context/NotificationContext', () => ({
+  NotificationProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  useNotificationContext: () => ({ addNotification: vi.fn() }),
+}));
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: { retry: false },
@@ -21,7 +26,7 @@ const mockAuthContext = {
   logout: vi.fn(),
   refreshSession: vi.fn(),
   refreshUser: vi.fn(),
-  updateUser: vi.fn(),
+updateUser: vi.fn(),
 };
 
 function wrapper({ children }: { children: React.ReactNode }) {
@@ -90,7 +95,10 @@ describe('useAuth', () => {
       await result.current.login({ email: 'test@example.com', password: 'password' });
     });
 
-    expect(login).toHaveBeenCalledWith({ email: 'test@example.com', password: 'password' });
+    expect(login).toHaveBeenCalledWith(
+      { email: 'test@example.com', password: 'password' },
+      expect.anything()
+    );
   });
 
   it('provides logout function', async () => {
@@ -112,7 +120,14 @@ describe('useAuth', () => {
   });
 
   it('returns profile loading state', () => {
-    const { result } = renderHook(() => useAuth(), { wrapper });
+    const unauthContext = { ...mockAuthContext, isAuthenticated: false };
+    const { result } = renderHook(() => useAuth(), { wrapper: ({ children }) => (
+      <QueryClientProvider client={queryClient}>
+        <AuthContext.Provider value={unauthContext}>
+          {children}
+        </AuthContext.Provider>
+      </QueryClientProvider>
+    )});
     expect(result.current.profileLoading).toBe(false);
   });
 

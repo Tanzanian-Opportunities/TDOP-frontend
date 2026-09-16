@@ -7,6 +7,7 @@ import { StatCard } from '@/components/dashboard/StatCard';
 import { EmptyState } from '@/components/dashboard/EmptyState';
 import { PageError } from '@/components/ui/PageStates';
 import { CheckCircle, XCircle, Eye, AlertTriangle, Archive, Search, Building2, MapPin } from 'lucide-react';
+import { adminApi } from '@/services/api/adminApi';
 
 interface ModerationItem {
   id: number;

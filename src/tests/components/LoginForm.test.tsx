@@ -86,30 +86,13 @@ describe('LoginForm', () => {
     await user.type(screen.getByLabelText(/password/i), 'wrongpassword');
     await user.click(screen.getByRole('button', { name: /sign in/i }));
 
-    expect(screen.getByText(/login failed/i)).toBeInTheDocument();
+    expect(screen.getByText(/invalid credentials/i)).toBeInTheDocument();
   });
 
   it('shows loading state during submission', async () => {
     mockLogin.mockImplementation(() => new Promise(() => {}));
-    const { useAuth } = await import('@/hooks/useAuth');
-    vi.mocked(useAuth).mockReturnValue({
-      login: mockLogin,
-      register: vi.fn(),
-      logout: vi.fn(),
-      refreshSession: vi.fn(),
-      refreshUser: vi.fn(),
-      updateUser: vi.fn(),
-      user: null,
-      tokens: null,
-      isAuthenticated: false,
-      isLoading: true,
-      isAdmin: false,
-      isOrganization: false,
-      isSeeker: false,
-      profileLoading: false,
-      profileData: undefined,
-    });
 
+    const user = userEvent.setup();
     render(
       <Wrapper>
         <LoginForm />
@@ -117,6 +100,10 @@ describe('LoginForm', () => {
     );
 
     const submitButton = screen.getByRole('button', { name: /sign in/i });
-    expect(submitButton).toBeDisabled();
+    await user.type(screen.getByLabelText(/email/i), 'test@example.com');
+    await user.type(screen.getByLabelText(/password/i), 'password123');
+    await user.click(submitButton);
+
+    expect(screen.getByRole('button', { name: /loading/i })).toBeDisabled();
   });
 });

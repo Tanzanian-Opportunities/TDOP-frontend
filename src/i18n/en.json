@@ -523,6 +523,7 @@
     "viewOpportunities": "View opportunities",
     "noResults": "No organizations found",
     "noResultsDesc": "Try a different search term or clear the sector filter to see all registered organizations.",
-    "clearSearch": "Clear search"
+    "clearSearch": "Clear search",
+    "people": "People"
   }
 }

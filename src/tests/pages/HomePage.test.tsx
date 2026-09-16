@@ -26,7 +26,7 @@ vi.mock('@/hooks/useAuth', () => ({
 }));
 
 vi.mock('@/hooks/useOpportunities', () => ({
-  useOpportunities: () => ({
+  useOpportunities: vi.fn(() => ({
     opportunities: [
       { id: '1', title: 'Software Engineer', company: 'Tech Corp', type: 'full-time' as const, status: 'open' as const },
       { id: '2', title: 'Data Analyst', company: 'Data Inc', type: 'part-time' as const, status: 'open' as const },
@@ -47,7 +47,7 @@ vi.mock('@/hooks/useOpportunities', () => ({
     unsaveOpportunity: vi.fn(),
     compareOpportunities: vi.fn(),
     savedOpportunities: [],
-  }),
+  })),
 }));
 
 vi.mock('@/services/api/opportunityApi', () => ({
@@ -132,7 +132,7 @@ describe('HomePage', () => {
 
   it('shows loading state', () => {
     vi.clearAllMocks();
-    vi.mocked(useOpportunities).mockReturnValue({
+    vi.mocked(useOpportunities).mockImplementationOnce(() => ({
       opportunities: [],
       total: 0,
       page: 1,
@@ -150,7 +150,7 @@ describe('HomePage', () => {
       unsaveOpportunity: vi.fn(),
       compareOpportunities: vi.fn(),
       savedOpportunities: [],
-    });
+    }));
 
     render(
       <Wrapper>

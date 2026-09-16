@@ -59,7 +59,13 @@ export const authApi = {
     return normalizeAuthPayload(data);
   },
   register: async (data: RegisterData): Promise<ApiResponse<{ user: User; tokens: AuthTokens }>> => {
-    const { data: response } = await axiosInstance.post('/auth/register', data);
+    const payload = {
+      email: data.email,
+      password: data.password,
+      fullName: `${data.firstName} ${data.lastName}`.trim(),
+      role: data.role.toUpperCase(),
+    };
+    const { data: response } = await axiosInstance.post('/auth/register', payload);
     return normalizeAuthPayload(response);
   },
   refresh: async (): Promise<AuthTokens> => {
