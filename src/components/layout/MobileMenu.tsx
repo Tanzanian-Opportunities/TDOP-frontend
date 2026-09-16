@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+﻿import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
@@ -101,14 +101,14 @@ const MobileMenu: React.FC = () => {
  <>
  <button
  onClick={() => { toggleTheme(); setIsOpen(false); }}
- className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 w-full dark:text-gray-300 dark:hover:bg-gray-800"
+ className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 transition-all cursor-pointer hover:-translate-y-0.5 active:translate-y-0 w-full dark:text-gray-300 dark:hover:bg-gray-800"
  >
  {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
  {isDark ? 'Light Mode' : 'Dark Mode'}
  </button>
  <button
  onClick={() => { logout(); close(); }}
- className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 w-full dark:hover:bg-red-950/40"
+ className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition-all cursor-pointer hover:-translate-y-0.5 active:translate-y-0 w-full dark:hover:bg-red-950/40"
  >
  {t('nav.logout')}
  </button>

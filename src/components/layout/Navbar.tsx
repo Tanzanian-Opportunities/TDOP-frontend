@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useNotifications } from '@/hooks/useNotifications';
@@ -83,7 +83,7 @@ currentLang === 'sw' ? 'bg-tdop-primary text-white' : 'text-gray-500 hover:text-
 
 <button
   onClick={toggleTheme}
-  className="p-2 rounded-lg hover:bg-gray-100 transition-colors hidden sm:block dark:hover:bg-gray-800"
+  className="p-2 rounded-lg hover:bg-gray-100 transition-all hover:-translate-y-0.5 cursor-pointer hidden sm:block dark:hover:bg-gray-800"
   aria-label="Toggle theme"
   >
   {isDark ? <Sun className="w-5 h-5 text-tdop-accent" /> : <Moon className="w-5 h-5 text-gray-600 dark:text-gray-300" />}
@@ -93,7 +93,7 @@ currentLang === 'sw' ? 'bg-tdop-primary text-white' : 'text-gray-500 hover:text-
  <div className="relative">
 <Link
   to="/notifications"
-  className="p-2 rounded-lg hover:bg-gray-100 relative transition-colors block dark:hover:bg-gray-800"
+  className="p-2 rounded-lg hover:bg-gray-100 relative transition-all hover:-translate-y-0.5 cursor-pointer active:translate-y-0 block dark:hover:bg-gray-800"
   aria-label="Notifications"
   >
   <Bell className="w-5 h-5 text-gray-600 dark:text-gray-300" />
@@ -110,7 +110,7 @@ currentLang === 'sw' ? 'bg-tdop-primary text-white' : 'text-gray-500 hover:text-
  <div className="relative">
 <button
   onClick={() => setShowUserMenu(!showUserMenu)}
-  className="flex items-center gap-2 p-1 pr-2 rounded-full hover:bg-gray-100 transition-colors dark:hover:bg-gray-800"
+  className="flex items-center gap-2 p-1 pr-2 rounded-full hover:bg-gray-100 transition-all hover:-translate-y-0.5 cursor-pointer dark:hover:bg-gray-800"
   >
  <div className="w-8 h-8 bg-tdop-primary rounded-full flex items-center justify-center text-white text-sm font-medium">
  {user?.firstName?.[0] || 'U'}
@@ -156,7 +156,7 @@ currentLang === 'sw' ? 'bg-tdop-primary text-white' : 'text-gray-500 hover:text-
  )}
 
  <button
- className="lg:hidden p-2"
+ className="lg:hidden p-2 transition-all hover:-translate-y-0.5 cursor-pointer active:translate-y-0 transition-transform hover:-translate-y-0.5 cursor-pointer"
  onClick={() => window.dispatchEvent(new CustomEvent('toggle-mobile-menu'))}
  aria-label="Open menu"
  >
