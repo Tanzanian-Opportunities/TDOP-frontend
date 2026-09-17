@@ -61,7 +61,7 @@ axiosInstance.interceptors.response.use(
           try {
             const res = await axios.post<any>(
               `${import.meta.env.VITE_API_URL || 'http://localhost:8080/api/v1'}/auth/refresh`,
-              { email: '' },
+              { refreshToken: storedTokens.refreshToken },
               {
                 headers: {
                   Authorization: `Bearer ${storedTokens.refreshToken}`,
@@ -69,7 +69,7 @@ axiosInstance.interceptors.response.use(
               }
             );
             const data = res.data || {};
-            const newTokens = data.tokens || { accessToken: data.token, refreshToken: data.refreshToken };
+            const newTokens = data.tokens || data.data?.tokens || { accessToken: data.token, refreshToken: data.refreshToken };
             if (!newTokens?.accessToken) throw new Error('No tokens in refresh response');
             setStoredTokens(newTokens);
             return newTokens.accessToken;

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Search, MapPin, ArrowRight, BadgeCheck, CheckCircle2 } from 'lucide-react';
+import { Search, ArrowRight, BadgeCheck, CheckCircle2 } from 'lucide-react';
+import RegionSelect, { RegionOption } from './RegionSelect';
 
 const heroImage = 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80';
 
@@ -10,6 +11,19 @@ const HeroSection: React.FC = () => {
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
   const [location, setLocation] = useState('all');
+
+  const regionOptions: RegionOption[] = [
+    { value: 'all', label: t('landing.heroLocationAll') },
+    { value: 'dar-es-salaam', label: 'Dar es Salaam' },
+    { value: 'dodoma', label: 'Dodoma' },
+    { value: 'arusha', label: 'Arusha' },
+    { value: 'kilimanjaro', label: 'Kilimanjaro' },
+    { value: 'mwanza', label: 'Mwanza' },
+    { value: 'morogoro', label: 'Morogoro' },
+    { value: 'tanga', label: 'Tanga' },
+    { value: 'mbeya', label: 'Mbeya' },
+    { value: 'zanzibar', label: 'Zanzibar' },
+  ];
 
   const quickFilters = [
     { label: t('landing.quickFilterJobs'), emoji: '💼' },
@@ -59,22 +73,13 @@ const HeroSection: React.FC = () => {
                   aria-label={t('app.search')}
                 />
               </div>
-              <div className="flex items-center gap-2 px-3 border-t sm:border-t-0 sm:border-l border-gray-200">
-                <MapPin className="w-5 h-5 text-gray-400 shrink-0" />
-                <select
+              <div className="flex items-center border-t sm:border-t-0 sm:border-l border-gray-200 dark:border-gray-700">
+                <RegionSelect
                   value={location}
-                  onChange={e => setLocation(e.target.value)}
-                  className="w-full py-2.5 text-gray-700 outline-none text-sm bg-transparent"
-                  aria-label={t('landing.heroLocationLabel')}
-                >
-                  <option value="all">{t('landing.heroLocationLabel')}: All</option>
-                  <option value="dar-es-salaam">Dar es Salaam</option>
-                  <option value="dodoma">Dodoma</option>
-                  <option value="arusha">Arusha</option>
-                  <option value="mwanza">Mwanza</option>
-                  <option value="morogoro">Morogoro</option>
-                  <option value="zanzibar">Zanzibar</option>
-                </select>
+                  onChange={setLocation}
+                  options={regionOptions}
+                  placeholder={t('landing.heroLocationLabel')}
+                />
               </div>
               <button
                 type="submit"

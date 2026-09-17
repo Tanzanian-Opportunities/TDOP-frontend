@@ -10,12 +10,22 @@ export const reportApi = {
     reason: string;
     description?: string;
   }): Promise<ApiResponse<unknown>> => {
-    const { data: response } = await axiosInstance.post('/reports', data);
+    const { data: response } = await axiosInstance.post('/reports', {
+      targetType: data.targetType,
+      targetId: data.targetId,
+      reason: data.reason,
+      description: data.description,
+    });
     return response;
   },
   getReports: async (params?: { page?: number; limit?: number; status?: string }): Promise<PaginatedApiResponse<any>> => {
     const { data } = await axiosInstance.get('/reports', { params });
-    return data;
+    const list = Array.isArray(data) ? data : [];
+    return {
+      success: true,
+      data: list,
+      pagination: { page: 1, limit: list.length, total: list.length, totalPages: 1 },
+    };
   },
   getReport: async (id: string): Promise<ApiResponse<unknown>> => {
     const { data } = await axiosInstance.get(`/reports/${id}`);

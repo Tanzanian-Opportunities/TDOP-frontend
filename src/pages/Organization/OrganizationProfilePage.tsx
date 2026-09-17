@@ -69,7 +69,7 @@ const OrganizationProfilePage: React.FC = () => {
               <div className="space-y-4">
                 <div className="flex items-start gap-4">
                   {profile.logo ? (
-                    <img src={profile.logo} alt={profile.organizationName} className="w-16 h-16 rounded-xl object-cover" />
+                    <img src={profile.logo} alt={profile.orgName} className="w-16 h-16 rounded-xl object-cover" />
                   ) : (
                     <div className="w-16 h-16 rounded-xl bg-tdop-primary/10 text-tdop-primary flex items-center justify-center">
                       <Building2 className="w-8 h-8" />
@@ -77,8 +77,8 @@ const OrganizationProfilePage: React.FC = () => {
                   )}
                   <div className="flex-1">
                     <div className="flex items-center gap-3">
-                      <h2 className="text-xl font-bold text-tdop-navy">{profile.organizationName}</h2>
-                      {profile.isVerified && <Badge variant="success">Verified</Badge>}
+                      <h2 className="text-xl font-bold text-tdop-navy">{profile.orgName}</h2>
+                      {profile.verified && <Badge variant="success">Verified</Badge>}
                     </div>
                     <p className="text-gray-500 mt-1">{profile.description || 'No description yet'}</p>
                   </div>
@@ -127,8 +127,8 @@ const OrganizationProfilePage: React.FC = () => {
             <div className="space-y-3">
               <div className="flex items-center justify-between p-3 bg-tdop-light rounded-xl">
                 <span className="text-gray-600">Status</span>
-                <Badge variant={profile?.isVerified ? 'success' : profile?.verificationStatus === 'rejected' ? 'danger' : 'warning'}>
-                  {profile?.verificationStatus || 'pending'}
+                <Badge variant={profile?.verified ? 'success' : 'warning'}>
+                  {profile?.verified ? 'verified' : 'pending'}
                 </Badge>
               </div>
               {profile?.verifiedAt && (

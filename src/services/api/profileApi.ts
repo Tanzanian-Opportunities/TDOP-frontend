@@ -12,16 +12,27 @@ export const profileApi = {
     return data;
   },
   getOrganizationProfile: async (): Promise<ApiResponse<OrganizationProfile>> => {
-    const { data } = await axiosInstance.get('/profile/organization');
-    return data;
+    const { data } = await axiosInstance.get('/organization/profile');
+    return { success: true, data };
   },
   updateProfile: async (data: ProfileUpdateData): Promise<ApiResponse<SeekerProfile>> => {
     const { data: response } = await axiosInstance.put('/profile', data);
     return response;
   },
   updateOrganizationProfile: async (data: OrganizationUpdateData): Promise<ApiResponse<OrganizationProfile>> => {
-    const { data: response } = await axiosInstance.put('/profile/organization', data);
-    return response;
+    const profileRes = await axiosInstance.get('/organization/profile');
+    const orgId = profileRes.data?.id;
+    const { data: response } = await axiosInstance.put('/organization/profile', null, {
+      params: {
+        orgId,
+        orgName: data.organizationName,
+        description: data.description,
+        website: data.websiteUrl,
+        industry: data.industry,
+        size: data.companySize,
+      },
+    });
+    return { success: true, data: response };
   },
   addSkill: async (data: { name: string; category: string; level: string }): Promise<ApiResponse<unknown>> => {
     const { data: response } = await axiosInstance.post('/profile/skills', data);

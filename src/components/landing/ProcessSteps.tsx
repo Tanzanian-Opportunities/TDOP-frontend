@@ -15,7 +15,8 @@ const ProcessSteps: React.FC = () => {
   ];
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <section className="py-20 bg-gray-50 dark:bg-gray-900">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="text-center mb-14">
         <span className="text-xs font-semibold uppercase tracking-widest text-tdop-primary">
           {t('landing.processSubtitle') || 'How It Works'}
@@ -31,7 +32,7 @@ const ProcessSteps: React.FC = () => {
           const Icon = step.icon;
           return (
             <React.Fragment key={step.titleKey}>
-              <div className="flex-1 min-w-[170px] text-center rounded-2xl border border-gray-100 bg-white p-6 hover:shadow-card hover:-translate-y-1 transition-all duration-200">
+              <div className="flex-1 min-w-[170px] text-center rounded-2xl border border-gray-100 bg-white p-6 hover:shadow-card hover:-translate-y-1 transition-all duration-200 dark:bg-gray-800 dark:border-gray-700">
                 <div className={`w-14 h-14 mx-auto rounded-2xl flex items-center justify-center ${step.color}`}>
                   <Icon className="w-7 h-7" />
                 </div>
@@ -47,6 +48,7 @@ const ProcessSteps: React.FC = () => {
             </React.Fragment>
           );
         })}
+      </div>
       </div>
     </section>
   );

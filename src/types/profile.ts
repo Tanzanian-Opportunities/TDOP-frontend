@@ -120,4 +120,5 @@ export interface OrganizationUpdateData {
   foundedYear?: number;
   location?: string;
   phone?: string;
+  websiteUrl?: string;
 }

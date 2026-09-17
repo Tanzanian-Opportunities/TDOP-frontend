@@ -12,7 +12,13 @@ interface BackendAuthResponse {
 
 const ROLE_MAP: Record<string, UserRole> = {
   ADMIN: 'admin',
+  SUPER_ADMIN: 'super_admin',
   ORGANIZATION: 'organization',
+  ORGANIZATION_ADMIN: 'organization_admin',
+  ORGANIZATION_OWNER: 'organization',
+  ORGANIZATION_MEMBER: 'organization_member',
+  MODERATOR: 'moderator',
+  VERIFICATION_OFFICER: 'verification_officer',
   SEEKER: 'seeker',
 };
 
@@ -78,7 +84,24 @@ export const authApi = {
   },
   getMe: async (): Promise<ApiResponse<User>> => {
     const { data } = await axiosInstance.get('/auth/me');
-    return data;
+    const body = data || {};
+    if (body?.data?.email) return body;
+    const fullName = (body.fullName || body.email || '').trim();
+    const [firstName = '', ...rest] = fullName.split(/\s+/);
+    return {
+      success: true,
+      data: {
+        id: String(body.id || body.email || ''),
+        email: body.email || '',
+        firstName,
+        lastName: rest.join(' ') || '',
+        role: ROLE_MAP[(body.role || '').toUpperCase()] || 'seeker',
+        isActive: body.enabled ?? true,
+        isVerified: body.verified ?? false,
+        createdAt: body.createdAt || new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+    };
   },
   forgotPassword: async (email: string): Promise<ApiResponse<{ success: boolean }>> => {
     const { data } = await axiosInstance.post('/auth/forgot-password', { email });
