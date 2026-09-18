@@ -4,9 +4,12 @@ import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import InputDialog from '@/components/ui/InputDialog';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
+import Pagination from '@/components/ui/Pagination';
 import { PageError } from '@/components/ui/PageStates';
 import { adminApi } from '@/services/api/adminApi';
 import { Flag, AlertTriangle, CheckCircle, XCircle, Clock } from 'lucide-react';
+
+const PAGE_SIZE = 15;
 
 interface Report {
 id: number;
@@ -31,6 +34,7 @@ const [tab, setTab] = useState<'pending' | 'all'>('pending');
 const [resolveTarget, setResolveTarget] = useState<{ id: number; reason: string } | null>(null);
 const [dismissTarget, setDismissTarget] = useState<{ id: number; reason: string } | null>(null);
 const [actionLoading, setActionLoading] = useState(false);
+const [currentPage, setCurrentPage] = useState(1);
 
 useEffect(() => {
 fetchData();
@@ -93,6 +97,9 @@ const filteredReports = tab === 'pending'
 ? reports.filter(r => r.status === 'PENDING')
 : reports;
 
+const totalPages = Math.ceil(filteredReports.length / PAGE_SIZE);
+const paginatedReports = filteredReports.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+
 if (loading) {
 return (
 <div className="max-w-7xl mx-auto px-4 py-8">
@@ -146,14 +153,15 @@ Reports
 
 <div className="flex gap-2">
 <button
-onClick={() => setTab('pending')}
+onClick={() => { setTab('pending'); setCurrentPage(1); }}
 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${tab === 'pending' ? 'bg-tdop-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
 >
 Pending ({stats.pending})
 </button>
 <button
-onClick={() => setTab('all')}
+onClick={() => { setTab('all'); setCurrentPage(1); }}
 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${tab === 'all' ? 'bg-tdop-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+>
 >
 All Reports ({stats.total})
 </button>
@@ -167,7 +175,7 @@ All Reports ({stats.total})
 <p>No {tab === 'pending' ? 'pending' : ''} reports found</p>
 </div>
 ) : (
-filteredReports.map((report) => (
+paginatedReports.map((report) => (
 <div key={report.id} className="p-4 hover:bg-gray-50 transition-colors">
 <div className="flex items-start justify-between">
 <div className="flex-1">
@@ -205,6 +213,8 @@ filteredReports.map((report) => (
 )}
 </div>
 </Card>
+
+<Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
 
 <InputDialog
   open={!!resolveTarget}

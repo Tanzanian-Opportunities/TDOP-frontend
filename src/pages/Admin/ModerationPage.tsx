@@ -4,12 +4,15 @@ import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import InputDialog from '@/components/ui/InputDialog';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
+import Pagination from '@/components/ui/Pagination';
 import { DashboardSection } from '@/components/dashboard/DashboardSection';
 import { StatCard } from '@/components/dashboard/StatCard';
 import { EmptyState } from '@/components/dashboard/EmptyState';
 import { PageError } from '@/components/ui/PageStates';
 import { CheckCircle, XCircle, Eye, AlertTriangle, Archive, Search, Building2, MapPin } from 'lucide-react';
 import { adminApi } from '@/services/api/adminApi';
+
+const PAGE_SIZE = 15;
 
 interface ModerationItem {
   id: number;
@@ -30,6 +33,7 @@ const ModerationPage: React.FC = () => {
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [dialogTarget, setDialogTarget] = useState<{ type: string; id: number; title: string } | null>(null);
   const [actionLoading, setActionLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     fetchQueue();
@@ -97,6 +101,9 @@ const ModerationPage: React.FC = () => {
     const matchesStatus = filterStatus === 'all' || item.status === filterStatus;
     return matchesSearch && matchesStatus;
   });
+
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  const paginated = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
   const statusCounts = {
     total: items.length,
@@ -170,7 +177,7 @@ const ModerationPage: React.FC = () => {
             type="text"
             placeholder="Search by title, organization, or category..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
             className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm text-tdop-navy placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-tdop-primary/20 focus:border-tdop-primary"
           />
         </div>
@@ -178,7 +185,7 @@ const ModerationPage: React.FC = () => {
           {['all', 'SUBMITTED', 'UNDER_REVIEW', 'APPROVED', 'REJECTED'].map(status => (
             <button
               key={status}
-              onClick={() => setFilterStatus(status)}
+              onClick={() => { setFilterStatus(status); setCurrentPage(1); }}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 filterStatus === status
                   ? 'bg-white text-tdop-navy shadow-sm'
@@ -207,7 +214,7 @@ const ModerationPage: React.FC = () => {
           />
         ) : (
           <div className="divide-y divide-gray-100">
-            {filtered.map((item) => (
+            {paginated.map((item) => (
               <div key={item.id} className="p-4 hover:bg-gray-50 transition-colors">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1 min-w-0">
@@ -258,6 +265,8 @@ const ModerationPage: React.FC = () => {
           </div>
         )}
       </DashboardSection>
+
+      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
 
       <InputDialog
         open={!!dialogTarget && dialogTarget.type === 'approve'}

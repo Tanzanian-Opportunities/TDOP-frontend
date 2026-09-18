@@ -8,62 +8,68 @@ interface PaginationProps {
   className?: string;
 }
 
-export const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange, className = '' }) => {
+const Pagination: React.FC<PaginationProps> = ({
+  currentPage,
+  totalPages,
+  onPageChange,
+  className = '',
+}) => {
   if (totalPages <= 1) return null;
 
-  const getVisiblePages = () => {
-    const pages: (number | string)[] = [];
+  const getPages = () => {
+    const pages: (number | '...')[] = [];
     const delta = 2;
+    const left = Math.max(2, currentPage - delta);
+    const right = Math.min(totalPages - 1, currentPage + delta);
 
-    for (let i = 1; i <= totalPages; i++) {
-      if (i === 1 || i === totalPages || (i >= currentPage - delta && i <= currentPage + delta)) {
-        pages.push(i);
-      } else if (pages[pages.length - 1] !== '...') {
-        pages.push('...');
-      }
-    }
+    pages.push(1);
+    if (left > 2) pages.push('...');
+    for (let i = left; i <= right; i++) pages.push(i);
+    if (right < totalPages - 1) pages.push('...');
+    if (totalPages > 1) pages.push(totalPages);
 
     return pages;
   };
 
   return (
-    <nav className={`flex items-center justify-center gap-1 ${className}`} aria-label="Pagination">
+    <div className={`flex items-center justify-center gap-1 ${className}`}>
       <button
         onClick={() => onPageChange(currentPage - 1)}
-        disabled={currentPage === 1}
+        disabled={currentPage <= 1}
+        className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
         aria-label="Previous page"
-        className="p-2 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
       >
         <ChevronLeft className="w-4 h-4" />
       </button>
-      {getVisiblePages().map((page, i) => {
-        if (typeof page === 'string') {
-          return <span key={`ellipsis-${i}`} className="px-2 py-1 text-gray-400" aria-hidden="true">...</span>;
-        }
-        return (
+
+      {getPages().map((page, i) =>
+        page === '...' ? (
+          <span key={`dots-${i}`} className="px-2 text-gray-400 text-sm">...</span>
+        ) : (
           <button
             key={page}
             onClick={() => onPageChange(page)}
-            aria-label={`Page ${page}`}
-            aria-current={page === currentPage ? 'page' : undefined}
-            className={`w-9 h-9 rounded-lg text-sm font-medium transition-colors ${
+            className={`min-w-[32px] h-8 rounded-lg text-sm font-medium transition-colors ${
               page === currentPage
                 ? 'bg-tdop-primary text-white'
-                : 'hover:bg-gray-100 text-gray-600'
+                : 'text-gray-600 hover:bg-gray-100'
             }`}
           >
             {page}
           </button>
-        );
-      })}
+        )
+      )}
+
       <button
         onClick={() => onPageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
+        disabled={currentPage >= totalPages}
+        className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
         aria-label="Next page"
-        className="p-2 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
       >
         <ChevronRight className="w-4 h-4" />
       </button>
-    </nav>
+    </div>
   );
 };
+
+export default Pagination;

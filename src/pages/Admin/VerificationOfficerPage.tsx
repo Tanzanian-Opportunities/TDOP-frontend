@@ -3,12 +3,15 @@ import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import InputDialog from '@/components/ui/InputDialog';
+import Pagination from '@/components/ui/Pagination';
 import { adminApi } from '@/services/api/adminApi';
 import { DashboardSection } from '@/components/dashboard/DashboardSection';
 import { StatCard } from '@/components/dashboard/StatCard';
 import { EmptyState } from '@/components/dashboard/EmptyState';
 import { PageError } from '@/components/ui/PageStates';
 import { CheckCircle, XCircle, Clock, FileText, AlertTriangle, Search, ArrowRight } from 'lucide-react';
+
+const PAGE_SIZE = 15;
 
 interface VerificationRequest {
   id: number;
@@ -29,6 +32,7 @@ const VerificationOfficerPage: React.FC = () => {
   const [rejectTarget, setRejectTarget] = useState<{ id: number; orgName: string } | null>(null);
   const [infoTarget, setInfoTarget] = useState<{ id: number; orgName: string } | null>(null);
   const [actionLoading, setActionLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     fetchData();
@@ -94,6 +98,9 @@ const VerificationOfficerPage: React.FC = () => {
     const matchesStatus = filterStatus === 'all' || req.status === filterStatus;
     return matchesSearch && matchesStatus;
   });
+
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  const paginated = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
   const approved = requests.filter(r => r.status === 'APPROVED').length;
   const rejected = requests.filter(r => r.status === 'REJECTED').length;
@@ -164,7 +171,7 @@ const VerificationOfficerPage: React.FC = () => {
             type="text"
             placeholder="Search by organization or document..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
             className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm text-tdop-navy placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-tdop-primary/20 focus:border-tdop-primary"
           />
         </div>
@@ -172,7 +179,7 @@ const VerificationOfficerPage: React.FC = () => {
           {['all', 'PENDING', 'APPROVED', 'REJECTED'].map(status => (
             <button
               key={status}
-              onClick={() => setFilterStatus(status)}
+              onClick={() => { setFilterStatus(status); setCurrentPage(1); }}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 filterStatus === status
                   ? 'bg-white text-tdop-navy shadow-sm'
@@ -201,7 +208,7 @@ const VerificationOfficerPage: React.FC = () => {
           />
         ) : (
           <div className="divide-y divide-gray-100">
-            {filtered.map((req) => (
+            {paginated.map((req) => (
               <div key={req.id} className="p-4 hover:bg-gray-50 transition-colors">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1 min-w-0">
@@ -239,6 +246,8 @@ const VerificationOfficerPage: React.FC = () => {
           </div>
         )}
       </DashboardSection>
+
+      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
 
       <InputDialog
         open={!!rejectTarget}
