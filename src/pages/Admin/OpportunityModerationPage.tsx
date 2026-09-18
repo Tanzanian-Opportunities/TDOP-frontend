@@ -4,12 +4,15 @@ import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import RejectDialog from '@/components/ui/RejectDialog';
+import Pagination from '@/components/ui/Pagination';
 import { DashboardSection } from '@/components/dashboard/DashboardSection';
 import { EmptyState } from '@/components/dashboard/EmptyState';
 import { PageError } from '@/components/ui/PageStates';
 import { adminApi } from '@/services/api/adminApi';
 import { useNotificationContext } from '@/context/NotificationContext';
 import { CheckCircle, XCircle, AlertTriangle, Search, Clock, Eye } from 'lucide-react';
+
+const PAGE_SIZE = 15;
 
 interface ModerationItem {
   id: number;
@@ -31,6 +34,7 @@ const OpportunityModerationPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [rejectTarget, setRejectTarget] = useState<{ id: number; title: string } | null>(null);
   const [rejectLoading, setRejectLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     fetchItems();
@@ -79,6 +83,9 @@ const OpportunityModerationPage: React.FC = () => {
     return item.title?.toLowerCase().includes(q) || item.createdBy?.orgName?.toLowerCase().includes(q);
   });
 
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  const paginated = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+
   if (loading) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -90,7 +97,7 @@ const OpportunityModerationPage: React.FC = () => {
     );
   }
 
-  if (error) return <PageError message="Failed to load opportunities for moderation. Please try again." onRetry={() => {}} />;
+  if (error) return <PageError message="Failed to load opportunities for moderation. Please try again." onRetry={fetchItems} />;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">
@@ -108,7 +115,7 @@ const OpportunityModerationPage: React.FC = () => {
           type="text"
           placeholder="Search opportunities..."
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
           className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm text-tdop-navy placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-tdop-primary/20 focus:border-tdop-primary"
         />
       </div>
@@ -126,7 +133,7 @@ const OpportunityModerationPage: React.FC = () => {
           />
         ) : (
           <div className="divide-y divide-gray-100">
-            {filtered.map(item => (
+            {paginated.map(item => (
               <div key={item.id} className="p-4 hover:bg-gray-50 transition-colors">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1 min-w-0">
@@ -152,6 +159,8 @@ const OpportunityModerationPage: React.FC = () => {
           </div>
         )}
       </DashboardSection>
+
+      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
 
       <RejectDialog
         open={!!rejectTarget}

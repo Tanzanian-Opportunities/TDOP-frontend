@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import {
 LayoutDashboard, Briefcase, Bookmark, FileText, Sparkles, FolderOpen, Building2,
 User, Settings, BarChart3, Users, Shield, Flag, UserCog, ChevronLeft, ChevronRight,
-CheckCircle, Eye, Clock, UsersRound, Wrench, Bell
+CheckCircle, Eye, Clock, UsersRound, Wrench, Bell, AlertTriangle, ClipboardList
 } from 'lucide-react';
 import { useApplications } from '@/hooks/useApplications';
 import { useNotifications } from '@/hooks/useNotifications';
@@ -49,19 +49,30 @@ const orgLinks: SidebarLink[] = [
 ];
 
 const adminLinks: SidebarLink[] = [
-{ to: '/admin', label: 'Dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
-{ to: '/admin/users', label: 'Users', icon: <Users className="w-5 h-5" /> },
-{ to: '/admin/organizations', label: 'Organizations', icon: <Building2 className="w-5 h-5" /> },
-{ to: '/admin/opportunities', label: 'Opportunities', icon: <Briefcase className="w-5 h-5" /> },
-{ to: '/admin/verification', label: 'Verification', icon: <CheckCircle className="w-5 h-5" /> },
-{ to: '/admin/moderation', label: 'Moderation', icon: <Eye className="w-5 h-5" /> },
-{ to: '/admin/reports', label: 'Reports', icon: <Flag className="w-5 h-5" /> },
-{ to: '/admin/analytics', label: 'Analytics', icon: <BarChart3 className="w-5 h-5" /> },
-{ to: '/admin/audit-log', label: 'Audit Log', icon: <Clock className="w-5 h-5" /> },
-{ to: '/admin/config', label: 'Platform Config', icon: <Wrench className="w-5 h-5" /> },
+  { to: '/admin', label: 'Dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
+  { to: '/admin/users', label: 'Users', icon: <Users className="w-5 h-5" /> },
+  { to: '/admin/organizations', label: 'Organizations', icon: <Building2 className="w-5 h-5" /> },
+  { to: '/admin/opportunities', label: 'Opportunities', icon: <Briefcase className="w-5 h-5" /> },
+  { to: '/admin/verification', label: 'Verification', icon: <CheckCircle className="w-5 h-5" /> },
+  { to: '/admin/moderation', label: 'Moderation', icon: <Eye className="w-5 h-5" /> },
+  { to: '/admin/reports', label: 'Reports', icon: <Flag className="w-5 h-5" /> },
+  { to: '/admin/analytics', label: 'Analytics', icon: <BarChart3 className="w-5 h-5" /> },
+  { to: '/admin/audit-log', label: 'Audit Log', icon: <Clock className="w-5 h-5" /> },
+  { to: '/admin/config', label: 'Platform Config', icon: <Wrench className="w-5 h-5" /> },
 ];
 
-const links = location.pathname.startsWith('/admin') ? adminLinks
+const trustLinks: SidebarLink[] = [
+  { to: '/trust', label: 'Attention Center', icon: <AlertTriangle className="w-5 h-5" /> },
+  { to: '/trust/work-queue', label: 'Work Queue', icon: <ClipboardList className="w-5 h-5" /> },
+  { to: '/trust/verifications', label: 'Verifications', icon: <CheckCircle className="w-5 h-5" /> },
+  { to: '/trust/moderation', label: 'Moderation', icon: <Eye className="w-5 h-5" /> },
+  { to: '/trust/reports', label: 'Reports', icon: <Flag className="w-5 h-5" /> },
+  { to: '/trust/activity', label: 'Activity Log', icon: <Clock className="w-5 h-5" /> },
+  { to: '/trust/overview', label: 'Overview', icon: <BarChart3 className="w-5 h-5" /> },
+];
+
+const links = location.pathname.startsWith('/trust') ? trustLinks
+: location.pathname.startsWith('/admin') ? adminLinks
 : location.pathname.includes('organization') ? orgLinks : seekerLinks;
 
 return (

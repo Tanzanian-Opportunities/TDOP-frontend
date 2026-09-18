@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Bookmark } from 'lucide-react';
 
 const SavedOpportunitiesPage: React.FC = () => {
-  const { savedOpportunities, isLoading, isError, total, unsaveOpportunity } = useOpportunities();
+  const { savedOpportunities, isLoading, isError, total, unsaveOpportunity, refetch } = useOpportunities();
   const { t } = useTranslation();
 
   if (isLoading) {
@@ -17,7 +17,7 @@ const SavedOpportunitiesPage: React.FC = () => {
     );
   }
 
-  if (isError) return <PageError message="Failed to load saved opportunities. Please try again." onRetry={() => {}} />;
+  if (isError) return <PageError message="Failed to load saved opportunities. Please try again." onRetry={refetch} />;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">

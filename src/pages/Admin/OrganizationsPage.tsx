@@ -3,9 +3,12 @@ import { Link } from 'react-router-dom';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
+import Pagination from '@/components/ui/Pagination';
 import { PageError } from '@/components/ui/PageStates';
 import { adminApi } from '@/services/api/adminApi';
 import { Building2, Shield, ShieldCheck, ShieldAlert, RefreshCw, Search, ExternalLink } from 'lucide-react';
+
+const PAGE_SIZE = 15;
 
 interface Organization {
   id: number;
@@ -29,6 +32,7 @@ const OrganizationsPage: React.FC = () => {
   const [error, setError] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState<'all' | 'verified' | 'pending'>('all');
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     fetchData();
@@ -58,6 +62,9 @@ const OrganizationsPage: React.FC = () => {
       (filterStatus === 'pending' && !org.verified);
     return matchesSearch && matchesStatus;
   });
+
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  const paginated = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
   if (loading) {
     return (
@@ -116,7 +123,7 @@ const OrganizationsPage: React.FC = () => {
             type="text"
             placeholder="Search organizations..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
             className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm text-tdop-navy placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-tdop-primary/20 focus:border-tdop-primary"
           />
         </div>
@@ -124,7 +131,7 @@ const OrganizationsPage: React.FC = () => {
           {(['all', 'verified', 'pending'] as const).map(status => (
             <button
               key={status}
-              onClick={() => setFilterStatus(status)}
+              onClick={() => { setFilterStatus(status); setCurrentPage(1); }}
               className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                 filterStatus === status
                   ? 'bg-tdop-primary text-white'
@@ -151,7 +158,7 @@ const OrganizationsPage: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {filtered.map((org) => (
+              {paginated.map((org) => (
                 <tr key={org.id} className="hover:bg-gray-50">
                   <td className="p-4">
                     <div className="flex items-center gap-3">
@@ -216,6 +223,8 @@ const OrganizationsPage: React.FC = () => {
           )}
         </div>
       </Card>
+
+      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
     </div>
   );
 };

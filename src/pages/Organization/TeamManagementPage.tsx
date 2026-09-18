@@ -30,26 +30,48 @@ const [error, setError] = useState(false);
 const [showInviteForm, setShowInviteForm] = useState(false);
 const [inviteEmail, setInviteEmail] = useState('');
 const [inviteRole, setInviteRole] = useState('MEMBER');
-const orgId = 1; // Would come from auth context
+const [orgId, setOrgId] = useState<number | null>(null);
 
 useEffect(() => {
-fetchData();
+  fetchOrgId();
 }, []);
 
+const fetchOrgId = async () => {
+  try {
+    const res = await axiosInstance.get('/organization/profile');
+    const profile = res.data;
+    if (profile?.id) {
+      setOrgId(profile.id);
+    } else {
+      setError(true);
+    }
+  } catch (err) {
+    console.error(err);
+    setError(true);
+  } finally {
+    setLoading(false);
+  }
+};
+
+useEffect(() => {
+  if (orgId) fetchData();
+}, [orgId]);
+
 const fetchData = async () => {
-try {
-const [membersRes, invitationsRes] = await Promise.all([
-axiosInstance.get(`/organization/team/${orgId}/members`),
-axiosInstance.get(`/organization/team/${orgId}/invitations`)
-]);
-setMembers(Array.isArray(membersRes.data) ? membersRes.data : []);
-setInvitations(Array.isArray(invitationsRes.data) ? invitationsRes.data : []);
-} catch (err) {
-console.error(err);
-setError(true);
-} finally {
-setLoading(false);
-}
+  if (!orgId) return;
+  try {
+    const [membersRes, invitationsRes] = await Promise.all([
+      axiosInstance.get(`/organization/team/${orgId}/members`),
+      axiosInstance.get(`/organization/team/${orgId}/invitations`)
+    ]);
+    setMembers(Array.isArray(membersRes.data) ? membersRes.data : []);
+    setInvitations(Array.isArray(invitationsRes.data) ? invitationsRes.data : []);
+  } catch (err) {
+    console.error(err);
+    setError(true);
+  } finally {
+    setLoading(false);
+  }
 };
 
 const handleInvite = async () => {
@@ -100,7 +122,7 @@ return (
 );
 }
 
-if (error) return <PageError message="Failed to load team data. Please try again." onRetry={() => {}} />;
+if (error) return <PageError message="Failed to load team data. Please try again." onRetry={fetchData} />;
 
 return (
 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">

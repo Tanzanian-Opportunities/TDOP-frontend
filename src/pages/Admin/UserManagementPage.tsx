@@ -2,10 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
+import Pagination from '@/components/ui/Pagination';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import { PageError } from '@/components/ui/PageStates';
 import { adminApi } from '@/services/api/adminApi';
+import { useNotificationContext } from '@/context/NotificationContext';
 import { Users, Shield, Ban, RefreshCw, Search } from 'lucide-react';
+
+const PAGE_SIZE = 15;
 
 interface User {
 id: number;
@@ -18,6 +22,7 @@ verified: boolean;
 }
 
 const UserManagementPage: React.FC = () => {
+const { addNotification } = useNotificationContext();
 const [users, setUsers] = useState<User[]>([]);
 const [loading, setLoading] = useState(true);
 const [error, setError] = useState(false);
@@ -25,6 +30,7 @@ const [searchQuery, setSearchQuery] = useState('');
 const [filterRole, setFilterRole] = useState('');
 const [confirmTarget, setConfirmTarget] = useState<{ type: string; id: number; name: string } | null>(null);
 const [actionLoading, setActionLoading] = useState(false);
+const [currentPage, setCurrentPage] = useState(1);
 
 useEffect(() => {
 fetchUsers();
@@ -50,6 +56,7 @@ await adminApi.suspendUser(String(confirmTarget.id));
 setConfirmTarget(null);
 fetchUsers();
 } catch (err) {
+addNotification({ type: 'error', title: 'Error', message: 'Failed to suspend user.' });
 console.error(err);
 } finally {
 setActionLoading(false);
@@ -61,6 +68,7 @@ try {
 await adminApi.updateUserRole(String(id), newRole);
 fetchUsers();
 } catch (err) {
+addNotification({ type: 'error', title: 'Error', message: 'Failed to update role.' });
 console.error(err);
 }
 };
@@ -70,6 +78,9 @@ const matchesSearch = `${user.fullName} ${user.email}`.toLowerCase().includes(se
 const matchesRole = !filterRole || user.role === filterRole;
 return matchesSearch && matchesRole;
 });
+
+const totalPages = Math.ceil(filteredUsers.length / PAGE_SIZE);
+const paginatedUsers = filteredUsers.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
 const getRoleBadge = (role: string) => {
 const colors: Record<string, string> = {
@@ -97,7 +108,7 @@ return (
 );
 }
 
-if (error) return <PageError message="Failed to load users. Please try again." onRetry={() => {}} />;
+if (error) return <PageError message="Failed to load users. Please try again." onRetry={fetchUsers} />;
 
 return (
 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">
@@ -121,13 +132,13 @@ User Management
 type="text"
 placeholder="Search users..."
 value={searchQuery}
-onChange={(e) => setSearchQuery(e.target.value)}
+onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
 className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm text-tdop-navy placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-tdop-primary/20 focus:border-tdop-primary"
 />
 </div>
 <select
 value={filterRole}
-onChange={(e) => setFilterRole(e.target.value)}
+onChange={(e) => { setFilterRole(e.target.value); setCurrentPage(1); }}
 className="px-3 py-2.5 rounded-xl border border-gray-200 bg-white text-sm text-tdop-navy focus:outline-none focus:ring-2 focus:ring-tdop-primary/20 focus:border-tdop-primary"
 >
 <option value="">All Roles</option>
@@ -152,7 +163,7 @@ className="px-3 py-2.5 rounded-xl border border-gray-200 bg-white text-sm text-t
 </tr>
 </thead>
 <tbody className="divide-y divide-gray-100">
-{filteredUsers.map((user) => (
+{paginatedUsers.map((user) => (
 <tr key={user.id} className="hover:bg-gray-50">
 <td className="p-4">
 <div className="flex items-center gap-3">
@@ -204,6 +215,8 @@ className="text-xs px-2 py-1 border rounded"
 )}
 </div>
 </Card>
+
+<Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
 
 <ConfirmDialog
   open={!!confirmTarget}

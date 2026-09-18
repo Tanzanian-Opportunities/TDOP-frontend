@@ -18,7 +18,7 @@ import {
   Briefcase, Bookmark, FileText, Sparkles, MapPin, Calendar,
   ArrowRight, GraduationCap, BookOpen, Shield, CheckCircle2, Circle,
   Clock, AlertTriangle, Bell, TrendingUp, Zap, ChevronRight,
-  Target, Award, Upload, Eye, ChevronRight as ChevronRightIcon,
+  Target, Award, Upload, Eye,
 } from 'lucide-react';
 
 const SeekerDashboardPage: React.FC = () => {
@@ -28,7 +28,7 @@ const SeekerDashboardPage: React.FC = () => {
   const { notifications, unreadCount } = useNotifications();
   const { documents } = useDocuments();
 
-  const { data: savedData, isError: savedError } = useQuery({
+  const { data: savedData, isError: savedError, refetch: refetchSaved } = useQuery({
     queryKey: ['saved-count'],
     queryFn: async () => {
       const { data } = await axiosInstance.get('/saved');
@@ -107,7 +107,7 @@ const SeekerDashboardPage: React.FC = () => {
     { label: 'Jobs', search: 'jobs', icon: Briefcase, color: 'bg-blue-50 text-tdop-primary' },
   ];
 
-  if (savedError) return <PageError message="Failed to load dashboard. Please try again." onRetry={() => {}} />;
+  if (savedError) return <PageError message="Failed to load dashboard. Please try again." onRetry={refetchSaved} />;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

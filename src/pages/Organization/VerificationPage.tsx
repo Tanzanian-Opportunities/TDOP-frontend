@@ -91,7 +91,7 @@ const VerificationPage: React.FC = () => {
     );
   }
 
-  if (error) return <PageError message="Failed to load verification data. Please try again." onRetry={() => {}} />;
+  if (error) return <PageError message="Failed to load verification data. Please try again." onRetry={fetchProfile} />;
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">

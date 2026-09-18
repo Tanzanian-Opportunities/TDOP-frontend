@@ -24,7 +24,7 @@ const statusFilters: { value: StatusFilter; label: string }[] = [
 ];
 
 const MyApplicationsPage: React.FC = () => {
-  const { applications, isLoading, isError, withdraw } = useApplications();
+  const { applications, isLoading, isError, withdraw, refetch } = useApplications();
   const { t } = useTranslation();
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -56,7 +56,7 @@ const MyApplicationsPage: React.FC = () => {
     );
   }
 
-  if (isError) return <PageError message="Failed to load applications. Please try again." onRetry={() => {}} />;
+  if (isError) return <PageError message="Failed to load applications. Please try again." onRetry={refetch} />;
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">

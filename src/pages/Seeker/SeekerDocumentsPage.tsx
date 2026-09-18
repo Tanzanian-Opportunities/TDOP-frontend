@@ -28,7 +28,7 @@ const fileTypeIcons: Record<string, React.ElementType> = {
 
 const SeekerDocumentsPage: React.FC = () => {
   const { t } = useTranslation();
-  const { documents, isLoading, isError, upload, removeDocument, isUploading } = useDocuments();
+  const { documents, isLoading, isError, upload, removeDocument, isUploading, refetch } = useDocuments();
   const [showUploadForm, setShowUploadForm] = useState(false);
   const [uploadName, setUploadName] = useState('');
   const [uploadType, setUploadType] = useState('cv');
@@ -68,7 +68,7 @@ const SeekerDocumentsPage: React.FC = () => {
     );
   }
 
-  if (isError) return <PageError message="Failed to load documents. Please try again." onRetry={() => {}} />;
+  if (isError) return <PageError message="Failed to load documents. Please try again." onRetry={refetch} />;
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">

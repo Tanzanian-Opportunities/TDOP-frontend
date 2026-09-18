@@ -44,6 +44,14 @@ import ModerationPage from '@/pages/Admin/ModerationPage';
 import PlatformConfigPage from '@/pages/Admin/PlatformConfigPage';
 import AdminOrganizationsPage from '@/pages/Admin/OrganizationsPage';
 import OrganizationTeamPage from '@/pages/Organization/TeamManagementPage';
+import TrustLayout from '@/components/layout/TrustLayout';
+import TrustAttentionPage from '@/pages/Trust/TrustAttentionPage';
+import TrustWorkQueuePage from '@/pages/Trust/TrustWorkQueuePage';
+import TrustVerificationReviewPage from '@/pages/Trust/TrustVerificationReviewPage';
+import TrustOpportunityReviewPage from '@/pages/Trust/TrustOpportunityReviewPage';
+import TrustReportReviewPage from '@/pages/Trust/TrustReportReviewPage';
+import TrustActivityPage from '@/pages/Trust/TrustActivityPage';
+import TrustOverviewPage from '@/pages/Trust/TrustOverviewPage';
 import ContactPage from '@/pages/Support/ContactPage';
 import HelpCenterPage from '@/pages/Support/HelpCenterPage';
 import PrivacyPage from '@/pages/Support/PrivacyPage';
@@ -103,6 +111,16 @@ const AppRoutes: React.FC = () => {
             <Route path="/admin/verification" element={<VerificationOfficerPage />} />
             <Route path="/admin/moderation" element={<ModerationPage />} />
             <Route path="/admin/config" element={<PlatformConfigPage />} />
+
+            <Route path="/trust" element={<TrustLayout />}>
+              <Route index element={<TrustAttentionPage />} />
+              <Route path="work-queue" element={<TrustWorkQueuePage />} />
+              <Route path="verifications" element={<TrustVerificationReviewPage />} />
+              <Route path="moderation" element={<TrustOpportunityReviewPage />} />
+              <Route path="reports" element={<TrustReportReviewPage />} />
+              <Route path="activity" element={<TrustActivityPage />} />
+              <Route path="overview" element={<TrustOverviewPage />} />
+            </Route>
           </Route>
         </Route>
 
