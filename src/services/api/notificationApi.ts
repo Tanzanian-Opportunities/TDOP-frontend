@@ -1,22 +1,32 @@
 import axiosInstance from './axiosInstance';
-import { NotificationData } from '@/context/NotificationContext';
-import { ApiResponse } from '@/types/api';
+
+export interface Notification {
+  id: string;
+  userId: string;
+  title: string;
+  message: string;
+  type: string;
+  read: boolean;
+  actionUrl?: string;
+  createdAt: string;
+}
 
 export const notificationApi = {
-  getNotifications: async (params?: { page?: number; limit?: number }): Promise<ApiResponse<NotificationData[]>> => {
-    const { data } = await axiosInstance.get('/notifications', { params });
-    return data;
+  getNotifications: async (): Promise<Notification[]> => {
+    const { data } = await axiosInstance.get('/notifications');
+    return Array.isArray(data) ? data : data?.data || [];
   },
-  markAsRead: async (id: string): Promise<ApiResponse<unknown>> => {
-    const { data } = await axiosInstance.put(`/notifications/${id}/read`);
-    return data;
+
+  getUnreadCount: async (): Promise<number> => {
+    const { data } = await axiosInstance.get('/notifications/unread-count');
+    return data?.count || 0;
   },
-  markAllAsRead: async (): Promise<ApiResponse<unknown>> => {
-    const { data } = await axiosInstance.post('/notifications/read-all');
-    return data;
+
+  markAsRead: async (id: string): Promise<void> => {
+    await axiosInstance.put(`/notifications/${id}/read`);
   },
-  deleteNotification: async (id: string): Promise<ApiResponse<unknown>> => {
-    await axiosInstance.delete(`/notifications/${id}`);
-    return { success: true };
+
+  markAllAsRead: async (): Promise<void> => {
+    await axiosInstance.post('/notifications/read-all');
   },
 };

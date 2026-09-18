@@ -28,29 +28,45 @@ export interface Opportunity {
   company: string;
   companyId: string;
   type: OpportunityType;
-  status: OpportunityStatus;
+  status: OpportunityStatus | string;
   location: string;
   isRemote: boolean;
   salaryMin?: number;
   salaryMax?: number;
   salaryCurrency?: string;
+  salaryRange?: string;
   experienceLevel: string;
-  requirements: string[];
+  requirements: string[] | string;
   responsibilities: string[];
-  benefits: string[];
+  benefits: string[] | string;
   skills: string[];
   tags: string[];
   applicationDeadline: string;
+  deadline?: string;
   publishedAt: string;
   updatedAt: string;
   createdAt: string;
   isVerified: boolean;
   isFeatured: boolean;
   views: number;
+  viewCount?: number;
+  saveCount?: number;
+  applicationCount?: number;
   applicationsCount: number;
   images?: string[];
   category: string;
   educationLevel: string;
+  applicationUrl?: string;
+  sourceUrl?: string;
+  workMode?: string;
+  eligibility?: string;
+  requiredDocuments?: string;
+  fundingInfo?: string;
+  verified?: boolean;
+  verifiedAt?: string;
+  moderated?: boolean;
+  organizationName?: string;
+  organizationId?: number;
 }
 
 export interface OpportunityCreate {
@@ -58,20 +74,26 @@ export interface OpportunityCreate {
   description: string;
   type: OpportunityType;
   location: string;
-  isRemote: boolean;
+  isRemote?: boolean;
   salaryMin?: number;
   salaryMax?: number;
   salaryCurrency?: string;
   experienceLevel: string;
-  requirements: string[];
-  responsibilities: string[];
-  benefits: string[];
-  skills: string[];
-  tags: string[];
-  applicationDeadline: string;
-  category: string;
-  educationLevel: string;
+  requirements: string[] | string;
+  responsibilities: string[] | string;
+  benefits: string[] | string;
+  skills?: string[];
+  tags?: string[];
+  applicationDeadline?: string;
+  deadline?: string;
+  category?: string;
+  educationLevel?: string;
   isFeatured?: boolean;
+  salaryRange?: string;
+  eligibility?: string;
+  requiredDocuments?: string;
+  workMode?: string;
+  applicationUrl?: string;
 }
 
 export interface PaginatedResponse<T> {

@@ -5,20 +5,21 @@ import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { PageError } from '@/components/ui/PageStates';
 import { profileApi } from '@/services/api/profileApi';
+import { useNotificationContext } from '@/context/NotificationContext';
 import { formatDate } from '@/utils/formatDate';
 import { FileText, FileCheck, Clock, Upload, CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
+import axiosInstance from '@/services/api/axiosInstance';
 
 const VerificationPage: React.FC = () => {
   const { t } = useTranslation();
+  const { addNotification } = useNotificationContext();
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  useEffect(() => {
-    fetchProfile();
-  }, []);
+  useEffect(() => { fetchProfile(); }, []);
 
   const fetchProfile = async () => {
     try {
@@ -34,7 +35,12 @@ const VerificationPage: React.FC = () => {
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) setSelectedFile(file);
+    if (!file) return;
+    if (file.size > 10 * 1024 * 1024) {
+      addNotification({ type: 'error', title: t('common.error'), message: t('verification.fileTooLarge') });
+      return;
+    }
+    setSelectedFile(file);
   };
 
   const handleSubmit = async () => {
@@ -43,42 +49,19 @@ const VerificationPage: React.FC = () => {
       setUploading(true);
       const formData = new FormData();
       formData.append('document', selectedFile);
-      const { default: axiosInstance } = await import('@/services/api/axiosInstance');
-      await axiosInstance.post('/organization/verification/submit', formData, {
+      await axiosInstance.post('/verify', formData, {
+        params: { orgId: profile?.id },
         headers: { 'Content-Type': 'multipart/form-data' },
       });
+      addNotification({ type: 'success', title: t('common.success'), message: t('verification.submitted') });
       setSelectedFile(null);
       fetchProfile();
-    } catch (err) {
-      console.error(err);
+    } catch (err: any) {
+      addNotification({ type: 'error', title: t('common.error'), message: err?.message || t('verification.submitFailed') });
     } finally {
       setUploading(false);
     }
   };
-
-  const statusConfig: Record<string, { label: string; variant: string; icon: React.ReactNode; color: string }> = {
-    verified: {
-      label: 'Verified',
-      variant: 'success',
-      icon: <CheckCircle className="w-6 h-6 text-tdop-secondary" />,
-      color: 'bg-emerald-50 border-emerald-200',
-    },
-    pending: {
-      label: 'Pending Review',
-      variant: 'warning',
-      icon: <Clock className="w-6 h-6 text-amber-500" />,
-      color: 'bg-amber-50 border-amber-200',
-    },
-    rejected: {
-      label: 'Rejected',
-      variant: 'danger',
-      icon: <XCircle className="w-6 h-6 text-red-500" />,
-      color: 'bg-red-50 border-red-200',
-    },
-  };
-
-  const status = profile?.verificationStatus || 'pending';
-  const config = statusConfig[status] || statusConfig.pending;
 
   if (loading) {
     return (
@@ -91,7 +74,9 @@ const VerificationPage: React.FC = () => {
     );
   }
 
-  if (error) return <PageError message="Failed to load verification data. Please try again." onRetry={fetchProfile} />;
+  if (error) return <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8"><PageError message={t('verification.loadError')} onRetry={fetchProfile} /></div>;
+
+  const isVerified = profile?.verified === true;
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">
@@ -104,99 +89,84 @@ const VerificationPage: React.FC = () => {
       </div>
 
       {/* Status Card */}
-      <div className={`rounded-2xl border-2 p-6 ${config.color}`}>
+      <div className={`rounded-2xl border-2 p-6 ${isVerified ? 'bg-emerald-50 border-emerald-200' : 'bg-amber-50 border-amber-200'}`}>
         <div className="flex items-center gap-4">
-          {config.icon}
+          {isVerified ? <CheckCircle className="w-6 h-6 text-tdop-secondary" /> : <Clock className="w-6 h-6 text-amber-500" />}
           <div>
-            <h3 className="font-semibold text-tdop-navy text-lg">Verification Status</h3>
-            <Badge variant={config.variant as any}>{config.label}</Badge>
+            <h3 className="font-semibold text-tdop-navy text-lg">{t('verification.verificationStatus')}</h3>
+            <Badge variant={isVerified ? 'success' : 'warning'}>
+              {isVerified ? t('verification.verified') : t('verification.pendingReview')}
+            </Badge>
           </div>
         </div>
         {profile?.verifiedAt && (
           <p className="text-sm text-gray-600 mt-3">
-            Verified on {formatDate(profile.verifiedAt)}
+            {t('orgProfile.verifiedOn')} {formatDate(profile.verifiedAt)}
           </p>
-        )}
-        {status === 'rejected' && (
-          <div className="mt-3 p-3 bg-white/60 rounded-xl">
-            <p className="text-sm text-gray-600 flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-amber-500" />
-              Your verification was rejected. Please review the feedback and resubmit with updated documents.
-            </p>
-          </div>
         )}
       </div>
 
       {/* Upload Document */}
-      <Card>
-        <div className="space-y-6">
-          <div>
-            <h3 className="font-medium text-tdop-navy mb-1">{t('organization.uploadVerificationDoc')}</h3>
-            <p className="text-sm text-gray-500">
-              Upload your organization registration certificate, tax ID, or other official documents.
-            </p>
-          </div>
+      {!isVerified && (
+        <Card>
+          <div className="space-y-6">
+            <div>
+              <h3 className="font-medium text-tdop-navy mb-1">{t('organization.uploadVerificationDoc')}</h3>
+              <p className="text-sm text-gray-500">
+                {t('organization.supportedFormats')}
+              </p>
+            </div>
 
-          <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-tdop-primary/40 transition-colors">
-            <Upload className="w-10 h-10 text-gray-400 mx-auto mb-3" />
-            {selectedFile ? (
-              <div>
-                <p className="text-sm font-medium text-tdop-navy">{selectedFile.name}</p>
-                <p className="text-xs text-gray-500 mt-1">
-                  {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
-                </p>
-              </div>
-            ) : (
-              <div>
-                <p className="text-sm text-gray-500 mb-3">
-                  Drag and drop or click to select a file
-                </p>
-                <label className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer transition-colors">
-                  <FileText className="w-4 h-4" />
-                  Select file
-                  <input
-                    type="file"
-                    accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
-                    onChange={handleFileSelect}
-                    className="hidden"
-                  />
-                </label>
+            <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-tdop-primary/40 transition-colors">
+              <Upload className="w-10 h-10 text-gray-400 mx-auto mb-3" />
+              {selectedFile ? (
+                <div>
+                  <p className="text-sm font-medium text-tdop-navy">{selectedFile.name}</p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
+                  </p>
+                </div>
+              ) : (
+                <div>
+                  <p className="text-sm text-gray-500 mb-3">{t('organization.dragDrop')}</p>
+                  <label className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer transition-colors">
+                    <FileText className="w-4 h-4" />
+                    {t('common.select')}
+                    <input type="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" onChange={handleFileSelect} className="hidden" />
+                  </label>
+                </div>
+              )}
+              <p className="text-xs text-gray-400 mt-3">PDF, JPG, PNG, DOC up to 10MB</p>
+            </div>
+
+            {selectedFile && (
+              <div className="flex items-center gap-3">
+                <Button onClick={handleSubmit} loading={uploading}>
+                  {isVerified ? t('common.submit') : t('organization.submitVerification')}
+                </Button>
+                <Button variant="outline" onClick={() => setSelectedFile(null)}>
+                  {t('common.cancel')}
+                </Button>
               </div>
             )}
-            <p className="text-xs text-gray-400 mt-3">
-              PDF, JPG, PNG, DOC up to 10MB
-            </p>
           </div>
-
-          {selectedFile && (
-            <div className="flex items-center gap-3">
-              <Button onClick={handleSubmit} loading={uploading}>
-                {status === 'rejected' ? 'Resubmit' : 'Submit for verification'}
-              </Button>
-              <Button variant="outline" onClick={() => setSelectedFile(null)}>
-                Cancel
-              </Button>
-            </div>
-          )}
-        </div>
-      </Card>
+        </Card>
+      )}
 
       {/* Timeline */}
       {profile?.createdAt && (
         <Card>
-          <h3 className="font-medium text-tdop-navy mb-4">Timeline</h3>
+          <h3 className="font-medium text-tdop-navy mb-4">{t('verification.verificationStatus')}</h3>
           <div className="space-y-3">
             <div className="flex items-center gap-3 text-sm">
               <div className="w-2 h-2 rounded-full bg-tdop-primary" />
-              <span className="text-gray-600">Organization registered</span>
+              <span className="text-gray-600">{t('organization.title')} registered</span>
               <span className="text-gray-400 ml-auto">{formatDate(profile.createdAt)}</span>
             </div>
-            {status !== 'pending' && profile?.verifiedAt && (
+            {isVerified && profile?.verifiedAt && (
               <div className="flex items-center gap-3 text-sm">
-                <div className={`w-2 h-2 rounded-full ${status === 'verified' ? 'bg-tdop-secondary' : 'bg-red-500'}`} />
-                <span className="text-gray-600">
-                  Verification {status === 'verified' ? 'approved' : 'rejected'}
-                </span>
+                <div className="w-2 h-2 rounded-full bg-tdop-secondary" />
+                <span className="text-gray-600">{t('verification.verified')}</span>
                 <span className="text-gray-400 ml-auto">{formatDate(profile.verifiedAt)}</span>
               </div>
             )}

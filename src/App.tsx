@@ -44,6 +44,14 @@ import ModerationPage from '@/pages/Admin/ModerationPage';
 import PlatformConfigPage from '@/pages/Admin/PlatformConfigPage';
 import AdminOrganizationsPage from '@/pages/Admin/OrganizationsPage';
 import OrganizationTeamPage from '@/pages/Organization/TeamManagementPage';
+import OpportunitiesListPage from '@/pages/Organization/OpportunitiesListPage';
+import OrgOpportunityDetailPage from '@/pages/Organization/OpportunityDetailPage';
+import OpportunityPreviewPage from '@/pages/Organization/OpportunityPreviewPage';
+import DeadlinesPage from '@/pages/Organization/DeadlinesPage';
+import OrgNotificationsPage from '@/pages/Organization/NotificationsPage';
+import OrgDocumentsPage from '@/pages/Organization/DocumentsPage';
+import OrgAnalyticsPage from '@/pages/Organization/AnalyticsPage';
+import OrgSettingsPage from '@/pages/Organization/SettingsPage';
 import TrustLayout from '@/components/layout/TrustLayout';
 import TrustAttentionPage from '@/pages/Trust/TrustAttentionPage';
 import TrustWorkQueuePage from '@/pages/Trust/TrustWorkQueuePage';
@@ -92,12 +100,20 @@ const AppRoutes: React.FC = () => {
 
           <Route element={<RoleGate allowedRoles={['organization', 'admin']} />}>
             <Route path="/my-jobs" element={<OrganizationDashboardPage />} />
+            <Route path="/organization/opportunities" element={<OpportunitiesListPage />} />
+            <Route path="/organization/opportunity/:id" element={<OrgOpportunityDetailPage />} />
+            <Route path="/organization/preview/:id" element={<OpportunityPreviewPage />} />
             <Route path="/create-opportunity" element={<CreateOpportunityPage />} />
             <Route path="/edit-opportunity/:id" element={<EditOpportunityPage />} />
             <Route path="/organization/applications" element={<OrgMyApplicationsPage />} />
+            <Route path="/organization/deadlines" element={<DeadlinesPage />} />
+            <Route path="/organization/notifications" element={<OrgNotificationsPage />} />
+            <Route path="/organization/documents" element={<OrgDocumentsPage />} />
+            <Route path="/organization/analytics" element={<OrgAnalyticsPage />} />
             <Route path="/organization/profile" element={<OrganizationProfilePage />} />
             <Route path="/organization/verification" element={<VerificationPage />} />
             <Route path="/organization/team" element={<OrganizationTeamPage />} />
+            <Route path="/organization/settings" element={<OrgSettingsPage />} />
           </Route>
 
           <Route element={<RoleGate allowedRoles={['admin', 'verification_officer', 'moderator', 'super_admin']} />}>

@@ -43,4 +43,22 @@ export const applicationApi = {
     const { data } = await axiosInstance.get(`/organization/opportunities/${opportunityId}/applicants`);
     return { success: true, data };
   },
+  shortlistApplication: async (applicationId: string): Promise<ApiResponse<Application>> => {
+    const { data } = await axiosInstance.post(`/organization/opportunities/applications/${applicationId}/shortlist`);
+    return { success: true, data };
+  },
+  rejectApplication: async (applicationId: string, reason?: string): Promise<ApiResponse<Application>> => {
+    const { data } = await axiosInstance.post(`/organization/opportunities/applications/${applicationId}/reject`, null, {
+      params: reason ? { reason } : {},
+    });
+    return { success: true, data };
+  },
+  submitOpportunity: async (id: string): Promise<ApiResponse<Application>> => {
+    const { data } = await axiosInstance.post(`/organization/opportunities/${id}/submit`);
+    return { success: true, data };
+  },
+  publishOpportunity: async (id: string): Promise<ApiResponse<Application>> => {
+    const { data } = await axiosInstance.post(`/organization/opportunities/${id}/publish`);
+    return { success: true, data };
+  },
 };

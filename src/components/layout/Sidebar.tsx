@@ -40,12 +40,18 @@ const seekerLinks: SidebarLink[] = [
 ];
 
 const orgLinks: SidebarLink[] = [
-{ to: '/my-jobs', label: 'Dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
-{ to: '/organization/profile', label: 'Organization Profile', icon: <Building2 className="w-5 h-5" /> },
-{ to: '/organization/team', label: 'Team Management', icon: <UsersRound className="w-5 h-5" /> },
-{ to: '/organization/applications', label: 'Applications', icon: <FileText className="w-5 h-5" /> },
-{ to: '/organization/verification', label: 'Verification', icon: <CheckCircle className="w-5 h-5" /> },
-{ to: '/create-opportunity', label: 'Create Opportunity', icon: <Briefcase className="w-5 h-5" /> },
+  { to: '/my-jobs', label: t('nav.dashboard'), icon: <LayoutDashboard className="w-5 h-5" /> },
+  { to: '/organization/opportunities', label: t('nav.opportunities'), icon: <Briefcase className="w-5 h-5" /> },
+  { to: '/create-opportunity', label: t('nav.createOpportunity'), icon: <Briefcase className="w-5 h-5" /> },
+  { to: '/organization/applications', label: t('nav.applications'), icon: <FileText className="w-5 h-5" /> },
+  { to: '/organization/deadlines', label: t('nav.deadlines'), icon: <Clock className="w-5 h-5" /> },
+  { to: '/organization/notifications', label: t('nav.notifications'), icon: <Bell className="w-5 h-5" />, count: unreadCount },
+  { to: '/organization/documents', label: t('nav.documents'), icon: <FolderOpen className="w-5 h-5" /> },
+  { to: '/organization/analytics', label: t('nav.analytics'), icon: <BarChart3 className="w-5 h-5" /> },
+  { to: '/organization/profile', label: t('nav.orgProfile'), icon: <Building2 className="w-5 h-5" /> },
+  { to: '/organization/verification', label: t('nav.verification'), icon: <CheckCircle className="w-5 h-5" /> },
+  { to: '/organization/team', label: t('nav.team'), icon: <UsersRound className="w-5 h-5" /> },
+  { to: '/organization/settings', label: t('nav.settings'), icon: <Settings className="w-5 h-5" /> },
 ];
 
 const adminLinks: SidebarLink[] = [
@@ -71,9 +77,14 @@ const trustLinks: SidebarLink[] = [
   { to: '/trust/overview', label: 'Overview', icon: <BarChart3 className="w-5 h-5" /> },
 ];
 
+const isOrgRoute = location.pathname.startsWith('/organization') ||
+  location.pathname === '/my-jobs' ||
+  location.pathname === '/create-opportunity' ||
+  location.pathname.startsWith('/edit-opportunity');
+
 const links = location.pathname.startsWith('/trust') ? trustLinks
 : location.pathname.startsWith('/admin') ? adminLinks
-: location.pathname.includes('organization') ? orgLinks : seekerLinks;
+: isOrgRoute ? orgLinks : seekerLinks;
 
 return (
 <aside

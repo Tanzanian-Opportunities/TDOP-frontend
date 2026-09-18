@@ -36,13 +36,7 @@ const SeekerDocumentsPage: React.FC = () => {
 
   const handleUpload = async () => {
     if (!selectedFile || !uploadName.trim()) return;
-    await upload({
-      name: uploadName.trim(),
-      fileName: selectedFile.name,
-      fileType: selectedFile.type || 'application/octet-stream',
-      fileSize: selectedFile.size,
-      documentType: uploadType,
-    }, selectedFile);
+    await upload(selectedFile, uploadName.trim(), uploadType);
     setShowUploadForm(false);
     setUploadName('');
     setUploadType('cv');
@@ -172,7 +166,7 @@ const SeekerDocumentsPage: React.FC = () => {
                 </h3>
                 <div className="space-y-2">
                   {group.docs.map(doc => {
-                    const FileIcon = fileTypeIcons[doc.fileType] || FileText;
+                    const FileIcon = fileTypeIcons[doc.documentType] || FileText;
                     return (
                       <div key={doc.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-4">
                         <div className="w-10 h-10 rounded-xl bg-tdop-primary/10 text-tdop-primary flex items-center justify-center shrink-0">
@@ -180,7 +174,7 @@ const SeekerDocumentsPage: React.FC = () => {
                         </div>
                         <div className="flex-1 min-w-0">
                           <h4 className="font-semibold text-sm text-tdop-navy truncate">{doc.name}</h4>
-                          <p className="text-xs text-gray-400 truncate">{doc.fileName} {doc.fileSize ? `· ${formatFileSize(doc.fileSize)}` : ''}</p>
+                          <p className="text-xs text-gray-400 truncate">{doc.name} {doc.fileSize ? `· ${formatFileSize(doc.fileSize)}` : ''}</p>
                         </div>
                         <button
                           onClick={() => handleDelete(String(doc.id))}

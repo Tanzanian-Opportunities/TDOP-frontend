@@ -109,7 +109,10 @@ export const opportunityApi = {
     return { success: true, data };
   },
   getMyOpportunities: async (): Promise<PaginatedApiResponse<Opportunity>> => {
-    const { data } = await axiosInstance.get('/opportunities');
+    const profileRes = await axiosInstance.get('/organization/profile');
+    const orgId = profileRes.data?.id;
+    if (!orgId) return normalizeList([]);
+    const { data } = await axiosInstance.get('/organization/opportunities', { params: { orgId } });
     return normalizeList(data);
   },
   verifyOpportunity: async (id: string): Promise<ApiResponse<{ verified: boolean }>> => {
@@ -117,5 +120,13 @@ export const opportunityApi = {
       params: { approved: true },
     });
     return { success: true, data: { verified: true } };
+  },
+  submitOpportunity: async (id: string): Promise<ApiResponse<Opportunity>> => {
+    const { data } = await axiosInstance.post(`/organization/opportunities/${id}/submit`);
+    return { success: true, data };
+  },
+  publishOpportunity: async (id: string): Promise<ApiResponse<Opportunity>> => {
+    const { data } = await axiosInstance.post(`/organization/opportunities/${id}/publish`);
+    return { success: true, data };
   },
 };

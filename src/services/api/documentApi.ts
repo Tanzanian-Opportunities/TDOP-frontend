@@ -1,61 +1,52 @@
 import axiosInstance from './axiosInstance';
-import { ApiResponse } from '@/types/api';
 
 export interface UserDocument {
-  id: number;
+  id: string;
   name: string;
-  fileName: string;
-  fileType: string;
-  fileSize: number;
-  documentType: string;
-  description: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface DocumentCreate {
-  name: string;
-  fileName: string;
-  fileType: string;
-  fileSize: number;
   documentType: string;
   description?: string;
+  fileUrl: string;
+  fileSize?: number;
+  uploadedAt: string;
+  updatedAt?: string;
 }
 
 export const documentApi = {
-  getDocuments: async (): Promise<ApiResponse<UserDocument[]>> => {
+  getDocuments: async (): Promise<UserDocument[]> => {
     const { data } = await axiosInstance.get('/documents');
-    return data;
+    return Array.isArray(data) ? data : data?.data || [];
   },
 
-  getDocument: async (id: string): Promise<ApiResponse<UserDocument>> => {
+  getDocument: async (id: string): Promise<UserDocument> => {
     const { data } = await axiosInstance.get(`/documents/${id}`);
     return data;
   },
 
-  uploadDocument: async (doc: DocumentCreate, file?: File): Promise<ApiResponse<UserDocument>> => {
-    if (file) {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('name', doc.name);
-      formData.append('documentType', doc.documentType);
-      if (doc.description) formData.append('description', doc.description);
-      const { data } = await axiosInstance.post('/documents', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-      return data;
-    }
-    const { data } = await axiosInstance.post('/documents', doc);
+  uploadDocument: async (file: File, name: string, documentType: string, description?: string): Promise<UserDocument> => {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('name', name);
+    formData.append('documentType', documentType);
+    if (description) formData.append('description', description);
+    const { data } = await axiosInstance.post('/documents', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
     return data;
   },
 
-  updateDocument: async (id: string, updates: Partial<Pick<UserDocument, 'name' | 'description'>>): Promise<ApiResponse<UserDocument>> => {
+  updateDocument: async (id: string, updates: { name?: string; description?: string }): Promise<UserDocument> => {
     const { data } = await axiosInstance.put(`/documents/${id}`, updates);
     return data;
   },
 
-  deleteDocument: async (id: string): Promise<ApiResponse<unknown>> => {
+  deleteDocument: async (id: string): Promise<void> => {
     await axiosInstance.delete(`/documents/${id}`);
-    return { success: true };
+  },
+
+  downloadDocument: async (id: string): Promise<Blob> => {
+    const { data } = await axiosInstance.get(`/documents/${id}/download`, {
+      responseType: 'blob',
+    });
+    return data;
   },
 };

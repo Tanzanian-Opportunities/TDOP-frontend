@@ -1,7 +1,6 @@
 import { useState, useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { notificationApi } from '@/services/api/notificationApi';
-import { NotificationData } from '@/context/NotificationContext';
+import { notificationApi, Notification } from '@/services/api/notificationApi';
 import { useNotificationContext } from '@/context/NotificationContext';
 
 export const useNotifications = () => {
@@ -37,22 +36,17 @@ export const useNotifications = () => {
     await markAllAsReadMutation.mutateAsync();
   }, [markAllAsReadMutation]);
 
-  const addNotificationToState = useCallback((notification: Omit<NotificationData, 'id' | 'timestamp' | 'read'>) => {
-    addNotification(notification);
-  }, [addNotification]);
-
-  const notifications = data?.data || [];
-  const unreadCount = Array.isArray(notifications) ? notifications.filter((n: any) => !n.read).length : 0;
+  const notifications: Notification[] = Array.isArray(data) ? data : [];
+  const unreadCount = notifications.filter((n: Notification) => !n.read).length;
 
   return {
     notifications,
     unreadCount,
-    total: (data as any)?.pagination?.total || 0,
+    total: notifications.length,
     isLoading,
     isError,
     refetch,
     markAsRead,
     markAllAsRead,
-    addNotificationToState,
   };
 };

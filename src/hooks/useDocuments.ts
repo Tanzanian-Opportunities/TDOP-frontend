@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { documentApi, DocumentCreate, UserDocument } from '@/services/api/documentApi';
+import { documentApi, UserDocument } from '@/services/api/documentApi';
 
 export const useDocuments = () => {
   const queryClient = useQueryClient();
@@ -12,7 +12,8 @@ export const useDocuments = () => {
   });
 
   const uploadMutation = useMutation({
-    mutationFn: ({ doc, file }: { doc: DocumentCreate; file?: File }) => documentApi.uploadDocument(doc, file),
+    mutationFn: ({ file, name, documentType, description }: { file: File; name: string; documentType: string; description?: string }) =>
+      documentApi.uploadDocument(file, name, documentType, description),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['documents'] });
     },
@@ -25,15 +26,15 @@ export const useDocuments = () => {
     },
   });
 
-  const upload = useCallback(async (doc: DocumentCreate, file?: File) => {
-    return uploadMutation.mutateAsync({ doc, file });
+  const upload = useCallback(async (file: File, name: string, documentType: string, description?: string) => {
+    return uploadMutation.mutateAsync({ file, name, documentType, description });
   }, [uploadMutation]);
 
   const removeDocument = useCallback(async (id: string) => {
     return deleteMutation.mutateAsync(id);
   }, [deleteMutation]);
 
-  const documents: UserDocument[] = (data as any)?.data || (Array.isArray((data as any)?.data) ? (data as any).data : []);
+  const documents: UserDocument[] = Array.isArray(data) ? data : [];
 
   return {
     documents,

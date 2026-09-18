@@ -249,11 +249,11 @@ export const OpportunityDetail: React.FC = () => {
         )}
 
         <div className="px-6 pb-6 space-y-4">
-          {opportunity.requirements.length > 0 && (
+          {(Array.isArray(opportunity.requirements) ? opportunity.requirements : (opportunity.requirements || '').split('\n').filter(Boolean)).length > 0 && (
             <div>
               <h3 className="font-medium text-tdop-navy mb-2">Requirements</h3>
               <ul className="space-y-1">
-                {opportunity.requirements.map((req, i) => (
+                {(Array.isArray(opportunity.requirements) ? opportunity.requirements : (opportunity.requirements || '').split('\n').filter(Boolean)).map((req: string, i: number) => (
                   <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
                     <Check className="w-4 h-4 text-tdop-primary mt-0.5 flex-shrink-0" />{req}
                   </li>
@@ -273,11 +273,11 @@ export const OpportunityDetail: React.FC = () => {
               </ul>
             </div>
           )}
-          {opportunity.benefits.length > 0 && (
+          {(Array.isArray(opportunity.benefits) ? opportunity.benefits : (opportunity.benefits || '').split('\n').filter(Boolean)).length > 0 && (
             <div>
               <h3 className="font-medium text-tdop-navy mb-2">Benefits</h3>
               <ul className="space-y-1">
-                {opportunity.benefits.map((benefit, i) => (
+                {(Array.isArray(opportunity.benefits) ? opportunity.benefits : (opportunity.benefits || '').split('\n').filter(Boolean)).map((benefit: string, i: number) => (
                   <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
                     <Check className="w-4 h-4 text-tdop-primary mt-0.5 flex-shrink-0" />{benefit}
                   </li>
