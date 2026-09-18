@@ -118,13 +118,6 @@ export const trustApi = {
     return data;
   },
 
-  assignReport: async (id: string, investigatorId: string): Promise<any> => {
-    const { data } = await axiosInstance.post(`/admin/reports/${id}/assign`, null, {
-      params: { investigatorId }
-    });
-    return data;
-  },
-
   getAuditLog: async (): Promise<any[]> => {
     const { data } = await axiosInstance.get('/admin/audit');
     return data;
@@ -137,6 +130,40 @@ export const trustApi = {
 
   reviewFraudSignal: async (id: string): Promise<any> => {
     const { data } = await axiosInstance.post(`/admin/fraud/signals/${id}/review`);
+    return data;
+  },
+
+  getVerificationDocuments: async (id: string): Promise<any[]> => {
+    const { data } = await axiosInstance.get(`/trust/verification/${id}/documents`);
+    return data;
+  },
+
+  getVerificationDetail: async (id: string): Promise<any> => {
+    const { data } = await axiosInstance.get(`/trust/verification/${id}`);
+    return data;
+  },
+
+  getModerationHistory: async (id: string): Promise<any[]> => {
+    const { data } = await axiosInstance.get(`/moderation/${id}/history`);
+    return data;
+  },
+
+  assignReport: async (id: string, investigatorId: string): Promise<any> => {
+    const { data } = await axiosInstance.post(`/trust/reports/${id}/assign`, null, {
+      params: { investigatorId }
+    });
+    return data;
+  },
+
+  addReportNotes: async (id: string, notes: string): Promise<any> => {
+    const { data } = await axiosInstance.post(`/trust/reports/${id}/add-notes`, null, {
+      params: { notes }
+    });
+    return data;
+  },
+
+  getTrustOfficers: async (): Promise<any[]> => {
+    const { data } = await axiosInstance.get('/trust/users');
     return data;
   },
 };
