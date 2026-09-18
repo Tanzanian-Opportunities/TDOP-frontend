@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
+import RejectDialog from '@/components/ui/RejectDialog';
 import { DashboardSection } from '@/components/dashboard/DashboardSection';
 import { EmptyState } from '@/components/dashboard/EmptyState';
 import { PageError } from '@/components/ui/PageStates';
@@ -28,6 +29,8 @@ const OpportunityModerationPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [rejectTarget, setRejectTarget] = useState<{ id: number; title: string } | null>(null);
+  const [rejectLoading, setRejectLoading] = useState(false);
 
   useEffect(() => {
     fetchItems();
@@ -55,15 +58,18 @@ const OpportunityModerationPage: React.FC = () => {
     }
   };
 
-  const handleReject = async (id: number) => {
-    const reason = prompt('Rejection reason:');
-    if (reason === null) return;
+  const handleReject = async (reason: string) => {
+    if (!rejectTarget) return;
+    setRejectLoading(true);
     try {
-      await adminApi.verifyOpportunity(String(id), false, reason);
+      await adminApi.verifyOpportunity(String(rejectTarget.id), false, reason);
       addNotification({ type: 'info', title: 'Rejected', message: 'Opportunity rejected.' });
+      setRejectTarget(null);
       fetchItems();
     } catch (err) {
       addNotification({ type: 'error', title: 'Error', message: 'Failed to reject.' });
+    } finally {
+      setRejectLoading(false);
     }
   };
 
@@ -136,7 +142,7 @@ const OpportunityModerationPage: React.FC = () => {
                     <Button size="sm" onClick={() => handleApprove(item.id)}>
                       <CheckCircle className="w-4 h-4 mr-1" /> Approve
                     </Button>
-                    <Button size="sm" variant="danger" onClick={() => handleReject(item.id)}>
+                    <Button size="sm" variant="danger" onClick={() => setRejectTarget({ id: item.id, title: item.title })}>
                       <XCircle className="w-4 h-4 mr-1" /> Reject
                     </Button>
                   </div>
@@ -146,6 +152,14 @@ const OpportunityModerationPage: React.FC = () => {
           </div>
         )}
       </DashboardSection>
+
+      <RejectDialog
+        open={!!rejectTarget}
+        title={`Reject "${rejectTarget?.title || ''}"?`}
+        onConfirm={handleReject}
+        onCancel={() => setRejectTarget(null)}
+        loading={rejectLoading}
+      />
     </div>
   );
 };

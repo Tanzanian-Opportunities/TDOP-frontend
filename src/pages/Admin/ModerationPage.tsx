@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
+import InputDialog from '@/components/ui/InputDialog';
+import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import { DashboardSection } from '@/components/dashboard/DashboardSection';
 import { StatCard } from '@/components/dashboard/StatCard';
 import { EmptyState } from '@/components/dashboard/EmptyState';
@@ -26,6 +28,8 @@ const ModerationPage: React.FC = () => {
   const [error, setError] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [dialogTarget, setDialogTarget] = useState<{ type: string; id: number; title: string } | null>(null);
+  const [actionLoading, setActionLoading] = useState(false);
 
   useEffect(() => {
     fetchQueue();
@@ -43,37 +47,45 @@ const ModerationPage: React.FC = () => {
     }
   };
 
-  const handleApprove = async (id: number) => {
-    const reason = prompt('Approval reason (optional):');
+  const handleApprove = async (reason: string) => {
+    if (!dialogTarget) return;
+    setActionLoading(true);
     try {
-      await adminApi.approveModeration(String(id), reason || undefined);
+      await adminApi.approveModeration(String(dialogTarget.id), reason || undefined);
+      setDialogTarget(null);
       fetchQueue();
     } catch (err) {
       console.error(err);
+    } finally {
+      setActionLoading(false);
     }
   };
 
-  const handleReject = async (id: number) => {
-    const reason = prompt('Rejection reason:');
-    if (reason !== null) {
-      try {
-        await adminApi.rejectModeration(String(id), reason);
-        fetchQueue();
-      } catch (err) {
-        console.error(err);
-      }
+  const handleReject = async (reason: string) => {
+    if (!dialogTarget) return;
+    setActionLoading(true);
+    try {
+      await adminApi.rejectModeration(String(dialogTarget.id), reason);
+      setDialogTarget(null);
+      fetchQueue();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setActionLoading(false);
     }
   };
 
-  const handleSuspend = async (id: number) => {
-    const reason = prompt('Suspension reason:');
-    if (reason !== null) {
-      try {
-        await adminApi.suspendModeration(String(id), reason);
-        fetchQueue();
-      } catch (err) {
-        console.error(err);
-      }
+  const handleSuspend = async (reason: string) => {
+    if (!dialogTarget) return;
+    setActionLoading(true);
+    try {
+      await adminApi.suspendModeration(String(dialogTarget.id), reason);
+      setDialogTarget(null);
+      fetchQueue();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setActionLoading(false);
     }
   };
 
@@ -230,13 +242,13 @@ const ModerationPage: React.FC = () => {
                     </div>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
-                    <Button size="sm" onClick={() => handleApprove(item.id)}>
+                    <Button size="sm" onClick={() => setDialogTarget({ type: 'approve', id: item.id, title: item.title })}>
                       <CheckCircle className="w-4 h-4 mr-1" /> Approve
                     </Button>
-                    <Button size="sm" variant="danger" onClick={() => handleReject(item.id)}>
+                    <Button size="sm" variant="danger" onClick={() => setDialogTarget({ type: 'reject', id: item.id, title: item.title })}>
                       <XCircle className="w-4 h-4 mr-1" /> Reject
                     </Button>
-                    <Button size="sm" variant="outline" onClick={() => handleSuspend(item.id)}>
+                    <Button size="sm" variant="outline" onClick={() => setDialogTarget({ type: 'suspend', id: item.id, title: item.title })}>
                       <Archive className="w-4 h-4 mr-1" /> Suspend
                     </Button>
                   </div>
@@ -246,6 +258,37 @@ const ModerationPage: React.FC = () => {
           </div>
         )}
       </DashboardSection>
+
+      <InputDialog
+        open={!!dialogTarget && dialogTarget.type === 'approve'}
+        title={`Approve "${dialogTarget?.title || ''}"?`}
+        label="Optional: provide an approval note"
+        placeholder="Looks good..."
+        required={false}
+        onConfirm={handleApprove}
+        onCancel={() => setDialogTarget(null)}
+        loading={actionLoading}
+      />
+      <InputDialog
+        open={!!dialogTarget && dialogTarget.type === 'reject'}
+        title={`Reject "${dialogTarget?.title || ''}"?`}
+        label="Provide a rejection reason"
+        placeholder="Does not meet guidelines..."
+        multiline
+        onConfirm={handleReject}
+        onCancel={() => setDialogTarget(null)}
+        loading={actionLoading}
+      />
+      <InputDialog
+        open={!!dialogTarget && dialogTarget.type === 'suspend'}
+        title={`Suspend "${dialogTarget?.title || ''}"?`}
+        label="Provide a suspension reason"
+        placeholder="Temporary hold pending review..."
+        multiline
+        onConfirm={handleSuspend}
+        onCancel={() => setDialogTarget(null)}
+        loading={actionLoading}
+      />
     </div>
   );
 };
