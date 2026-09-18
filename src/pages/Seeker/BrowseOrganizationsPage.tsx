@@ -26,23 +26,25 @@ const BrowseOrganizationsPage: React.FC = () => {
   const { t } = useTranslation();
   const [searchInput, setSearchInput] = useState('');
   const [sector, setSector] = useState('all');
-  const [organizations, setOrganizations] = useState<Organization[]>([]);
-  const [loading, setLoading] = useState(true);
+const [organizations, setOrganizations] = useState<Organization[]>([]);
+const [loading, setLoading] = useState(true);
+const [error, setError] = useState(false);
 
-  useEffect(() => {
-    fetchOrganizations();
-  }, []);
+useEffect(() => {
+  fetchOrganizations();
+}, []);
 
-  const fetchOrganizations = async () => {
-    try {
-      const data = await organizationApi.getOrganizations();
-      setOrganizations(Array.isArray(data) ? data : []);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+const fetchOrganizations = async () => {
+  try {
+    const data = await organizationApi.getOrganizations();
+    setOrganizations(Array.isArray(data) ? data : []);
+  } catch (err) {
+    console.error(err);
+    setError(true);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const industries = useMemo(
     () => Array.from(new Set(organizations.map((o) => o.industry).filter((v): v is string => !!v))).sort(),
@@ -73,6 +75,20 @@ const BrowseOrganizationsPage: React.FC = () => {
               <div key={i} className="h-64 bg-gray-200 rounded-2xl" />
             ))}
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="text-center py-16">
+          <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
+          <p className="text-gray-600 mb-4">Failed to load organizations.</p>
+          <button onClick={fetchOrganizations} className="px-4 py-2 bg-tdop-primary text-white rounded-lg hover:bg-blue-700 transition-colors">
+            Retry
+          </button>
         </div>
       </div>
     );

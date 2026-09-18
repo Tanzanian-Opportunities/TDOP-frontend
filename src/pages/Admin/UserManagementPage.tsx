@@ -6,6 +6,7 @@ import Pagination from '@/components/ui/Pagination';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import { PageError } from '@/components/ui/PageStates';
 import { adminApi } from '@/services/api/adminApi';
+import { useNotificationContext } from '@/context/NotificationContext';
 import { Users, Shield, Ban, RefreshCw, Search } from 'lucide-react';
 
 const PAGE_SIZE = 15;
@@ -21,6 +22,7 @@ verified: boolean;
 }
 
 const UserManagementPage: React.FC = () => {
+const { addNotification } = useNotificationContext();
 const [users, setUsers] = useState<User[]>([]);
 const [loading, setLoading] = useState(true);
 const [error, setError] = useState(false);
@@ -54,6 +56,7 @@ await adminApi.suspendUser(String(confirmTarget.id));
 setConfirmTarget(null);
 fetchUsers();
 } catch (err) {
+addNotification({ type: 'error', title: 'Error', message: 'Failed to suspend user.' });
 console.error(err);
 } finally {
 setActionLoading(false);
@@ -65,6 +68,7 @@ try {
 await adminApi.updateUserRole(String(id), newRole);
 fetchUsers();
 } catch (err) {
+addNotification({ type: 'error', title: 'Error', message: 'Failed to update role.' });
 console.error(err);
 }
 };
@@ -104,7 +108,7 @@ return (
 );
 }
 
-if (error) return <PageError message="Failed to load users. Please try again." onRetry={() => {}} />;
+if (error) return <PageError message="Failed to load users. Please try again." onRetry={fetchUsers} />;
 
 return (
 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">

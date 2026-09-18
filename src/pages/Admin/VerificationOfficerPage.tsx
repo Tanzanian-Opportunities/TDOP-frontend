@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/Button';
 import InputDialog from '@/components/ui/InputDialog';
 import Pagination from '@/components/ui/Pagination';
 import { adminApi } from '@/services/api/adminApi';
+import { useNotificationContext } from '@/context/NotificationContext';
 import { DashboardSection } from '@/components/dashboard/DashboardSection';
 import { StatCard } from '@/components/dashboard/StatCard';
 import { EmptyState } from '@/components/dashboard/EmptyState';
@@ -23,6 +24,7 @@ interface VerificationRequest {
 }
 
 const VerificationOfficerPage: React.FC = () => {
+  const { addNotification } = useNotificationContext();
   const [requests, setRequests] = useState<VerificationRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -57,8 +59,10 @@ const VerificationOfficerPage: React.FC = () => {
   const handleApprove = async (id: number) => {
     try {
       await adminApi.approveVerification(String(id));
+      addNotification({ type: 'success', title: 'Approved', message: 'Verification approved.' });
       fetchData();
     } catch (err) {
+      addNotification({ type: 'error', title: 'Error', message: 'Failed to approve verification.' });
       console.error(err);
     }
   };
@@ -71,6 +75,7 @@ const VerificationOfficerPage: React.FC = () => {
       setRejectTarget(null);
       fetchData();
     } catch (err) {
+      addNotification({ type: 'error', title: 'Error', message: 'Failed to reject verification.' });
       console.error(err);
     } finally {
       setActionLoading(false);
@@ -85,6 +90,7 @@ const VerificationOfficerPage: React.FC = () => {
       setInfoTarget(null);
       fetchData();
     } catch (err) {
+      addNotification({ type: 'error', title: 'Error', message: 'Failed to request info.' });
       console.error(err);
     } finally {
       setActionLoading(false);
@@ -119,7 +125,7 @@ const VerificationOfficerPage: React.FC = () => {
     );
   }
 
-  if (error) return <PageError message="Failed to load verification queue. Please try again." onRetry={() => {}} />;
+  if (error) return <PageError message="Failed to load verification queue. Please try again." onRetry={fetchData} />;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">

@@ -76,7 +76,7 @@ const AnalyticsPage: React.FC = () => {
     );
   }
 
-  if (error) return <PageError message="Failed to load analytics. Please try again." onRetry={() => {}} />;
+  if (error) return <PageError message="Failed to load analytics. Please try again." onRetry={fetchData} />;
 
   const statCards = [
     {

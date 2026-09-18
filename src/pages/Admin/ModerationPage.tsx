@@ -11,6 +11,7 @@ import { EmptyState } from '@/components/dashboard/EmptyState';
 import { PageError } from '@/components/ui/PageStates';
 import { CheckCircle, XCircle, Eye, AlertTriangle, Archive, Search, Building2, MapPin } from 'lucide-react';
 import { adminApi } from '@/services/api/adminApi';
+import { useNotificationContext } from '@/context/NotificationContext';
 
 const PAGE_SIZE = 15;
 
@@ -26,6 +27,7 @@ interface ModerationItem {
 }
 
 const ModerationPage: React.FC = () => {
+  const { addNotification } = useNotificationContext();
   const [items, setItems] = useState<ModerationItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -59,6 +61,7 @@ const ModerationPage: React.FC = () => {
       setDialogTarget(null);
       fetchQueue();
     } catch (err) {
+      addNotification({ type: 'error', title: 'Error', message: 'Failed to approve.' });
       console.error(err);
     } finally {
       setActionLoading(false);
@@ -73,6 +76,7 @@ const ModerationPage: React.FC = () => {
       setDialogTarget(null);
       fetchQueue();
     } catch (err) {
+      addNotification({ type: 'error', title: 'Error', message: 'Failed to reject.' });
       console.error(err);
     } finally {
       setActionLoading(false);
@@ -87,6 +91,7 @@ const ModerationPage: React.FC = () => {
       setDialogTarget(null);
       fetchQueue();
     } catch (err) {
+      addNotification({ type: 'error', title: 'Error', message: 'Failed to suspend.' });
       console.error(err);
     } finally {
       setActionLoading(false);
@@ -125,7 +130,7 @@ const ModerationPage: React.FC = () => {
     );
   }
 
-  if (error) return <PageError message="Failed to load moderation queue. Please try again." onRetry={() => {}} />;
+  if (error) return <PageError message="Failed to load moderation queue. Please try again." onRetry={fetchQueue} />;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">

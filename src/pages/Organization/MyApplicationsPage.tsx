@@ -79,7 +79,7 @@ const OrgMyApplicationsPage: React.FC = () => {
     );
   }
 
-  if (error) return <PageError message="Failed to load applications. Please try again." onRetry={() => {}} />;
+  if (error) return <PageError message="Failed to load applications. Please try again." onRetry={fetchApplications} />;
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">

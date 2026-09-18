@@ -7,6 +7,7 @@ import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import Pagination from '@/components/ui/Pagination';
 import { PageError } from '@/components/ui/PageStates';
 import { adminApi } from '@/services/api/adminApi';
+import { useNotificationContext } from '@/context/NotificationContext';
 import { Flag, AlertTriangle, CheckCircle, XCircle, Clock } from 'lucide-react';
 
 const PAGE_SIZE = 15;
@@ -26,6 +27,7 @@ createdAt: string;
 }
 
 const ReportsPage: React.FC = () => {
+const { addNotification } = useNotificationContext();
 const [reports, setReports] = useState<Report[]>([]);
 const [loading, setLoading] = useState(true);
 const [error, setError] = useState(false);
@@ -64,6 +66,7 @@ await adminApi.resolveReport(String(resolveTarget.id), resolution);
 setResolveTarget(null);
 fetchData();
 } catch (err) {
+addNotification({ type: 'error', title: 'Error', message: 'Failed to resolve report.' });
 console.error(err);
 } finally {
 setActionLoading(false);
@@ -78,6 +81,7 @@ await adminApi.dismissReport(String(dismissTarget.id));
 setDismissTarget(null);
 fetchData();
 } catch (err) {
+addNotification({ type: 'error', title: 'Error', message: 'Failed to dismiss report.' });
 console.error(err);
 } finally {
 setActionLoading(false);
@@ -112,7 +116,7 @@ return (
 );
 }
 
-if (error) return <PageError message="Failed to load reports. Please try again." onRetry={() => {}} />;
+if (error) return <PageError message="Failed to load reports. Please try again." onRetry={fetchData} />;
 
 return (
 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">
@@ -161,7 +165,6 @@ Pending ({stats.pending})
 <button
 onClick={() => { setTab('all'); setCurrentPage(1); }}
 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${tab === 'all' ? 'bg-tdop-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
->
 >
 All Reports ({stats.total})
 </button>

@@ -56,7 +56,7 @@ function getDeepLink(title: string, message: string): string | null {
 
 const SeekerNotificationsPage: React.FC = () => {
   const { t } = useTranslation();
-  const { notifications, unreadCount, isLoading, isError, markAsRead, markAllAsRead } = useNotifications();
+  const { notifications, unreadCount, isLoading, isError, markAsRead, markAllAsRead, refetch } = useNotifications();
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>('all');
 
   const filtered = useMemo(() => {
@@ -72,7 +72,7 @@ const SeekerNotificationsPage: React.FC = () => {
     );
   }
 
-  if (isError) return <PageError message="Failed to load notifications. Please try again." onRetry={() => {}} />;
+  if (isError) return <PageError message="Failed to load notifications. Please try again." onRetry={refetch} />;
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">

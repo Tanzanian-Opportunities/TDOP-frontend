@@ -97,7 +97,7 @@ const OpportunityModerationPage: React.FC = () => {
     );
   }
 
-  if (error) return <PageError message="Failed to load opportunities for moderation. Please try again." onRetry={() => {}} />;
+  if (error) return <PageError message="Failed to load opportunities for moderation. Please try again." onRetry={fetchItems} />;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">

@@ -20,7 +20,7 @@ const sortLabels: Record<SortOption, string> = {
 const BrowseOpportunitiesPage: React.FC = () => {
   const { t } = useTranslation();
   const location = useLocation();
-  const { opportunities, isLoading, isError, total, search, filters, setFilter, clearFilters } = useOpportunities();
+  const { opportunities, isLoading, isError, total, search, filters, setFilter, clearFilters, refetch } = useOpportunities();
   const [searchInput, setSearchInput] = React.useState('');
   const [sortBy, setSortBy] = React.useState<SortOption>('newest');
 
@@ -70,7 +70,7 @@ const BrowseOpportunitiesPage: React.FC = () => {
     }
   }, [opportunities, sortBy]);
 
-  if (isError) return <PageError message="Failed to load opportunities. Please try again." onRetry={() => {}} />;
+  if (isError) return <PageError message="Failed to load opportunities. Please try again." onRetry={refetch} />;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">

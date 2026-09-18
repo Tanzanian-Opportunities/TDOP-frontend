@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/Button';
 import InputDialog from '@/components/ui/InputDialog';
 import { PageError } from '@/components/ui/PageStates';
 import { adminApi } from '@/services/api/adminApi';
+import { useNotificationContext } from '@/context/NotificationContext';
 import { Shield, Settings, Users, RefreshCw, Search } from 'lucide-react';
 
 interface Config {
@@ -15,6 +16,7 @@ description: string;
 }
 
 const PlatformConfigPage: React.FC = () => {
+const { addNotification } = useNotificationContext();
 const [configs, setConfigs] = useState<Config[]>([]);
 const [loading, setLoading] = useState(true);
 const [error, setError] = useState(false);
@@ -47,6 +49,7 @@ await adminApi.setConfig(key, editValue);
 setEditingKey(null);
 fetchConfigs();
 } catch (err) {
+addNotification({ type: 'error', title: 'Error', message: 'Failed to save config.' });
 console.error(err);
 }
 };
@@ -71,6 +74,7 @@ try {
   await adminApi.setConfig(newKey, newValue, description || undefined);
   fetchConfigs();
 } catch (err) {
+  addNotification({ type: 'error', title: 'Error', message: 'Failed to add config.' });
   console.error(err);
 } finally {
   setActionLoading(false);
@@ -92,7 +96,7 @@ return (
 );
 }
 
-if (error) return <PageError message="Failed to load platform configuration. Please try again." onRetry={() => {}} />;
+if (error) return <PageError message="Failed to load platform configuration. Please try again." onRetry={fetchConfigs} />;
 
 return (
 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
