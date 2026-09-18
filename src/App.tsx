@@ -42,6 +42,7 @@ import AuditLogPage from '@/pages/Admin/AuditLogPage';
 import VerificationOfficerPage from '@/pages/Admin/VerificationOfficerPage';
 import ModerationPage from '@/pages/Admin/ModerationPage';
 import PlatformConfigPage from '@/pages/Admin/PlatformConfigPage';
+import AdminOrganizationsPage from '@/pages/Admin/OrganizationsPage';
 import OrganizationTeamPage from '@/pages/Organization/TeamManagementPage';
 import ContactPage from '@/pages/Support/ContactPage';
 import HelpCenterPage from '@/pages/Support/HelpCenterPage';
@@ -94,6 +95,7 @@ const AppRoutes: React.FC = () => {
           <Route element={<RoleGate allowedRoles={['admin', 'verification_officer', 'moderator', 'super_admin']} />}>
             <Route path="/admin" element={<AdminDashboardPage />} />
             <Route path="/admin/users" element={<UserManagementPage />} />
+            <Route path="/admin/organizations" element={<AdminOrganizationsPage />} />
             <Route path="/admin/opportunities" element={<OpportunityModerationPage />} />
             <Route path="/admin/analytics" element={<AnalyticsPage />} />
             <Route path="/admin/reports" element={<ReportsPage />} />

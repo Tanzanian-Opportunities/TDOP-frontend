@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
+import InputDialog from '@/components/ui/InputDialog';
+import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import { PageError } from '@/components/ui/PageStates';
 import { adminApi } from '@/services/api/adminApi';
 import { Flag, AlertTriangle, CheckCircle, XCircle, Clock } from 'lucide-react';
@@ -26,6 +28,9 @@ const [loading, setLoading] = useState(true);
 const [error, setError] = useState(false);
 const [stats, setStats] = useState({ total: 0, pending: 0, reviewed: 0, actioned: 0 });
 const [tab, setTab] = useState<'pending' | 'all'>('pending');
+const [resolveTarget, setResolveTarget] = useState<{ id: number; reason: string } | null>(null);
+const [dismissTarget, setDismissTarget] = useState<{ id: number; reason: string } | null>(null);
+const [actionLoading, setActionLoading] = useState(false);
 
 useEffect(() => {
 fetchData();
@@ -47,25 +52,31 @@ setLoading(false);
 }
 };
 
-const handleResolve = async (id: number) => {
-const resolution = prompt('Resolution:');
-if (resolution !== null) {
+const handleResolve = async (resolution: string) => {
+if (!resolveTarget) return;
+setActionLoading(true);
 try {
-await adminApi.resolveReport(String(id), resolution);
+await adminApi.resolveReport(String(resolveTarget.id), resolution);
+setResolveTarget(null);
 fetchData();
 } catch (err) {
 console.error(err);
-}
+} finally {
+setActionLoading(false);
 }
 };
 
-const handleDismiss = async (id: number) => {
-if (!confirm('Dismiss this report?')) return;
+const handleDismiss = async () => {
+if (!dismissTarget) return;
+setActionLoading(true);
 try {
-await adminApi.dismissReport(String(id));
+await adminApi.dismissReport(String(dismissTarget.id));
+setDismissTarget(null);
 fetchData();
 } catch (err) {
 console.error(err);
+} finally {
+setActionLoading(false);
 }
 };
 
@@ -180,11 +191,11 @@ filteredReports.map((report) => (
 </div>
 {report.status === 'PENDING' && (
 <div className="flex items-center gap-2 ml-4">
-<Button size="sm" onClick={() => handleResolve(report.id)}>
-<CheckCircle className="w-4 h-4 mr-1" /> Resolve
+<Button size="sm" onClick={() => setResolveTarget({ id: report.id, reason: report.reason })}>
+  <CheckCircle className="w-4 h-4 mr-1" /> Resolve
 </Button>
-<Button size="sm" variant="outline" onClick={() => handleDismiss(report.id)}>
-<XCircle className="w-4 h-4 mr-1" /> Dismiss
+<Button size="sm" variant="outline" onClick={() => setDismissTarget({ id: report.id, reason: report.reason })}>
+  <XCircle className="w-4 h-4 mr-1" /> Dismiss
 </Button>
 </div>
 )}
@@ -194,6 +205,27 @@ filteredReports.map((report) => (
 )}
 </div>
 </Card>
+
+<InputDialog
+  open={!!resolveTarget}
+  title="Resolve Report"
+  label={`Provide a resolution for: "${resolveTarget?.reason || ''}"`}
+  placeholder="Issue addressed, user warned..."
+  multiline
+  onConfirm={handleResolve}
+  onCancel={() => setResolveTarget(null)}
+  loading={actionLoading}
+/>
+<ConfirmDialog
+  open={!!dismissTarget}
+  title="Dismiss Report"
+  message={`Dismiss the report "${dismissTarget?.reason || ''}"? This action cannot be undone.`}
+  confirmLabel="Dismiss"
+  variant="warning"
+  onConfirm={handleDismiss}
+  onCancel={() => setDismissTarget(null)}
+  loading={actionLoading}
+/>
 </div>
 );
 };

@@ -164,6 +164,12 @@ const AdminDashboardPage: React.FC = () => {
               color="bg-tdop-primary/10 text-tdop-primary"
             />
             <QuickAction
+              label="Organizations"
+              icon={<Building2 className="w-5 h-5" />}
+              to="/admin/organizations"
+              color="bg-purple-50 text-purple-600"
+            />
+            <QuickAction
               label="Moderation"
               icon={<Eye className="w-5 h-5" />}
               to="/admin/moderation"

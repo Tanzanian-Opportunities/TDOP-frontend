@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
+import InputDialog from '@/components/ui/InputDialog';
 import { PageError } from '@/components/ui/PageStates';
 import { adminApi } from '@/services/api/adminApi';
 import { Shield, Settings, Users, RefreshCw, Search } from 'lucide-react';
@@ -19,6 +20,10 @@ const [loading, setLoading] = useState(true);
 const [error, setError] = useState(false);
 const [editingKey, setEditingKey] = useState<string | null>(null);
 const [editValue, setEditValue] = useState('');
+const [addStep, setAddStep] = useState<'key' | 'value' | 'description' | null>(null);
+const [newKey, setNewKey] = useState('');
+const [newValue, setNewValue] = useState('');
+const [actionLoading, setActionLoading] = useState(false);
 
 useEffect(() => {
 fetchConfigs();
@@ -47,16 +52,31 @@ console.error(err);
 };
 
 const handleAddConfig = async () => {
-const key = prompt('Config key:');
-if (!key) return;
-const value = prompt('Config value:');
-if (value === null) return;
-const description = prompt('Description (optional):');
+setAddStep('key');
+};
+
+const handleKeyConfirm = (key: string) => {
+setNewKey(key);
+setAddStep('value');
+};
+
+const handleValueConfirm = async (value: string) => {
+setNewValue(value);
+setAddStep('description');
+};
+
+const handleDescriptionConfirm = async (description: string) => {
+setActionLoading(true);
 try {
-await adminApi.setConfig(key, value, description || undefined);
-fetchConfigs();
+  await adminApi.setConfig(newKey, newValue, description || undefined);
+  fetchConfigs();
 } catch (err) {
-console.error(err);
+  console.error(err);
+} finally {
+  setActionLoading(false);
+  setAddStep(null);
+  setNewKey('');
+  setNewValue('');
 }
 };
 
@@ -137,6 +157,33 @@ Edit
 )}
 </div>
 </Card>
+
+<InputDialog
+  open={addStep === 'key'}
+  title="Add config — Key"
+  label="Enter the configuration key (e.g. platform.maintenance_mode)"
+  placeholder="platform.feature_flag"
+  onConfirm={handleKeyConfirm}
+  onCancel={() => { setAddStep(null); setNewKey(''); setNewValue(''); }}
+/>
+<InputDialog
+  open={addStep === 'value'}
+  title="Add config — Value"
+  label="Enter the configuration value"
+  placeholder="true"
+  onConfirm={handleValueConfirm}
+  onCancel={() => setAddStep('key')}
+/>
+<InputDialog
+  open={addStep === 'description'}
+  title="Add config — Description"
+  label="Describe what this configuration controls (optional)"
+  placeholder="Controls the maintenance mode flag"
+  required={false}
+  onConfirm={handleDescriptionConfirm}
+  onCancel={() => setAddStep(null)}
+  loading={actionLoading}
+/>
 </div>
 );
 };

@@ -51,6 +51,7 @@ const orgLinks: SidebarLink[] = [
 const adminLinks: SidebarLink[] = [
 { to: '/admin', label: 'Dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
 { to: '/admin/users', label: 'Users', icon: <Users className="w-5 h-5" /> },
+{ to: '/admin/organizations', label: 'Organizations', icon: <Building2 className="w-5 h-5" /> },
 { to: '/admin/opportunities', label: 'Opportunities', icon: <Briefcase className="w-5 h-5" /> },
 { to: '/admin/verification', label: 'Verification', icon: <CheckCircle className="w-5 h-5" /> },
 { to: '/admin/moderation', label: 'Moderation', icon: <Eye className="w-5 h-5" /> },

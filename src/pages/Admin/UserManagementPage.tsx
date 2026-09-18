@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
+import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import { PageError } from '@/components/ui/PageStates';
 import { adminApi } from '@/services/api/adminApi';
 import { Users, Shield, Ban, RefreshCw, Search } from 'lucide-react';
@@ -22,6 +23,8 @@ const [loading, setLoading] = useState(true);
 const [error, setError] = useState(false);
 const [searchQuery, setSearchQuery] = useState('');
 const [filterRole, setFilterRole] = useState('');
+const [confirmTarget, setConfirmTarget] = useState<{ type: string; id: number; name: string } | null>(null);
+const [actionLoading, setActionLoading] = useState(false);
 
 useEffect(() => {
 fetchUsers();
@@ -39,13 +42,17 @@ setLoading(false);
 }
 };
 
-const handleSuspend = async (id: number) => {
-if (!confirm('Suspend this user?')) return;
+const handleSuspend = async () => {
+if (!confirmTarget) return;
+setActionLoading(true);
 try {
-await adminApi.suspendUser(String(id));
+await adminApi.suspendUser(String(confirmTarget.id));
+setConfirmTarget(null);
 fetchUsers();
 } catch (err) {
 console.error(err);
+} finally {
+setActionLoading(false);
 }
 };
 
@@ -180,8 +187,8 @@ className="text-xs px-2 py-1 border rounded"
 <td className="p-4 text-right">
 <div className="flex items-center justify-end gap-2">
 {user.enabled && (
-<Button variant="ghost" size="sm" onClick={() => handleSuspend(user.id)}>
-<Ban className="w-4 h-4 text-red-500" />
+<Button variant="ghost" size="sm" onClick={() => setConfirmTarget({ type: 'suspend', id: user.id, name: user.fullName })}>
+  <Ban className="w-4 h-4 text-red-500" />
 </Button>
 )}
 </div>
@@ -197,6 +204,17 @@ className="text-xs px-2 py-1 border rounded"
 )}
 </div>
 </Card>
+
+<ConfirmDialog
+  open={!!confirmTarget}
+  title={`Suspend ${confirmTarget?.name || ''}?`}
+  message="This user will lose access to the platform immediately. You can re-enable their account later."
+  confirmLabel="Suspend User"
+  variant="danger"
+  onConfirm={handleSuspend}
+  onCancel={() => setConfirmTarget(null)}
+  loading={actionLoading}
+/>
 </div>
 );
 };

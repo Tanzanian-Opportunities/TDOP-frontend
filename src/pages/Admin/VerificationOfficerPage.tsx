@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
+import InputDialog from '@/components/ui/InputDialog';
 import { adminApi } from '@/services/api/adminApi';
 import { DashboardSection } from '@/components/dashboard/DashboardSection';
 import { StatCard } from '@/components/dashboard/StatCard';
@@ -25,6 +26,9 @@ const VerificationOfficerPage: React.FC = () => {
   const [stats, setStats] = useState({ pending: 0 });
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [rejectTarget, setRejectTarget] = useState<{ id: number; orgName: string } | null>(null);
+  const [infoTarget, setInfoTarget] = useState<{ id: number; orgName: string } | null>(null);
+  const [actionLoading, setActionLoading] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -55,27 +59,31 @@ const VerificationOfficerPage: React.FC = () => {
     }
   };
 
-  const handleReject = async (id: number) => {
-    const reason = prompt('Rejection reason:');
-    if (reason !== null) {
-      try {
-        await adminApi.rejectVerification(String(id), reason);
-        fetchData();
-      } catch (err) {
-        console.error(err);
-      }
+  const handleReject = async (reason: string) => {
+    if (!rejectTarget) return;
+    setActionLoading(true);
+    try {
+      await adminApi.rejectVerification(String(rejectTarget.id), reason);
+      setRejectTarget(null);
+      fetchData();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setActionLoading(false);
     }
   };
 
-  const handleRequestInfo = async (id: number) => {
-    const info = prompt('What information is needed?');
-    if (info !== null) {
-      try {
-        await adminApi.requestVerificationInfo(String(id), info);
-        fetchData();
-      } catch (err) {
-        console.error(err);
-      }
+  const handleRequestInfo = async (info: string) => {
+    if (!infoTarget) return;
+    setActionLoading(true);
+    try {
+      await adminApi.requestVerificationInfo(String(infoTarget.id), info);
+      setInfoTarget(null);
+      fetchData();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setActionLoading(false);
     }
   };
 
@@ -218,10 +226,10 @@ const VerificationOfficerPage: React.FC = () => {
                     <Button size="sm" onClick={() => handleApprove(req.id)}>
                       <CheckCircle className="w-4 h-4 mr-1" /> Approve
                     </Button>
-                    <Button size="sm" variant="outline" onClick={() => handleRequestInfo(req.id)}>
+                    <Button size="sm" variant="outline" onClick={() => setInfoTarget({ id: req.id, orgName: req.organization?.orgName || 'Unknown' })}>
                       <FileText className="w-4 h-4 mr-1" /> Info
                     </Button>
-                    <Button size="sm" variant="danger" onClick={() => handleReject(req.id)}>
+                    <Button size="sm" variant="danger" onClick={() => setRejectTarget({ id: req.id, orgName: req.organization?.orgName || 'Unknown' })}>
                       <XCircle className="w-4 h-4 mr-1" /> Reject
                     </Button>
                   </div>
@@ -231,6 +239,27 @@ const VerificationOfficerPage: React.FC = () => {
           </div>
         )}
       </DashboardSection>
+
+      <InputDialog
+        open={!!rejectTarget}
+        title={`Reject "${rejectTarget?.orgName || ''}"?`}
+        label="Provide a rejection reason"
+        placeholder="Missing documentation..."
+        multiline
+        onConfirm={handleReject}
+        onCancel={() => setRejectTarget(null)}
+        loading={actionLoading}
+      />
+      <InputDialog
+        open={!!infoTarget}
+        title={`Request info from "${infoTarget?.orgName || ''}"`}
+        label="What information is needed?"
+        placeholder="Please provide your business registration certificate..."
+        multiline
+        onConfirm={handleRequestInfo}
+        onCancel={() => setInfoTarget(null)}
+        loading={actionLoading}
+      />
     </div>
   );
 };
