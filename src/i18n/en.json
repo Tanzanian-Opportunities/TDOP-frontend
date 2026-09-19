@@ -140,7 +140,12 @@
     "governanceChangeLog": "Governance change log",
     "platformConfig": "System settings and policies",
     "governanceView": "Governance View",
-    "platformGovernance": "Platform Governance"
+    "platformGovernance": "Platform Governance",
+    "featureControls": "Feature Controls",
+    "sessionControl": "Session Control",
+    "notificationConfig": "Notification Configuration",
+    "integrationConfig": "Integration Configuration",
+    "backgroundJobs": "Background Jobs"
   },
   "auth": {
     "login": "Login",

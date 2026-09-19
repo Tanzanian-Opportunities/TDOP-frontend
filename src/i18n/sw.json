@@ -140,7 +140,12 @@
     "governanceChangeLog": "Kumbukumbu ya mabadiliko ya usimamizi",
     "platformConfig": "Mipangilio ya mfumo na sera",
     "governanceView": "Mtazamo wa Usimamizi",
-    "platformGovernance": "Usimamizi wa Jukwaa"
+    "platformGovernance": "Usimamizi wa Jukwaa",
+    "featureControls": "Udhibiti wa Vipengele",
+    "sessionControl": "Udhibiti wa Kikao",
+    "notificationConfig": "Mpangilio wa Arifa",
+    "integrationConfig": "Mpangilio wa Uunganishaji",
+    "backgroundJobs": "Kazi za Usuli"
   },
   "auth": {
     "welcomeDescription": "Unganisha na fursa zinazolingana na ujuzi na malengo yako",

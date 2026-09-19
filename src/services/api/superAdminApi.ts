@@ -138,4 +138,49 @@ export const superAdminApi = {
     });
     return data;
   },
+
+  getFeatureFlags: async (): Promise<any[]> => {
+    const { data } = await axiosInstance.get('/admin/super/feature-flags');
+    return data;
+  },
+
+  setFeatureFlag: async (key: string, value: string, description?: string): Promise<any> => {
+    const { data } = await axiosInstance.post('/admin/super/feature-flags', { key, value, description });
+    return data;
+  },
+
+  deleteFeatureFlag: async (key: string): Promise<any> => {
+    const { data } = await axiosInstance.delete(`/admin/super/feature-flags/${encodeURIComponent(key)}`);
+    return data;
+  },
+
+  getSessionOverview: async (): Promise<any> => {
+    const { data } = await axiosInstance.get('/admin/super/session-overview');
+    return data;
+  },
+
+  getNotificationConfig: async (): Promise<any[]> => {
+    const { data } = await axiosInstance.get('/admin/super/notification-config');
+    return data;
+  },
+
+  setNotificationConfig: async (key: string, value: string, description?: string): Promise<any> => {
+    const { data } = await axiosInstance.post('/admin/super/notification-config', { key, value, description });
+    return data;
+  },
+
+  getIntegrationConfig: async (): Promise<any[]> => {
+    const { data } = await axiosInstance.get('/admin/super/integration-config');
+    return data;
+  },
+
+  setIntegrationConfig: async (key: string, value: string, description?: string): Promise<any> => {
+    const { data } = await axiosInstance.post('/admin/super/integration-config', { key, value, description });
+    return data;
+  },
+
+  getBackgroundJobs: async (): Promise<any> => {
+    const { data } = await axiosInstance.get('/admin/super/background-jobs');
+    return data;
+  },
 };

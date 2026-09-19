@@ -3,7 +3,7 @@ import { Outlet, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import {
   Shield, AlertTriangle, Activity, HeartPulse, Users, Building2, Eye, Lock, Brain,
-  Database, Settings, ChevronLeft, ChevronRight, Wrench, BarChart3
+  Database, Settings, ChevronLeft, ChevronRight, Wrench, BarChart3, Bell, Plug, Clock
 } from 'lucide-react';
 
 interface NavItem {
@@ -31,6 +31,11 @@ const SuperAdminLayout: React.FC = () => {
     { to: '/super-admin/audit', label: 'Audit & Compliance', icon: <Eye className="w-5 h-5" />, group: 'Intelligence & Security' },
     { to: '/super-admin/config', label: 'Platform Config', icon: <Wrench className="w-5 h-5" />, group: 'Configuration' },
     { to: '/super-admin/taxonomy', label: 'Taxonomy', icon: <Database className="w-5 h-5" />, group: 'Configuration' },
+    { to: '/super-admin/features', label: 'Feature Controls', icon: <Settings className="w-5 h-5" />, group: 'Configuration' },
+    { to: '/super-admin/sessions', label: 'Session Control', icon: <Users className="w-5 h-5" />, group: 'Configuration' },
+    { to: '/super-admin/notifications', label: 'Notification Config', icon: <Bell className="w-5 h-5" />, group: 'Configuration' },
+    { to: '/super-admin/integrations', label: 'Integration Config', icon: <Plug className="w-5 h-5" />, group: 'Configuration' },
+    { to: '/super-admin/jobs', label: 'Background Jobs', icon: <Clock className="w-5 h-5" />, group: 'Configuration' },
   ];
 
   const isActive = (path: string) => {

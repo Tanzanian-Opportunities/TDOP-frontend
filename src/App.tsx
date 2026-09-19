@@ -68,6 +68,11 @@ import SuperAdminSecurityPage from '@/pages/SuperAdmin/SuperAdminSecurityPage';
 import SuperAdminAuditPage from '@/pages/SuperAdmin/SuperAdminAuditPage';
 import SuperAdminConfigPage from '@/pages/SuperAdmin/SuperAdminConfigPage';
 import SuperAdminTaxonomyPage from '@/pages/SuperAdmin/SuperAdminTaxonomyPage';
+import SuperAdminFeatureControlsPage from '@/pages/SuperAdmin/SuperAdminFeatureControlsPage';
+import SuperAdminSessionControlPage from '@/pages/SuperAdmin/SuperAdminSessionControlPage';
+import SuperAdminNotificationConfigPage from '@/pages/SuperAdmin/SuperAdminNotificationConfigPage';
+import SuperAdminIntegrationConfigPage from '@/pages/SuperAdmin/SuperAdminIntegrationConfigPage';
+import SuperAdminBackgroundJobsPage from '@/pages/SuperAdmin/SuperAdminBackgroundJobsPage';
 import ContactPage from '@/pages/Support/ContactPage';
 import HelpCenterPage from '@/pages/Support/HelpCenterPage';
 import PrivacyPage from '@/pages/Support/PrivacyPage';
@@ -156,6 +161,11 @@ const AppRoutes: React.FC = () => {
               <Route path="audit" element={<SuperAdminAuditPage />} />
               <Route path="config" element={<SuperAdminConfigPage />} />
               <Route path="taxonomy" element={<SuperAdminTaxonomyPage />} />
+              <Route path="features" element={<SuperAdminFeatureControlsPage />} />
+              <Route path="sessions" element={<SuperAdminSessionControlPage />} />
+              <Route path="notifications" element={<SuperAdminNotificationConfigPage />} />
+              <Route path="integrations" element={<SuperAdminIntegrationConfigPage />} />
+              <Route path="jobs" element={<SuperAdminBackgroundJobsPage />} />
             </Route>
           </Route>
         </Route>
