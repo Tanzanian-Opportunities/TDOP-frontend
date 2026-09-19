@@ -166,4 +166,84 @@ export const trustApi = {
     const { data } = await axiosInstance.get('/trust/users');
     return data;
   },
+
+  getEscalations: async (): Promise<any[]> => {
+    const { data } = await axiosInstance.get('/trust/escalations');
+    return data;
+  },
+
+  getOpenEscalations: async (): Promise<any[]> => {
+    const { data } = await axiosInstance.get('/trust/escalations/open');
+    return data;
+  },
+
+  getEscalationById: async (id: string): Promise<any> => {
+    const { data } = await axiosInstance.get(`/trust/escalations/${id}`);
+    return data;
+  },
+
+  createEscalation: async (body: { targetType: string; targetId: number; reason: string; description?: string }): Promise<any> => {
+    const { data } = await axiosInstance.post('/trust/escalations', body);
+    return data;
+  },
+
+  assignEscalation: async (id: string, officerId: string): Promise<any> => {
+    const { data } = await axiosInstance.post(`/trust/escalations/${id}/assign`, null, { params: { officerId } });
+    return data;
+  },
+
+  resolveEscalation: async (id: string, resolution: string): Promise<any> => {
+    const { data } = await axiosInstance.post(`/trust/escalations/${id}/resolve`, null, { params: { resolution } });
+    return data;
+  },
+
+  dismissEscalation: async (id: string, reason?: string): Promise<any> => {
+    const { data } = await axiosInstance.post(`/trust/escalations/${id}/dismiss`, null, { params: { reason } });
+    return data;
+  },
+
+  getEscalationStats: async (): Promise<any> => {
+    const { data } = await axiosInstance.get('/trust/escalations/stats');
+    return data;
+  },
+
+  getAppeals: async (): Promise<any[]> => {
+    const { data } = await axiosInstance.get('/trust/appeals');
+    return data;
+  },
+
+  getPendingAppeals: async (): Promise<any[]> => {
+    const { data } = await axiosInstance.get('/trust/appeals/pending');
+    return data;
+  },
+
+  getAppealById: async (id: string): Promise<any> => {
+    const { data } = await axiosInstance.get(`/trust/appeals/${id}`);
+    return data;
+  },
+
+  createAppeal: async (body: { targetType: string; targetId: number; reason: string; description?: string }): Promise<any> => {
+    const { data } = await axiosInstance.post('/trust/appeals', body);
+    return data;
+  },
+
+  upholdAppeal: async (id: string, resolution: string): Promise<any> => {
+    const { data } = await axiosInstance.post(`/trust/appeals/${id}/uphold`, null, { params: { resolution } });
+    return data;
+  },
+
+  overruleAppeal: async (id: string, resolution: string): Promise<any> => {
+    const { data } = await axiosInstance.post(`/trust/appeals/${id}/overrule`, null, { params: { resolution } });
+    return data;
+  },
+
+  dismissAppeal: async (id: string, reason?: string): Promise<any> => {
+    const { data } = await axiosInstance.post(`/trust/appeals/${id}/dismiss`, null, { params: { reason } });
+    return data;
+  },
+
+  getAppealStats: async (): Promise<any> => {
+    const { data } = await axiosInstance.get('/trust/appeals/stats');
+    return data;
+  },
 };

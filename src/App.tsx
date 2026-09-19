@@ -60,6 +60,27 @@ import TrustOpportunityReviewPage from '@/pages/Trust/TrustOpportunityReviewPage
 import TrustReportReviewPage from '@/pages/Trust/TrustReportReviewPage';
 import TrustActivityPage from '@/pages/Trust/TrustActivityPage';
 import TrustOverviewPage from '@/pages/Trust/TrustOverviewPage';
+import TrustEscalationPage from '@/pages/Trust/TrustEscalationPage';
+import TrustAppealPage from '@/pages/Trust/TrustAppealPage';
+import SuperAdminLayout from '@/components/layout/SuperAdminLayout';
+import SuperAdminOverviewPage from '@/pages/SuperAdmin/SuperAdminOverviewPage';
+import SuperAdminAttentionPage from '@/pages/SuperAdmin/SuperAdminAttentionPage';
+import SuperAdminPulsePage from '@/pages/SuperAdmin/SuperAdminPulsePage';
+import SuperAdminHealthPage from '@/pages/SuperAdmin/SuperAdminHealthPage';
+import SuperAdminRolesPage from '@/pages/SuperAdmin/SuperAdminRolesPage';
+import SuperAdminAccessPage from '@/pages/SuperAdmin/SuperAdminAccessPage';
+import SuperAdminOrgGovernancePage from '@/pages/SuperAdmin/SuperAdminOrgGovernancePage';
+import SuperAdminTrustGovernancePage from '@/pages/SuperAdmin/SuperAdminTrustGovernancePage';
+import SuperAdminIntelligencePage from '@/pages/SuperAdmin/SuperAdminIntelligencePage';
+import SuperAdminSecurityPage from '@/pages/SuperAdmin/SuperAdminSecurityPage';
+import SuperAdminAuditPage from '@/pages/SuperAdmin/SuperAdminAuditPage';
+import SuperAdminConfigPage from '@/pages/SuperAdmin/SuperAdminConfigPage';
+import SuperAdminTaxonomyPage from '@/pages/SuperAdmin/SuperAdminTaxonomyPage';
+import SuperAdminFeatureControlsPage from '@/pages/SuperAdmin/SuperAdminFeatureControlsPage';
+import SuperAdminSessionControlPage from '@/pages/SuperAdmin/SuperAdminSessionControlPage';
+import SuperAdminNotificationConfigPage from '@/pages/SuperAdmin/SuperAdminNotificationConfigPage';
+import SuperAdminIntegrationConfigPage from '@/pages/SuperAdmin/SuperAdminIntegrationConfigPage';
+import SuperAdminBackgroundJobsPage from '@/pages/SuperAdmin/SuperAdminBackgroundJobsPage';
 import ContactPage from '@/pages/Support/ContactPage';
 import HelpCenterPage from '@/pages/Support/HelpCenterPage';
 import PrivacyPage from '@/pages/Support/PrivacyPage';
@@ -136,6 +157,31 @@ const AppRoutes: React.FC = () => {
               <Route path="reports" element={<TrustReportReviewPage />} />
               <Route path="activity" element={<TrustActivityPage />} />
               <Route path="overview" element={<TrustOverviewPage />} />
+              <Route path="escalations" element={<TrustEscalationPage />} />
+              <Route path="appeals" element={<TrustAppealPage />} />
+            </Route>
+          </Route>
+
+          <Route element={<RoleGate allowedRoles={['super_admin']} />}>
+            <Route path="/super-admin" element={<SuperAdminLayout />}>
+              <Route index element={<SuperAdminOverviewPage />} />
+              <Route path="attention" element={<SuperAdminAttentionPage />} />
+              <Route path="pulse" element={<SuperAdminPulsePage />} />
+              <Route path="health" element={<SuperAdminHealthPage />} />
+              <Route path="roles" element={<SuperAdminRolesPage />} />
+              <Route path="access" element={<SuperAdminAccessPage />} />
+              <Route path="org-governance" element={<SuperAdminOrgGovernancePage />} />
+              <Route path="trust-governance" element={<SuperAdminTrustGovernancePage />} />
+              <Route path="intelligence" element={<SuperAdminIntelligencePage />} />
+              <Route path="security" element={<SuperAdminSecurityPage />} />
+              <Route path="audit" element={<SuperAdminAuditPage />} />
+              <Route path="config" element={<SuperAdminConfigPage />} />
+              <Route path="taxonomy" element={<SuperAdminTaxonomyPage />} />
+              <Route path="features" element={<SuperAdminFeatureControlsPage />} />
+              <Route path="sessions" element={<SuperAdminSessionControlPage />} />
+              <Route path="notifications" element={<SuperAdminNotificationConfigPage />} />
+              <Route path="integrations" element={<SuperAdminIntegrationConfigPage />} />
+              <Route path="jobs" element={<SuperAdminBackgroundJobsPage />} />
             </Route>
           </Route>
         </Route>
