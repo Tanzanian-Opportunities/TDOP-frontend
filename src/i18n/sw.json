@@ -46,7 +46,8 @@
     "create": "Tengeneza Fursa",
     "documents": "Nyaraka",
     "searchOrganizations": "Tafuta taasisi, sekta, mahali...",
-    "trustOps": "Uendeshaji wa Uaminifu"
+    "trustOps": "Uendeshaji wa Uaminifu",
+    "superAdmin": "Msimamizi Mkuu"
   },
   "trust": {
     "attentionCenter": "Kituo cha Uangalizi",
@@ -108,6 +109,38 @@
     "appellant": "Mwasiliani",
     "upholdAppeal": "Shikamana Rufaa",
     "overruleAppeal": "Kataa Rufaa"
+  },
+  "superAdmin": {
+    "overview": "Muhtasari",
+    "attention": "Uangalifu wa Jukwaa",
+    "pulse": "Mapigo ya Jukwaa",
+    "health": "Afya ya Jukwaa",
+    "roles": "Majukumu na Ruhusa",
+    "access": "Usimamizi wa ufikiaji",
+    "orgGovernance": "Usimamizi wa Shirika",
+    "trustGovernance": "Usimamizi wa Uaminifu",
+    "intelligence": "Akili ya Ekosistimu",
+    "security": "Kituo cha Usalama",
+    "audit": "Ukaguzi na Ufuatiliaji",
+    "config": "Mpangilio wa Jukwaa",
+    "controlCenter": "Kituo cha Udhibiti wa Jukwaa",
+    "governanceOverview": "Muhtasari wa usimamizi — afya ya jukwaa, uangalifu, na vipimo vya ekosistimu",
+    "itemsRequireAttention": "bidhaa {{count}} zinahitaji uangalifu wa usimamizi",
+    "allClear": "Wote wazi — hakuna uangalifu wa usimamizi unahitajika.",
+    "governanceOoversight": "Bidhaa zinazohitaji uangalifu wa msimamizi mkuu",
+    "ecosystemMetrics": "Vipimo vya wakati halisi kupitia jukwaa lote",
+    "systemHealth": "Hali ya huduma za mfumo na miundombinu",
+    "servicesOperational": "{{count}}/{{total}} huduma zinafanya kazi",
+    "roleDistribution": "Usambazaji wa majukumu na muhtasari wa ruhusa",
+    "privilegedAccess": "Uangalifu wa ufikiaji wa privilege — nani ana majukumu ya juu",
+    "orgOversight": "Uangalifu wa kiwango cha ekosistimu cha mashirika",
+    "trustOversight": "Uangalifu wa uthibitishaji, usimamizi, na huduma za uaminifu",
+    "crossCuttingAnalytics": "Uchambuzi wa pande zote na akili kupitia jukwaa lote",
+    "securityEvents": "Matukio ya usalama na ishara za hatari",
+    "governanceChangeLog": "Kumbukumbu ya mabadiliko ya usimamizi",
+    "platformConfig": "Mipangilio ya mfumo na sera",
+    "governanceView": "Mtazamo wa Usimamizi",
+    "platformGovernance": "Usimamizi wa Jukwaa"
   },
   "auth": {
     "welcomeDescription": "Unganisha na fursa zinazolingana na ujuzi na malengo yako",

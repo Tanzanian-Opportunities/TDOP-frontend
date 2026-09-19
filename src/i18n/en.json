@@ -46,7 +46,8 @@
     "documents": "Documents",
     "postOpportunity": "Post Opportunity",
     "searchOrganizations": "Search organizations, sectors, locations...",
-    "trustOps": "Trust Ops"
+    "trustOps": "Trust Ops",
+    "superAdmin": "Super Admin"
   },
   "trust": {
     "attentionCenter": "Attention Center",
@@ -108,6 +109,38 @@
     "appellant": "Appellant",
     "upholdAppeal": "Uphold Appeal",
     "overruleAppeal": "Overrule Appeal"
+  },
+  "superAdmin": {
+    "overview": "Overview",
+    "attention": "Platform Attention",
+    "pulse": "Platform Pulse",
+    "health": "Platform Health",
+    "roles": "Roles & Permissions",
+    "access": "Access Governance",
+    "orgGovernance": "Org Governance",
+    "trustGovernance": "Trust Governance",
+    "intelligence": "Ecosystem Intelligence",
+    "security": "Security Center",
+    "audit": "Audit & Compliance",
+    "config": "Platform Configuration",
+    "controlCenter": "Platform Control Center",
+    "governanceOverview": "Governance overview — platform health, attention, and ecosystem metrics",
+    "itemsRequireAttention": "{{count}} item(s) require governance attention",
+    "allClear": "All clear — no governance attention required.",
+    "governanceOversight": "Items needing super admin governance oversight",
+    "ecosystemMetrics": "Real-time ecosystem metrics across the entire platform",
+    "systemHealth": "System service status and infrastructure health",
+    "servicesOperational": "{{count}}/{{total}} services operational",
+    "roleDistribution": "Platform role distribution and permission overview",
+    "privilegedAccess": "Privileged access oversight — who holds elevated roles",
+    "orgOversight": "Ecosystem-level organization oversight",
+    "trustOversight": "Oversight of verification, moderation, and trust operations",
+    "crossCuttingAnalytics": "Cross-cutting analytics and intelligence across the platform",
+    "securityEvents": "Security events and risk signals",
+    "governanceChangeLog": "Governance change log",
+    "platformConfig": "System settings and policies",
+    "governanceView": "Governance View",
+    "platformGovernance": "Platform Governance"
   },
   "auth": {
     "login": "Login",

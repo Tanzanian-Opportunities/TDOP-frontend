@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import {
 LayoutDashboard, Briefcase, Bookmark, FileText, Sparkles, FolderOpen, Building2,
 User, Settings, BarChart3, Users, Shield, Flag, UserCog, ChevronLeft, ChevronRight,
-CheckCircle, Eye, Clock, UsersRound, Wrench, Bell, AlertTriangle, ClipboardList
+CheckCircle, Eye, Clock, UsersRound, Wrench, Bell, AlertTriangle, ClipboardList, Lock, Activity, Brain, HeartPulse
 } from 'lucide-react';
 import { useApplications } from '@/hooks/useApplications';
 import { useNotifications } from '@/hooks/useNotifications';
@@ -73,7 +73,23 @@ const trustLinks: SidebarLink[] = [
   { to: '/trust/appeals', label: 'Appeals', icon: <Shield className="w-5 h-5" /> },
 ];
 
-const links = location.pathname.startsWith('/trust') ? trustLinks
+const superAdminLinks: SidebarLink[] = [
+  { to: '/super-admin', label: 'Overview', icon: <BarChart3 className="w-5 h-5" /> },
+  { to: '/super-admin/attention', label: 'Attention', icon: <AlertTriangle className="w-5 h-5" /> },
+  { to: '/super-admin/pulse', label: 'Pulse', icon: <Activity className="w-5 h-5" /> },
+  { to: '/super-admin/health', label: 'Health', icon: <HeartPulse className="w-5 h-5" /> },
+  { to: '/super-admin/roles', label: 'Roles', icon: <Lock className="w-5 h-5" /> },
+  { to: '/super-admin/access', label: 'Access', icon: <Users className="w-5 h-5" /> },
+  { to: '/super-admin/org-governance', label: 'Org Governance', icon: <Building2 className="w-5 h-5" /> },
+  { to: '/super-admin/trust-governance', label: 'Trust Governance', icon: <Shield className="w-5 h-5" /> },
+  { to: '/super-admin/intelligence', label: 'Intelligence', icon: <Brain className="w-5 h-5" /> },
+  { to: '/super-admin/security', label: 'Security', icon: <Lock className="w-5 h-5" /> },
+  { to: '/super-admin/audit', label: 'Audit', icon: <Eye className="w-5 h-5" /> },
+  { to: '/super-admin/config', label: 'Config', icon: <Wrench className="w-5 h-5" /> },
+];
+
+const links = location.pathname.startsWith('/super-admin') ? superAdminLinks
+: location.pathname.startsWith('/trust') ? trustLinks
 : location.pathname.startsWith('/admin') ? adminLinks
 : location.pathname.includes('organization') ? orgLinks : seekerLinks;
 
