@@ -6,104 +6,71 @@ import { PageError, PageLoading } from '@/components/ui/PageStates';
 import { Eye } from 'lucide-react';
 
 const SuperAdminAuditPage: React.FC = () => {
-  const [data, setData] = useState<GovernanceChangeLog | null>(null);
+  const [data, setData] = useState<GovernanceChangeLog[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await superAdminApi.getGovernanceChangeLog();
-        setData(result);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch governance change log');
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
+    superAdminApi.getGovernanceChangeLog()
+      .then(setData)
+      .catch(() => setError(true))
+      .finally(() => setLoading(false));
   }, []);
 
   const filteredChanges = useMemo(() => {
-    if (!data?.changes) return [];
-    if (!searchTerm) return data.changes;
-    return data.changes.filter(
-      (change) =>
-        change.action.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [data?.changes, searchTerm]);
+    if (!searchTerm) return data;
+    return data.filter((change) => change.action.toLowerCase().includes(searchTerm.toLowerCase()));
+  }, [data, searchTerm]);
 
   if (loading) return <PageLoading />;
-  if (error) return <PageError message={error} />;
-  if (!data) return <PageError message="No data available" />;
+  if (error) return <PageError />;
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <Eye className="w-8 h-8 text-primary" />
-        <h1 className="text-2xl font-bold">Audit & Compliance</h1>
+    <div className="max-w-7xl mx-auto space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold text-tdop-navy flex items-center gap-2">
+          <Eye className="w-7 h-7 text-tdop-primary" />
+          Audit &amp; Compliance
+        </h1>
+        <p className="text-sm text-gray-500 mt-1">Governance change log</p>
       </div>
-
       <div className="flex items-center gap-4">
         <input
           type="text"
           placeholder="Filter by action..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="px-4 py-2 border rounded-md bg-background w-64"
+          className="px-4 py-2 border border-gray-300 rounded-lg text-sm w-64 focus:ring-2 focus:ring-tdop-primary focus:border-transparent"
         />
-        <span className="text-sm text-muted-foreground">
-          {filteredChanges.length} change(s) found
-        </span>
+        <span className="text-sm text-gray-500">{filteredChanges.length} change(s) found</span>
       </div>
-
-      <Card className="p-6">
+      <Card className="overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full">
             <thead>
-              <tr className="border-b text-left">
-                <th className="pb-3 font-medium">Action</th>
-                <th className="pb-3 font-medium">Entity Type</th>
-                <th className="pb-3 font-medium">Entity ID</th>
-                <th className="pb-3 font-medium">Timestamp</th>
-                <th className="pb-3 font-medium">Old Value</th>
-                <th className="pb-3 font-medium">New Value</th>
+              <tr className="bg-gray-50 border-b">
+                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">Action</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">Entity Type</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">Entity ID</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">Timestamp</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">Old Value</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">New Value</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y">
               {filteredChanges.map((change, index) => (
-                <tr key={index} className="border-b last:border-0">
-                  <td className="py-3">
-                    <Badge variant="outline">{change.action}</Badge>
-                  </td>
-                  <td className="py-3">{change.entityType}</td>
-                  <td className="py-3 font-mono text-xs">{change.entityId}</td>
-                  <td className="py-3 text-muted-foreground">
-                    {new Date(change.timestamp).toLocaleString()}
-                  </td>
-                  <td className="py-3 max-w-xs truncate text-xs">
-                    {change.oldValue ? (
-                      <code className="bg-muted px-1 py-0.5 rounded">{change.oldValue}</code>
-                    ) : (
-                      <span className="text-muted-foreground">N/A</span>
-                    )}
-                  </td>
-                  <td className="py-3 max-w-xs truncate text-xs">
-                    {change.newValue ? (
-                      <code className="bg-muted px-1 py-0.5 rounded">{change.newValue}</code>
-                    ) : (
-                      <span className="text-muted-foreground">N/A</span>
-                    )}
-                  </td>
+                <tr key={index} className="hover:bg-gray-50 transition-colors">
+                  <td className="px-4 py-3"><Badge variant="outline">{change.action}</Badge></td>
+                  <td className="px-4 py-3 text-sm">{change.entityType}</td>
+                  <td className="px-4 py-3 text-xs font-mono">{change.entityId}</td>
+                  <td className="px-4 py-3 text-xs text-gray-500">{change.timestamp ? new Date(change.timestamp).toLocaleString() : 'N/A'}</td>
+                  <td className="px-4 py-3 text-xs max-w-xs truncate">{change.oldValue || <span className="text-gray-400">N/A</span>}</td>
+                  <td className="px-4 py-3 text-xs max-w-xs truncate">{change.newValue || <span className="text-gray-400">N/A</span>}</td>
                 </tr>
               ))}
               {filteredChanges.length === 0 && (
-                <tr>
-                  <td colSpan={6} className="py-4 text-center text-muted-foreground">
-                    No changes match the filter
-                  </td>
-                </tr>
+                <tr><td colSpan={6} className="px-4 py-8 text-center text-gray-500 text-sm">No changes match the filter</td></tr>
               )}
             </tbody>
           </table>

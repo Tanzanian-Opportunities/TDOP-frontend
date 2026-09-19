@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import {
 LayoutDashboard, Briefcase, Bookmark, FileText, Sparkles, FolderOpen, Building2,
 User, Settings, BarChart3, Users, Shield, Flag, UserCog, ChevronLeft, ChevronRight,
-CheckCircle, Eye, Clock, UsersRound, Wrench, Bell, AlertTriangle, ClipboardList, Lock, Activity, Brain, HeartPulse
+CheckCircle, Eye, Clock, UsersRound, Wrench, Bell, AlertTriangle, ClipboardList, Lock, Activity, Brain, HeartPulse, Database
 } from 'lucide-react';
 import { useApplications } from '@/hooks/useApplications';
 import { useNotifications } from '@/hooks/useNotifications';
@@ -86,6 +86,7 @@ const superAdminLinks: SidebarLink[] = [
   { to: '/super-admin/security', label: 'Security', icon: <Lock className="w-5 h-5" /> },
   { to: '/super-admin/audit', label: 'Audit', icon: <Eye className="w-5 h-5" /> },
   { to: '/super-admin/config', label: 'Config', icon: <Wrench className="w-5 h-5" /> },
+  { to: '/super-admin/taxonomy', label: 'Taxonomy', icon: <Database className="w-5 h-5" /> },
 ];
 
 const links = location.pathname.startsWith('/super-admin') ? superAdminLinks

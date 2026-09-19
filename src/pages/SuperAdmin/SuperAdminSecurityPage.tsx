@@ -3,90 +3,73 @@ import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { superAdminApi, SecurityOverview } from '@/services/api/superAdminApi';
 import { PageError, PageLoading } from '@/components/ui/PageStates';
-import { Lock } from 'lucide-react';
+import { Lock, CheckCircle, XCircle } from 'lucide-react';
 
 const SuperAdminSecurityPage: React.FC = () => {
   const [data, setData] = useState<SecurityOverview | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await superAdminApi.getSecurityOverview();
-        setData(result);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch security overview');
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
+    superAdminApi.getSecurityOverview()
+      .then(setData)
+      .catch(() => setError(true))
+      .finally(() => setLoading(false));
   }, []);
 
   if (loading) return <PageLoading />;
-  if (error) return <PageError message={error} />;
-  if (!data) return <PageError message="No data available" />;
-
-  const summaryCards = [
-    { label: 'Total Users', value: data.totalUsers, variant: 'primary' as const },
-    { label: 'Enabled', value: data.enabled, variant: 'accent' as const },
-    { label: 'Disabled', value: data.disabled, variant: 'danger' as const },
-    { label: 'Unverified', value: data.unverified, variant: 'secondary' as const },
-    { label: 'High Risk', value: data.highRisk, variant: 'danger' as const },
-    { label: 'Medium Risk', value: data.mediumRisk, variant: 'accent' as const },
-    { label: 'Unreviewed Signals', value: data.unreviewedSignals, variant: 'outline' as const },
-  ];
+  if (error || !data) return <PageError />;
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <Lock className="w-8 h-8 text-primary" />
-        <h1 className="text-2xl font-bold">Security Center</h1>
+    <div className="max-w-7xl mx-auto space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold text-tdop-navy flex items-center gap-2">
+          <Lock className="w-7 h-7 text-tdop-primary" />
+          Security Center
+        </h1>
+        <p className="text-sm text-gray-500 mt-1">Security events and risk signals</p>
       </div>
-
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
-        {summaryCards.map((card) => (
-          <Card key={card.label} className="p-4 text-center">
-            <p className="text-sm text-muted-foreground">{card.label}</p>
-            <Badge variant={card.variant} className="mt-2 text-lg font-bold">
-              {card.value}
-            </Badge>
+        {[
+          { label: 'Total Users', value: data.totalUsers, variant: 'primary' as const },
+          { label: 'Enabled', value: data.enabledUsers, variant: 'secondary' as const },
+          { label: 'Disabled', value: data.disabledUsers, variant: 'danger' as const },
+          { label: 'Unverified', value: data.unverifiedUsers, variant: 'outline' as const },
+          { label: 'High Risk', value: data.highRiskSignals, variant: 'danger' as const },
+          { label: 'Medium Risk', value: data.mediumRiskSignals, variant: 'accent' as const },
+          { label: 'Unreviewed', value: data.unreviewedSignals, variant: 'outline' as const },
+        ].map((card) => (
+          <Card key={card.label} className="p-4">
+            <p className="text-xs text-gray-500">{card.label}</p>
+            <p className="text-xl font-bold text-tdop-navy mt-1">{card.value}</p>
           </Card>
         ))}
       </div>
-
-      <Card className="p-6">
-        <h2 className="text-lg font-semibold mb-4">Recent Audit Logs</h2>
+      <Card className="overflow-hidden">
+        <div className="px-5 py-3 border-b bg-gray-50">
+          <h3 className="text-sm font-semibold text-tdop-navy">Recent Audit Logs</h3>
+        </div>
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full">
             <thead>
-              <tr className="border-b text-left">
-                <th className="pb-3 font-medium">Action</th>
-                <th className="pb-3 font-medium">Entity Type</th>
-                <th className="pb-3 font-medium">Entity ID</th>
-                <th className="pb-3 font-medium">Timestamp</th>
+              <tr className="bg-gray-50 border-b">
+                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">Action</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">Entity Type</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">Entity ID</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">Timestamp</th>
               </tr>
             </thead>
-            <tbody>
-              {data.recentAuditLogs?.map((log, index) => (
-                <tr key={index} className="border-b last:border-0">
-                  <td className="py-3">
-                    <Badge variant="outline">{log.action}</Badge>
-                  </td>
-                  <td className="py-3">{log.entityType}</td>
-                  <td className="py-3 font-mono text-xs">{log.entityId}</td>
-                  <td className="py-3 text-muted-foreground">
-                    {new Date(log.timestamp).toLocaleString()}
-                  </td>
+            <tbody className="divide-y">
+              {data.recentAuditLogs?.map((log: any, index: number) => (
+                <tr key={index} className="hover:bg-gray-50 transition-colors">
+                  <td className="px-4 py-3"><Badge variant="outline">{log.action}</Badge></td>
+                  <td className="px-4 py-3 text-sm">{log.entityType}</td>
+                  <td className="px-4 py-3 text-xs font-mono">{log.entityId}</td>
+                  <td className="px-4 py-3 text-xs text-gray-500">{log.timestamp ? new Date(log.timestamp).toLocaleString() : 'N/A'}</td>
                 </tr>
               ))}
               {(!data.recentAuditLogs || data.recentAuditLogs.length === 0) && (
-                <tr>
-                  <td colSpan={4} className="py-4 text-center text-muted-foreground">
-                    No recent audit logs
-                  </td>
-                </tr>
+                <tr><td colSpan={4} className="px-4 py-8 text-center text-gray-500 text-sm">No recent audit logs</td></tr>
               )}
             </tbody>
           </table>

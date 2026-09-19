@@ -5,61 +5,56 @@ import { PageError, PageLoading } from '@/components/ui/PageStates';
 import { Brain } from 'lucide-react';
 
 const formatKey = (key: string): string => {
-  return key
-    .replace(/([A-Z])/g, ' $1')
-    .replace(/^./, (str) => str.toUpperCase())
-    .trim();
+  return key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase()).trim();
 };
 
 const SuperAdminIntelligencePage: React.FC = () => {
   const [data, setData] = useState<EcosystemIntelligence | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await superAdminApi.getEcosystemIntelligence();
-        setData(result);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch ecosystem intelligence');
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
+    superAdminApi.getEcosystemIntelligence()
+      .then(setData)
+      .catch(() => setError(true))
+      .finally(() => setLoading(false));
   }, []);
 
   if (loading) return <PageLoading />;
-  if (error) return <PageError message={error} />;
-  if (!data) return <PageError message="No data available" />;
+  if (error || !data) return <PageError />;
 
   const sections = [
-    { title: 'Platform Dashboard Stats', data: data.platformDashboardStats },
+    { title: 'Platform Dashboard Stats', data: data.platformStats },
     { title: 'Opportunity Analytics', data: data.opportunityAnalytics },
     { title: 'Report Analytics', data: data.reportAnalytics },
     { title: 'Platform Activity', data: data.platformActivity },
   ];
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <Brain className="w-8 h-8 text-primary" />
-        <h1 className="text-2xl font-bold">Ecosystem Intelligence</h1>
+    <div className="max-w-7xl mx-auto space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold text-tdop-navy flex items-center gap-2">
+          <Brain className="w-7 h-7 text-tdop-primary" />
+          Ecosystem Intelligence
+        </h1>
+        <p className="text-sm text-gray-500 mt-1">Cross-cutting analytics and intelligence across the platform</p>
       </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {sections.map((section) => (
-          <Card key={section.title} className="p-6">
-            <h2 className="text-lg font-semibold mb-4">{section.title}</h2>
-            <div className="space-y-3">
-              {Object.entries(section.data || {}).map(([key, value]) => (
-                <div key={key} className="flex justify-between border-b pb-2">
-                  <span className="text-muted-foreground">{formatKey(key)}</span>
-                  <span className="font-medium">{String(value)}</span>
-                </div>
-              ))}
-            </div>
+          <Card key={section.title} className="p-5">
+            <h3 className="text-sm font-semibold text-tdop-navy mb-3">{section.title}</h3>
+            {section.data ? (
+              <div className="space-y-2">
+                {Object.entries(section.data).map(([key, value]) => (
+                  <div key={key} className="flex justify-between text-sm">
+                    <span className="text-gray-500">{formatKey(key)}</span>
+                    <span className="font-medium text-tdop-navy">{String(value)}</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-gray-400">No data available</p>
+            )}
           </Card>
         ))}
       </div>

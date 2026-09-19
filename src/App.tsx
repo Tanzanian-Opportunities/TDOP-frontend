@@ -67,6 +67,7 @@ import SuperAdminIntelligencePage from '@/pages/SuperAdmin/SuperAdminIntelligenc
 import SuperAdminSecurityPage from '@/pages/SuperAdmin/SuperAdminSecurityPage';
 import SuperAdminAuditPage from '@/pages/SuperAdmin/SuperAdminAuditPage';
 import SuperAdminConfigPage from '@/pages/SuperAdmin/SuperAdminConfigPage';
+import SuperAdminTaxonomyPage from '@/pages/SuperAdmin/SuperAdminTaxonomyPage';
 import ContactPage from '@/pages/Support/ContactPage';
 import HelpCenterPage from '@/pages/Support/HelpCenterPage';
 import PrivacyPage from '@/pages/Support/PrivacyPage';
@@ -154,6 +155,7 @@ const AppRoutes: React.FC = () => {
               <Route path="security" element={<SuperAdminSecurityPage />} />
               <Route path="audit" element={<SuperAdminAuditPage />} />
               <Route path="config" element={<SuperAdminConfigPage />} />
+              <Route path="taxonomy" element={<SuperAdminTaxonomyPage />} />
             </Route>
           </Route>
         </Route>

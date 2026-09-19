@@ -8,87 +8,79 @@ import { Database, Info } from 'lucide-react';
 const SuperAdminTaxonomyPage: React.FC = () => {
   const [data, setData] = useState<TaxonomyOverview | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await superAdminApi.getTaxonomyOverview();
-        setData(result);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch taxonomy overview');
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
+    superAdminApi.getTaxonomyOverview()
+      .then(setData)
+      .catch(() => setError(true))
+      .finally(() => setLoading(false));
   }, []);
 
   if (loading) return <PageLoading />;
-  if (error) return <PageError message={error} />;
-  if (!data) return <PageError message="No data available" />;
+  if (error || !data) return <PageError />;
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <Database className="w-8 h-8 text-primary" />
-        <h1 className="text-2xl font-bold">Taxonomy Governance</h1>
+    <div className="max-w-7xl mx-auto space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold text-tdop-navy flex items-center gap-2">
+          <Database className="w-7 h-7 text-tdop-primary" />
+          Taxonomy Governance
+        </h1>
+        <p className="text-sm text-gray-500 mt-1">Platform taxonomy categories, locations, and types</p>
       </div>
-
       {data.note && (
-        <div className="flex items-start gap-3 p-4 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg">
-          <Info className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
-          <p className="text-sm text-blue-800 dark:text-blue-200">{data.note}</p>
-        </div>
+        <Card className="p-4 bg-blue-50 border border-blue-200">
+          <div className="flex items-start gap-3">
+            <Info className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+            <p className="text-sm text-blue-800">{data.note}</p>
+          </div>
+        </Card>
       )}
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="p-6">
-          <h2 className="text-lg font-semibold mb-4">Category Count</h2>
-          <Badge variant="primary" className="text-2xl font-bold px-4 py-2">
-            {data.categoryCount}
-          </Badge>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Card className="p-5">
+          <p className="text-sm text-gray-500">Category Count</p>
+          <p className="text-2xl font-bold text-tdop-navy mt-1">{data.categoryCount}</p>
         </Card>
-
-        <Card className="p-6">
-          <h2 className="text-lg font-semibold mb-4">Categories</h2>
-          <div className="flex flex-wrap gap-2">
-            {data.categories?.map((category) => (
-              <Badge key={category} variant="outline">
-                {category}
-              </Badge>
-            ))}
-            {(!data.categories || data.categories.length === 0) && (
-              <span className="text-sm text-muted-foreground">No categories</span>
-            )}
-          </div>
+        <Card className="p-5">
+          <p className="text-sm text-gray-500">Location Count</p>
+          <p className="text-2xl font-bold text-tdop-navy mt-1">{data.locations?.length || 0}</p>
         </Card>
-
-        <Card className="p-6">
-          <h2 className="text-lg font-semibold mb-4">Locations</h2>
-          <div className="flex flex-wrap gap-2">
-            {data.locations?.map((location) => (
-              <Badge key={location} variant="secondary">
-                {location}
-              </Badge>
-            ))}
-            {(!data.locations || data.locations.length === 0) && (
-              <span className="text-sm text-muted-foreground">No locations</span>
-            )}
-          </div>
+        <Card className="p-5">
+          <p className="text-sm text-gray-500">Type Count</p>
+          <p className="text-2xl font-bold text-tdop-navy mt-1">{data.types?.length || 0}</p>
         </Card>
       </div>
-
-      <Card className="p-6">
-        <h2 className="text-lg font-semibold mb-4">Types</h2>
+      <Card className="p-5">
+        <h3 className="text-sm font-semibold text-tdop-navy mb-3">Categories</h3>
+        <div className="flex flex-wrap gap-2">
+          {data.categories?.map((cat) => (
+            <Badge key={cat} variant="outline">{cat}</Badge>
+          ))}
+          {(!data.categories || data.categories.length === 0) && (
+            <span className="text-sm text-gray-400">No categories found</span>
+          )}
+        </div>
+      </Card>
+      <Card className="p-5">
+        <h3 className="text-sm font-semibold text-tdop-navy mb-3">Locations</h3>
+        <div className="flex flex-wrap gap-2">
+          {data.locations?.map((loc) => (
+            <Badge key={loc} variant="secondary">{loc}</Badge>
+          ))}
+          {(!data.locations || data.locations.length === 0) && (
+            <span className="text-sm text-gray-400">No locations found</span>
+          )}
+        </div>
+      </Card>
+      <Card className="p-5">
+        <h3 className="text-sm font-semibold text-tdop-navy mb-3">Opportunity Types</h3>
         <div className="flex flex-wrap gap-2">
           {data.types?.map((type) => (
-            <Badge key={type} variant="accent">
-              {type}
-            </Badge>
+            <Badge key={type} variant="accent">{type}</Badge>
           ))}
           {(!data.types || data.types.length === 0) && (
-            <span className="text-sm text-muted-foreground">No types</span>
+            <span className="text-sm text-gray-400">No types found</span>
           )}
         </div>
       </Card>

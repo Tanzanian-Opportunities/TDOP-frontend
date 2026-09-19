@@ -30,6 +30,7 @@ const SuperAdminLayout: React.FC = () => {
     { to: '/super-admin/security', label: 'Security Center', icon: <Lock className="w-5 h-5" />, group: 'Intelligence & Security' },
     { to: '/super-admin/audit', label: 'Audit & Compliance', icon: <Eye className="w-5 h-5" />, group: 'Intelligence & Security' },
     { to: '/super-admin/config', label: 'Platform Config', icon: <Wrench className="w-5 h-5" />, group: 'Configuration' },
+    { to: '/super-admin/taxonomy', label: 'Taxonomy', icon: <Database className="w-5 h-5" />, group: 'Configuration' },
   ];
 
   const isActive = (path: string) => {
