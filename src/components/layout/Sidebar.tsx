@@ -69,6 +69,8 @@ const trustLinks: SidebarLink[] = [
   { to: '/trust/reports', label: 'Reports', icon: <Flag className="w-5 h-5" /> },
   { to: '/trust/activity', label: 'Activity Log', icon: <Clock className="w-5 h-5" /> },
   { to: '/trust/overview', label: 'Overview', icon: <BarChart3 className="w-5 h-5" /> },
+  { to: '/trust/escalations', label: 'Escalations', icon: <AlertTriangle className="w-5 h-5" /> },
+  { to: '/trust/appeals', label: 'Appeals', icon: <Shield className="w-5 h-5" /> },
 ];
 
 const links = location.pathname.startsWith('/trust') ? trustLinks

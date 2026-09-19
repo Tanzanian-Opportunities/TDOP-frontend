@@ -92,7 +92,22 @@
     "reportsOverview": "Reports Overview",
     "fraudOverview": "Fraud Signals Overview",
     "resolutionRate": "Resolution rate",
-    "highRiskAttention": "{{count}} high-risk signal(s) require attention"
+    "highRiskAttention": "{{count}} high-risk signal(s) require attention",
+    "escalations": "Escalations",
+    "appeals": "Appeals",
+    "newEscalation": "New Escalation",
+    "escalate": "Escalate",
+    "resolve": "Resolve",
+    "dismiss": "Dismiss",
+    "assign": "Assign",
+    "open": "Open",
+    "inProgress": "In Progress",
+    "upheld": "Upheld",
+    "overruled": "Overruled",
+    "underReview": "Under Review",
+    "appellant": "Appellant",
+    "upholdAppeal": "Uphold Appeal",
+    "overruleAppeal": "Overrule Appeal"
   },
   "auth": {
     "login": "Login",

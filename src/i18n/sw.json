@@ -92,7 +92,22 @@
     "reportsOverview": "Muhtasari wa Ripoti",
     "fraudOverview": "Muhtasari wa Ishara za Uhalifu",
     "resolutionRate": "Kiwango cha ufumbuzi",
-    "highRiskAttention": "Ishara {{count}} za hatari kuu zinahitaji uangalizi"
+    "highRiskAttention": "Ishara {{count}} za hatari kuu zinahitaji uangalizi",
+    "escalations": "Upandishaji",
+    "appeals": "Maombi ya Rufaa",
+    "newEscalation": "Upandishaji Mpya",
+    "escalate": "Pandisha",
+    "resolve": "Tatua",
+    "dismiss": "Ondoa",
+    "assign": "Kabidhi",
+    "open": "Wazi",
+    "inProgress": "Inaendelea",
+    "upheld": "Imeshikamana",
+    "overruled": "Imekatwa",
+    "underReview": "Inakaguliwa",
+    "appellant": "Mwasiliani",
+    "upholdAppeal": "Shikamana Rufaa",
+    "overruleAppeal": "Kataa Rufaa"
   },
   "auth": {
     "welcomeDescription": "Unganisha na fursa zinazolingana na ujuzi na malengo yako",

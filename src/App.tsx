@@ -52,6 +52,8 @@ import TrustOpportunityReviewPage from '@/pages/Trust/TrustOpportunityReviewPage
 import TrustReportReviewPage from '@/pages/Trust/TrustReportReviewPage';
 import TrustActivityPage from '@/pages/Trust/TrustActivityPage';
 import TrustOverviewPage from '@/pages/Trust/TrustOverviewPage';
+import TrustEscalationPage from '@/pages/Trust/TrustEscalationPage';
+import TrustAppealPage from '@/pages/Trust/TrustAppealPage';
 import ContactPage from '@/pages/Support/ContactPage';
 import HelpCenterPage from '@/pages/Support/HelpCenterPage';
 import PrivacyPage from '@/pages/Support/PrivacyPage';
@@ -120,6 +122,8 @@ const AppRoutes: React.FC = () => {
               <Route path="reports" element={<TrustReportReviewPage />} />
               <Route path="activity" element={<TrustActivityPage />} />
               <Route path="overview" element={<TrustOverviewPage />} />
+              <Route path="escalations" element={<TrustEscalationPage />} />
+              <Route path="appeals" element={<TrustAppealPage />} />
             </Route>
           </Route>
         </Route>
