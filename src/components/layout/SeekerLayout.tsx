@@ -4,9 +4,8 @@ import { useAuth } from '@/hooks/useAuth';
 import { useNotificationContext } from '@/context/NotificationContext';
 import { Toast } from '@/components/ui/Toast';
 import {
-  Shield, AlertTriangle, Activity, HeartPulse, Users, Building2, Eye, Lock, Brain,
-  Database, Settings, ChevronLeft, ChevronRight, Wrench, BarChart3, Bell, Plug, Clock,
-  LogOut
+  LayoutDashboard, Briefcase, Building2, Bookmark, FileText, Sparkles,
+  FolderOpen, Bell, User, ChevronLeft, ChevronRight, LogOut
 } from 'lucide-react';
 
 interface NavItem {
@@ -16,7 +15,7 @@ interface NavItem {
   group: string;
 }
 
-const SuperAdminLayout: React.FC = () => {
+const SeekerLayout: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useAuth();
@@ -24,28 +23,19 @@ const SuperAdminLayout: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = React.useState(true);
 
   const navItems: NavItem[] = [
-    { to: '/super-admin', label: 'Overview', icon: <BarChart3 className="w-5 h-5" />, group: 'Control Center' },
-    { to: '/super-admin/attention', label: 'Platform Attention', icon: <AlertTriangle className="w-5 h-5" />, group: 'Control Center' },
-    { to: '/super-admin/pulse', label: 'Platform Pulse', icon: <Activity className="w-5 h-5" />, group: 'Control Center' },
-    { to: '/super-admin/health', label: 'Platform Health', icon: <HeartPulse className="w-5 h-5" />, group: 'Control Center' },
-    { to: '/super-admin/roles', label: 'Roles & Permissions', icon: <Lock className="w-5 h-5" />, group: 'Governance' },
-    { to: '/super-admin/access', label: 'Access Governance', icon: <Users className="w-5 h-5" />, group: 'Governance' },
-    { to: '/super-admin/org-governance', label: 'Org Governance', icon: <Building2 className="w-5 h-5" />, group: 'Governance' },
-    { to: '/super-admin/trust-governance', label: 'Trust Governance', icon: <Shield className="w-5 h-5" />, group: 'Governance' },
-    { to: '/super-admin/intelligence', label: 'Ecosystem Intelligence', icon: <Brain className="w-5 h-5" />, group: 'Intelligence & Security' },
-    { to: '/super-admin/security', label: 'Security Center', icon: <Lock className="w-5 h-5" />, group: 'Intelligence & Security' },
-    { to: '/super-admin/audit', label: 'Audit & Compliance', icon: <Eye className="w-5 h-5" />, group: 'Intelligence & Security' },
-    { to: '/super-admin/config', label: 'Platform Config', icon: <Wrench className="w-5 h-5" />, group: 'Configuration' },
-    { to: '/super-admin/taxonomy', label: 'Taxonomy', icon: <Database className="w-5 h-5" />, group: 'Configuration' },
-    { to: '/super-admin/features', label: 'Feature Controls', icon: <Settings className="w-5 h-5" />, group: 'Configuration' },
-    { to: '/super-admin/sessions', label: 'Session Control', icon: <Users className="w-5 h-5" />, group: 'Configuration' },
-    { to: '/super-admin/notifications', label: 'Notification Config', icon: <Bell className="w-5 h-5" />, group: 'Configuration' },
-    { to: '/super-admin/integrations', label: 'Integration Config', icon: <Plug className="w-5 h-5" />, group: 'Configuration' },
-    { to: '/super-admin/jobs', label: 'Background Jobs', icon: <Clock className="w-5 h-5" />, group: 'Configuration' },
+    { to: '/dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-5 h-5" />, group: 'Browse' },
+    { to: '/browse', label: 'Opportunities', icon: <Briefcase className="w-5 h-5" />, group: 'Browse' },
+    { to: '/organizations', label: 'Organizations', icon: <Building2 className="w-5 h-5" />, group: 'Browse' },
+    { to: '/saved', label: 'Saved', icon: <Bookmark className="w-5 h-5" />, group: 'Browse' },
+    { to: '/applications', label: 'Applications', icon: <FileText className="w-5 h-5" />, group: 'Activity' },
+    { to: '/recommendations', label: 'Recommendations', icon: <Sparkles className="w-5 h-5" />, group: 'Activity' },
+    { to: '/documents', label: 'Documents', icon: <FolderOpen className="w-5 h-5" />, group: 'Activity' },
+    { to: '/notifications', label: 'Notifications', icon: <Bell className="w-5 h-5" />, group: 'Activity' },
+    { to: '/profile', label: 'Profile', icon: <User className="w-5 h-5" />, group: 'Account' },
   ];
 
   const isActive = (path: string) => {
-    if (path === '/super-admin') return location.pathname === '/super-admin';
+    if (path === '/dashboard') return location.pathname === '/dashboard';
     return location.pathname.startsWith(path);
   };
 
@@ -68,8 +58,8 @@ const SuperAdminLayout: React.FC = () => {
             onClick={() => setSidebarOpen(o => !o)}
             className="w-full flex items-center justify-center p-2 rounded-lg bg-tdop-primary/20 hover:bg-tdop-primary/30 transition-colors"
           >
-            <Shield className="w-5 h-5 text-tdop-accent" />
-            {sidebarOpen && <span className="ml-2 text-sm font-semibold">Super Admin</span>}
+            <Briefcase className="w-5 h-5 text-tdop-accent" />
+            {sidebarOpen && <span className="ml-2 text-sm font-semibold">TDOP</span>}
             {sidebarOpen ? <ChevronLeft className="w-4 h-4 ml-auto" /> : <ChevronRight className="w-4 h-4" />}
           </button>
         </div>
@@ -98,12 +88,13 @@ const SuperAdminLayout: React.FC = () => {
         </nav>
         <div className={`p-3 border-t border-white/10 ${sidebarOpen ? '' : 'hidden'}`}>
           <div className="flex items-center gap-3 mb-2">
-            <div className="w-8 h-8 bg-tdop-accent rounded-full flex items-center justify-center text-tdop-navy text-sm font-bold">
-              {user?.firstName?.[0] || 'SA'}
+            <div className="w-8 h-8 bg-tdop-primary rounded-full flex items-center justify-center text-white text-sm font-medium">
+              {user?.firstName?.[0] || 'U'}
+              {user?.lastName?.[0] || ''}
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-white truncate">{user?.firstName} {user?.lastName}</p>
-              <p className="text-xs text-white/50">Super Administrator</p>
+              <p className="text-xs text-white/50 capitalize">{user?.role}</p>
             </div>
           </div>
           <button
@@ -115,7 +106,7 @@ const SuperAdminLayout: React.FC = () => {
           </button>
         </div>
       </aside>
-      <main className="flex-1 overflow-y-auto bg-slate-50 p-6">
+      <main className="flex-1 overflow-y-auto bg-gray-50 p-6">
         <Outlet />
       </main>
       {notifications.slice(0, 3).map(notif => (
@@ -125,4 +116,4 @@ const SuperAdminLayout: React.FC = () => {
   );
 };
 
-export default SuperAdminLayout;
+export default SeekerLayout;

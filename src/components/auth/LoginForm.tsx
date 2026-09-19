@@ -25,10 +25,14 @@ const LoginForm: React.FC = () => {
       try {
         const stored = JSON.parse(localStorage.getItem('tdop-user') || '{}');
         const role = stored?.role;
-        if (role === 'organization' || role === 'organization_admin' || role === 'organization_member') {
-          navigate('/my-jobs');
-        } else if (role === 'admin' || role === 'super_admin' || role === 'moderator' || role === 'verification_officer') {
+        if (role === 'super_admin') {
+          navigate('/super-admin');
+        } else if (role === 'admin') {
           navigate('/admin');
+        } else if (role === 'moderator' || role === 'verification_officer') {
+          navigate('/trust');
+        } else if (role === 'organization' || role === 'organization_admin' || role === 'organization_member') {
+          navigate('/my-jobs');
         } else {
           navigate('/dashboard');
         }
