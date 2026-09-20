@@ -16,7 +16,7 @@ const Logo: React.FC<LogoProps> = ({ className = '', dark = false, size = 'md' }
   const word = size === 'lg' ? 'text-2xl' : size === 'sm' ? 'text-lg' : 'text-xl';
 
   return (
-    <span className={`inline-flex items-center gap-2.5 ${className}`}>
+    <span aria-label="TDOP home" className={`inline-flex items-center gap-2.5 ${className}`}>
       <span
         className={`${tile} bg-tdop-primary flex items-center justify-center font-display font-extrabold text-white shadow-soft`}
       >

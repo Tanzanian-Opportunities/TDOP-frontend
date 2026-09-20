@@ -46,7 +46,6 @@ const fetchOrgId = async () => {
       setError(true);
     }
   } catch (err) {
-    console.error(err);
     setError(true);
   } finally {
     setLoading(false);
@@ -67,7 +66,6 @@ const fetchData = async () => {
     setMembers(Array.isArray(membersRes.data) ? membersRes.data : []);
     setInvitations(Array.isArray(invitationsRes.data) ? invitationsRes.data : []);
   } catch (err) {
-    console.error(err);
     setError(true);
   } finally {
     setLoading(false);
@@ -85,7 +83,6 @@ setInviteEmail('');
 setInviteRole('MEMBER');
 fetchData();
 } catch (err) {
-console.error(err);
 }
 };
 
@@ -95,7 +92,6 @@ try {
 await axiosInstance.delete(`/organization/team/${orgId}/members/${memberUserId}`);
 fetchData();
 } catch (err) {
-console.error(err);
 }
 };
 
@@ -106,7 +102,6 @@ params: { role: newRole }
 });
 fetchData();
 } catch (err) {
-console.error(err);
 }
 };
 

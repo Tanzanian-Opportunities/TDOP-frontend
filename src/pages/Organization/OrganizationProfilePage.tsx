@@ -24,7 +24,6 @@ const OrganizationProfilePage: React.FC = () => {
       const { data } = await profileApi.getOrganizationProfile();
       setProfile(data);
     } catch (err) {
-      console.error(err);
       setError(true);
     } finally {
       setLoading(false);

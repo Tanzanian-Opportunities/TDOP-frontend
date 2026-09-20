@@ -136,7 +136,7 @@ const ApplicationDetailPage: React.FC = () => {
 
           <Card>
             <Button variant="outline" className="w-full" asChild>
-              <a href={`/opportunities/${appData.opportunityId}`}>{t('application.viewOpportunity', 'View Opportunity')}</a>
+              <Link to={`/opportunities/${appData.opportunityId}`}>{t('application.viewOpportunity', 'View Opportunity')}</Link>
             </Button>
           </Card>
         </div>

@@ -103,6 +103,7 @@ const SeekerNotificationsPage: React.FC = () => {
             <button
               key={f.value}
               onClick={() => setCategoryFilter(f.value)}
+              aria-pressed={categoryFilter === f.value}
               className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
                 categoryFilter === f.value
                   ? 'bg-tdop-primary text-white'

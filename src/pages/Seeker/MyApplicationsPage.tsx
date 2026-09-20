@@ -90,6 +90,7 @@ const MyApplicationsPage: React.FC = () => {
               <button
                 key={f.value}
                 onClick={() => setStatusFilter(f.value)}
+                aria-pressed={statusFilter === f.value}
                 className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
                   statusFilter === f.value
                     ? 'bg-tdop-primary text-white'
@@ -149,7 +150,7 @@ const MyApplicationsPage: React.FC = () => {
                       </Link>
                     </Button>
                     <Button variant="outline" size="sm" asChild>
-                      <a href={`/opportunities/${application.opportunityId}`}>Details</a>
+                      <Link to={`/opportunities/${application.opportunityId}`}>Details</Link>
                     </Button>
                     {application.status !== 'withdrawn' && application.status !== 'rejected' && (
                       <Button variant="ghost" size="sm" onClick={() => withdraw(application.id)}>

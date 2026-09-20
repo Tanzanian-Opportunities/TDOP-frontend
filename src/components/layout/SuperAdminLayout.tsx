@@ -51,7 +51,7 @@ const SuperAdminLayout: React.FC = () => {
 
   return (
     <div className="flex min-h-[calc(100vh-4rem)]">
-      <aside className={`${sidebarOpen ? 'w-64' : 'w-16'} bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-white flex flex-col transition-all duration-300 shrink-0`}>
+      <aside className={`${sidebarOpen ? 'w-64' : 'w-16'} bg-gradient-to-b from-tdop-navy via-tdop-primary to-tdop-navy text-white flex flex-col transition-all duration-300 shrink-0`}>
         <div className="p-2 border-b border-white/10">
           <button
             onClick={() => setSidebarOpen(o => !o)}
@@ -72,6 +72,7 @@ const SuperAdminLayout: React.FC = () => {
                 <Link
                   key={item.to}
                   to={item.to}
+                  aria-current={isActive(item.to) ? 'page' : undefined}
                   className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                     isActive(item.to)
                       ? 'bg-tdop-primary text-white shadow-lg shadow-tdop-primary/25'
@@ -89,7 +90,7 @@ const SuperAdminLayout: React.FC = () => {
           <p className="text-xs text-white/40">Platform Governance</p>
         </div>
       </aside>
-      <main className="flex-1 overflow-y-auto bg-slate-50 p-6">
+      <main className="flex-1 overflow-y-auto bg-tdop-light p-6">
         <Outlet />
       </main>
     </div>

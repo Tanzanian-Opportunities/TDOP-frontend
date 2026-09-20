@@ -51,6 +51,7 @@ const TrustLayout: React.FC = () => {
             <Link
               key={item.to}
               to={item.to}
+              aria-current={isActive(item.to) ? 'page' : undefined}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                 isActive(item.to)
                   ? 'bg-tdop-accent text-tdop-navy font-semibold'

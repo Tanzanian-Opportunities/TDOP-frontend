@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 
 interface InputDialogProps {
@@ -25,6 +25,24 @@ const InputDialog: React.FC<InputDialogProps> = ({
   loading = false,
 }) => {
   const [value, setValue] = useState('');
+  const inputRef = React.useRef<HTMLInputElement | HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (open) {
+      setValue('');
+      setTimeout(() => inputRef.current?.focus(), 50);
+      const handleEscape = (e: KeyboardEvent) => { if (e.key === 'Escape') onCancel(); };
+      document.addEventListener('keydown', handleEscape);
+      return () => document.removeEventListener('keydown', handleEscape);
+    }
+  }, [open, onCancel]);
+
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = 'hidden';
+      return () => { document.body.style.overflow = ''; };
+    }
+  }, [open]);
 
   if (!open) return null;
 
@@ -34,8 +52,10 @@ const InputDialog: React.FC<InputDialogProps> = ({
     setValue('');
   };
 
+  const inputId = `input-dialog-${title.replace(/\s/g, '-').toLowerCase()}`;
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label={title}>
       <div className="fixed inset-0 bg-black/40 backdrop-blur-sm" onClick={onCancel} />
       <div className="relative bg-white rounded-2xl shadow-xl max-w-md w-full p-6 animate-slide-up">
         <button
@@ -47,24 +67,26 @@ const InputDialog: React.FC<InputDialogProps> = ({
         </button>
 
         <h3 className="text-lg font-semibold text-tdop-navy mb-1">{title}</h3>
-        <p className="text-sm text-gray-500 mb-4">{label}</p>
+        <label htmlFor={inputId} className="text-sm text-gray-500 mb-4 block">{label}</label>
 
         {multiline ? (
           <textarea
+            ref={inputRef as React.RefObject<HTMLTextAreaElement>}
+            id={inputId}
             value={value}
             onChange={(e) => setValue(e.target.value)}
             placeholder={placeholder}
             className="w-full p-3 rounded-xl border border-gray-200 text-sm text-tdop-navy placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-tdop-primary/20 focus:border-tdop-primary resize-none"
             rows={3}
-            autoFocus
           />
         ) : (
           <input
+            ref={inputRef as React.RefObject<HTMLInputElement>}
+            id={inputId}
             value={value}
             onChange={(e) => setValue(e.target.value)}
             placeholder={placeholder}
             className="w-full p-3 rounded-xl border border-gray-200 text-sm text-tdop-navy placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-tdop-primary/20 focus:border-tdop-primary"
-            autoFocus
             onKeyDown={(e) => { if (e.key === 'Enter') handleSubmit(); }}
           />
         )}

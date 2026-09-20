@@ -24,6 +24,25 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   onCancel,
   loading = false,
 }) => {
+  const dialogRef = React.useRef<HTMLDivElement>(null);
+  const cancelRef = React.useRef<HTMLButtonElement>(null);
+
+  React.useEffect(() => {
+    if (open) {
+      cancelRef.current?.focus();
+      const handleEscape = (e: KeyboardEvent) => { if (e.key === 'Escape') onCancel(); };
+      document.addEventListener('keydown', handleEscape);
+      return () => document.removeEventListener('keydown', handleEscape);
+    }
+  }, [open, onCancel]);
+
+  React.useEffect(() => {
+    if (open) {
+      document.body.style.overflow = 'hidden';
+      return () => { document.body.style.overflow = ''; };
+    }
+  }, [open]);
+
   if (!open) return null;
 
   const variantStyles = {
@@ -44,9 +63,9 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   const styles = variantStyles[variant];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label={title}>
       <div className="fixed inset-0 bg-black/40 backdrop-blur-sm" onClick={onCancel} />
-      <div className="relative bg-white rounded-2xl shadow-xl max-w-md w-full p-6 animate-slide-up">
+      <div ref={dialogRef} className="relative bg-white rounded-2xl shadow-xl max-w-md w-full p-6 animate-slide-up">
         <button
           onClick={onCancel}
           className="absolute top-4 right-4 p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
@@ -64,6 +83,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 
         <div className="flex items-center justify-end gap-3">
           <button
+            ref={cancelRef}
             onClick={onCancel}
             disabled={loading}
             className="px-4 py-2 text-sm font-medium text-gray-600 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors disabled:opacity-50"

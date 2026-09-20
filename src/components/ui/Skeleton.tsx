@@ -12,6 +12,8 @@ export const Skeleton: React.FC<SkeletonProps> = ({ className = '', width, heigh
     <div
       className={`skeleton ${rounded ? 'rounded-lg' : ''} ${className}`}
       style={{ width, height }}
+      aria-busy="true"
+      role="presentation"
     />
   );
 };

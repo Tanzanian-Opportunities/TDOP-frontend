@@ -47,7 +47,6 @@ const EditOpportunityPage: React.FC = () => {
       setRequirements(Array.isArray(opp.requirements) ? opp.requirements.join('\n') : '');
     } catch (err) {
       setError('Failed to load opportunity');
-      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -66,13 +65,6 @@ const EditOpportunityPage: React.FC = () => {
         applicationDeadline: deadline,
         category,
         requirements: requirements.split('\n').filter(Boolean),
-        isRemote: false,
-        experienceLevel: 'mid',
-        skills: [],
-        tags: [],
-        responsibilities: [],
-        benefits: [],
-        educationLevel: '',
       });
       addNotification({ type: 'success', title: 'Updated', message: 'Opportunity updated successfully.' });
       navigate('/my-jobs');

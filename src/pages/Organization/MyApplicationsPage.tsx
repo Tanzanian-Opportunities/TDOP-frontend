@@ -48,7 +48,6 @@ const OrgMyApplicationsPage: React.FC = () => {
       const list = data?.applications || (Array.isArray(data) ? data : []);
       setApplications(list);
     } catch (err) {
-      console.error(err);
       setError(true);
     } finally {
       setLoading(false);

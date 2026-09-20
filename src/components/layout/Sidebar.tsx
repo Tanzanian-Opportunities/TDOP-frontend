@@ -121,6 +121,7 @@ return (
 key={link.label}
 to={link.to}
 title={collapsed ? link.label : undefined}
+aria-current={isActive ? 'page' : undefined}
 className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
 isActive
 ? 'bg-tdop-accent text-tdop-navy font-semibold'

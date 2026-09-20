@@ -61,10 +61,26 @@ export const OpportunityDetail: React.FC = () => {
     refetchOnWindowFocus: false,
   });
 
-  if (isLoading || !opportunity) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-tdop-primary" />
+      </div>
+    );
+  }
+
+  if (!opportunity) {
+    return (
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+        <div className="w-16 h-16 rounded-2xl bg-tdop-light flex items-center justify-center mx-auto mb-4">
+          <AlertCircle className="w-8 h-8 text-gray-400" />
+        </div>
+        <h2 className="text-xl font-semibold text-tdop-navy mb-2">Opportunity Not Found</h2>
+        <p className="text-gray-500 mb-6">The opportunity you're looking for doesn't exist or has been removed.</p>
+        <Link to="/browse" className="inline-flex items-center gap-2 px-4 py-2 bg-tdop-primary text-white rounded-lg hover:bg-blue-700 transition-colors">
+          <ArrowLeft className="w-4 h-4" />
+          Browse Opportunities
+        </Link>
       </div>
     );
   }
@@ -374,7 +390,7 @@ export const OpportunityDetail: React.FC = () => {
 
             <div className="p-6 space-y-5">
               {applyError && (
-                <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-600">
+                <div role="alert" className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-600">
                   <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />{applyError}
                 </div>
               )}
