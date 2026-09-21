@@ -12,14 +12,12 @@ interface OpportunityCompareProps {
  opportunities: Opportunity[];
  onRemove: (id: string) => void;
  onClearAll: () => void;
- onCompare: () => void;
 }
 
 export const OpportunityCompare: React.FC<OpportunityCompareProps> = ({
  opportunities,
  onRemove,
  onClearAll,
- onCompare,
 }) => {
  const { t } = useTranslation();
 
@@ -39,14 +37,11 @@ export const OpportunityCompare: React.FC<OpportunityCompareProps> = ({
  <div className="space-y-6">
  <div className="flex items-center justify-between">
  <h2 className="text-xl font-bold text-tdop-navy">{t('comparison.title')}</h2>
- <div className="flex items-center gap-2">
- <Button variant="outline" size="sm" onClick={onClearAll}>
- {t('comparison.clearAll')}
- </Button>
- <Button onClick={onCompare} disabled={opportunities.length < 2}>
- {t('comparison.select')}
- </Button>
- </div>
+  <div className="flex items-center gap-2">
+  <Button variant="outline" size="sm" onClick={onClearAll}>
+  {t('comparison.clearAll')}
+  </Button>
+  </div>
  </div>
 
  <div className="overflow-x-auto">
