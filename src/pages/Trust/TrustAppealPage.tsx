@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
@@ -31,6 +32,7 @@ interface Appeal {
 const PAGE_SIZE = 10;
 
 const TrustAppealPage: React.FC = () => {
+  const { t } = useTranslation();
   const { addNotification } = useNotificationContext();
   const [appeals, setAppeals] = useState<Appeal[]>([]);
   const [loading, setLoading] = useState(true);
@@ -69,7 +71,7 @@ const TrustAppealPage: React.FC = () => {
       setSelectedAppeal(null);
       loadAppeals();
     } catch (err) {
-      addNotification({ type: 'error', title: 'Error', message: 'Failed to uphold.' });
+      addNotification({ type: 'error', title: 'Error', message: t('trustAppeal.failedUphold') });
     } finally {
       setActionLoading(false);
     }
@@ -85,7 +87,7 @@ const TrustAppealPage: React.FC = () => {
       setSelectedAppeal(null);
       loadAppeals();
     } catch (err) {
-      addNotification({ type: 'error', title: 'Error', message: 'Failed to overrule.' });
+      addNotification({ type: 'error', title: 'Error', message: t('trustAppeal.failedOverrule') });
     } finally {
       setActionLoading(false);
     }
@@ -101,7 +103,7 @@ const TrustAppealPage: React.FC = () => {
       setSelectedAppeal(null);
       loadAppeals();
     } catch (err) {
-      addNotification({ type: 'error', title: 'Error', message: 'Failed to dismiss.' });
+      addNotification({ type: 'error', title: 'Error', message: t('trustAppeal.failedDismiss') });
     } finally {
       setActionLoading(false);
     }
@@ -143,7 +145,7 @@ const TrustAppealPage: React.FC = () => {
       {selectedAppeal ? (
         <div className="space-y-6">
           <button onClick={() => setSelectedAppeal(null)} className="flex items-center gap-2 text-sm text-tdop-primary hover:underline focus:outline-none focus:ring-2 focus:ring-tdop-primary rounded" aria-label="Go back">
-            ← Back to appeals
+            {t('trustAppeal.backToAppeals')}
           </button>
           <Card className="p-6">
             <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
@@ -159,41 +161,41 @@ const TrustAppealPage: React.FC = () => {
             <div className="mt-6 space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium text-gray-700">Target</label>
+                  <label className="text-sm font-medium text-gray-700">{t('trustAppeal.target')}</label>
                   <p className="mt-1 text-sm text-gray-600 capitalize">{selectedAppeal.targetType?.replace('_', ' ')} #{selectedAppeal.targetId}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-700">Created</label>
+                  <label className="text-sm font-medium text-gray-700">{t('trustAppeal.created')}</label>
                   <p className="mt-1 text-sm text-gray-600">{selectedAppeal.createdAt ? new Date(selectedAppeal.createdAt).toLocaleString() : '—'}</p>
                 </div>
               </div>
               {selectedAppeal.description && (
                 <div>
-                  <label className="text-sm font-medium text-gray-700">Description</label>
+                  <label className="text-sm font-medium text-gray-700">{t('trustAppeal.description')}</label>
                   <p className="mt-1 text-sm text-gray-600 bg-gray-50 p-3 rounded-lg whitespace-pre-wrap">{selectedAppeal.description}</p>
                 </div>
               )}
               {selectedAppeal.appellant && (
                 <div>
-                  <label className="text-sm font-medium text-gray-700">Appellant</label>
+                  <label className="text-sm font-medium text-gray-700">{t('trustAppeal.appellant')}</label>
                   <p className="mt-1 text-sm text-gray-600">{selectedAppeal.appellant.firstName} {selectedAppeal.appellant.lastName} ({selectedAppeal.appellant.email})</p>
                 </div>
               )}
               {selectedAppeal.reviewedBy && (
                 <div>
-                  <label className="text-sm font-medium text-gray-700">Reviewed by</label>
+                  <label className="text-sm font-medium text-gray-700">{t('trustAppeal.reviewedBy')}</label>
                   <p className="mt-1 text-sm text-gray-600">{selectedAppeal.reviewedBy.firstName} {selectedAppeal.reviewedBy.lastName}</p>
                 </div>
               )}
               {selectedAppeal.reviewNotes && (
                 <div>
-                  <label className="text-sm font-medium text-gray-700">Review Notes</label>
+                  <label className="text-sm font-medium text-gray-700">{t('trustAppeal.reviewNotes')}</label>
                   <p className="mt-1 text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">{selectedAppeal.reviewNotes}</p>
                 </div>
               )}
               {selectedAppeal.resolution && (
                 <div>
-                  <label className="text-sm font-medium text-gray-700">Resolution</label>
+                  <label className="text-sm font-medium text-gray-700">{t('trustAppeal.resolution')}</label>
                   <p className="mt-1 text-sm text-gray-600 bg-teal-50 p-3 rounded-lg">{selectedAppeal.resolution}</p>
                 </div>
               )}
@@ -201,13 +203,13 @@ const TrustAppealPage: React.FC = () => {
             {(selectedAppeal.status === 'PENDING' || selectedAppeal.status === 'UNDER_REVIEW') && (
               <div className="mt-6 flex flex-wrap gap-3">
                 <Button onClick={() => setUpholdTarget({ id: selectedAppeal.id, reason: selectedAppeal.reason })} disabled={actionLoading} className="bg-tdop-secondary hover:bg-teal-700 text-white">
-                  <CheckCircle className="w-4 h-4 mr-2" /> Uphold Appeal
+                   <CheckCircle className="w-4 h-4 mr-2" /> {t('trustAppeal.upholdAppeal')}
                 </Button>
                 <Button onClick={() => setOverruleTarget({ id: selectedAppeal.id, reason: selectedAppeal.reason })} variant="danger" disabled={actionLoading}>
-                  <XCircle className="w-4 h-4 mr-2" /> Overrule Appeal
+                   <XCircle className="w-4 h-4 mr-2" /> {t('trustAppeal.overruleAppeal')}
                 </Button>
                 <Button onClick={() => setDismissTarget({ id: selectedAppeal.id, reason: selectedAppeal.reason })} variant="outline" disabled={actionLoading}>
-                  Dismiss
+                  {t('trustAppeal.dismiss')}
                 </Button>
               </div>
             )}
@@ -218,30 +220,30 @@ const TrustAppealPage: React.FC = () => {
           <div>
             <h1 className="text-2xl font-bold text-tdop-navy flex items-center gap-2">
               <Scale className="w-7 h-7 text-tdop-primary" />
-              Appeals
+               Appeals
             </h1>
-            <p className="text-sm text-gray-500 mt-1">Review and decide on user-submitted appeals</p>
+            <p className="text-sm text-gray-500 mt-1">{t('trustAppeal.subtitle')}</p>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             <Card className="p-4 bg-amber-50 border border-amber-200">
-              <div className="flex items-center gap-2 text-amber-600"><Clock className="w-5 h-5" /><span className="text-sm font-medium">Pending</span></div>
+              <div className="flex items-center gap-2 text-amber-600"><Clock className="w-5 h-5" /><span className="text-sm font-medium">{t('trustAppeal.pending')}</span></div>
               <p className="text-2xl font-bold text-tdop-navy mt-1">{stats.pending}</p>
             </Card>
             <Card className="p-4 bg-blue-50 border border-blue-200">
-              <div className="flex items-center gap-2 text-tdop-primary"><MessageSquare className="w-5 h-5" /><span className="text-sm font-medium">Review</span></div>
+              <div className="flex items-center gap-2 text-tdop-primary"><MessageSquare className="w-5 h-5" /><span className="text-sm font-medium">{t('trustAppeal.review')}</span></div>
               <p className="text-2xl font-bold text-tdop-navy mt-1">{stats.underReview}</p>
             </Card>
             <Card className="p-4 bg-teal-50 border border-teal-200">
-              <div className="flex items-center gap-2 text-tdop-secondary"><CheckCircle className="w-5 h-5" /><span className="text-sm font-medium">Upheld</span></div>
+              <div className="flex items-center gap-2 text-tdop-secondary"><CheckCircle className="w-5 h-5" /><span className="text-sm font-medium">{t('trustAppeal.upheld')}</span></div>
               <p className="text-2xl font-bold text-tdop-navy mt-1">{stats.upheld}</p>
             </Card>
             <Card className="p-4 bg-red-50 border border-red-200">
-              <div className="flex items-center gap-2 text-red-600"><XCircle className="w-5 h-5" /><span className="text-sm font-medium">Overruled</span></div>
+              <div className="flex items-center gap-2 text-red-600"><XCircle className="w-5 h-5" /><span className="text-sm font-medium">{t('trustAppeal.overruled')}</span></div>
               <p className="text-2xl font-bold text-tdop-navy mt-1">{stats.overruled}</p>
             </Card>
             <Card className="p-4 bg-gray-50 border border-gray-200">
-              <div className="flex items-center gap-2 text-gray-600"><Shield className="w-5 h-5" /><span className="text-sm font-medium">Dismissed</span></div>
+              <div className="flex items-center gap-2 text-gray-600"><Shield className="w-5 h-5" /><span className="text-sm font-medium">{t('trustAppeal.dismissed')}</span></div>
               <p className="text-2xl font-bold text-tdop-navy mt-1">{stats.dismissed}</p>
             </Card>
           </div>
@@ -250,15 +252,15 @@ const TrustAppealPage: React.FC = () => {
             <div className="flex flex-col md:flex-row gap-3">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <input type="text" placeholder="Search appeals..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
+                <input type="text" placeholder={t('trustAppeal.searchPlaceholder')} value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-tdop-primary focus:border-transparent"
                   aria-label="Search appeals"
                 />
               </div>
               <select value={filterStatus} onChange={e => setFilterStatus(e.target.value)} className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-tdop-primary" aria-label="Filter by status">
-                <option value="all">All Status</option>
-                <option value="pending">Pending</option>
-                <option value="under_review">Under Review</option>
+                <option value="all">{t('trustAppeal.allStatus')}</option>
+                <option value="pending">{t('trustAppeal.pending')}</option>
+                <option value="under_review">{t('trustAppeal.underReview')}</option>
                 <option value="upheld">Upheld</option>
                 <option value="overruled">Overruled</option>
                 <option value="dismissed">Dismissed</option>
@@ -270,7 +272,7 @@ const TrustAppealPage: React.FC = () => {
             {paginated.length === 0 ? (
               <div className="p-12 text-center text-gray-500">
                 <Scale className="w-12 h-12 mx-auto text-gray-300 mb-3" />
-                <p className="font-medium">No appeals</p>
+                <p className="font-medium">{t('trustAppeal.noAppeals')}</p>
               </div>
             ) : (
               <div className="divide-y" role="list" aria-label="Appeals list">
@@ -301,9 +303,9 @@ const TrustAppealPage: React.FC = () => {
         </>
       )}
 
-      <InputDialog open={!!upholdTarget} onCancel={() => setUpholdTarget(null)} onConfirm={handleUphold} title="Uphold Appeal" label="Resolution notes" placeholder="Explain why the appeal is upheld..." loading={actionLoading} />
-      <InputDialog open={!!overruleTarget} onCancel={() => setOverruleTarget(null)} onConfirm={handleOverrule} title="Overrule Appeal" label="Resolution notes" placeholder="Explain why the appeal is overruled..." loading={actionLoading} />
-      <ConfirmDialog open={!!dismissTarget} onCancel={() => setDismissTarget(null)} onConfirm={handleDismiss} title="Dismiss Appeal" message={`Dismiss: "${dismissTarget?.reason}"?`} confirmLabel="Dismiss" loading={actionLoading} />
+      <InputDialog open={!!upholdTarget} onCancel={() => setUpholdTarget(null)} onConfirm={handleUphold} title={t('trustAppeal.upholdAppeal')} label={t('trustAppeal.resolutionNotes')} placeholder={t('trustAppeal.upholdPlaceholder')} loading={actionLoading} />
+      <InputDialog open={!!overruleTarget} onCancel={() => setOverruleTarget(null)} onConfirm={handleOverrule} title={t('trustAppeal.overruleAppeal')} label={t('trustAppeal.resolutionNotes')} placeholder={t('trustAppeal.overrulePlaceholder')} loading={actionLoading} />
+      <ConfirmDialog open={!!dismissTarget} onCancel={() => setDismissTarget(null)} onConfirm={handleDismiss} title={t('trustAppeal.dismiss')} message={`Dismiss: "${dismissTarget?.reason}"?`} confirmLabel={t('trustAppeal.dismiss')} loading={actionLoading} />
     </div>
   );
 };

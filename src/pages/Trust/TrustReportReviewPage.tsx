@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -39,6 +40,7 @@ interface TrustOfficer {
 const PAGE_SIZE = 10;
 
 const TrustReportReviewPage: React.FC = () => {
+  const { t } = useTranslation();
   const { addNotification } = useNotificationContext();
   const [searchParams, setSearchParams] = useSearchParams();
   const [reports, setReports] = useState<Report[]>([]);
@@ -98,7 +100,7 @@ const TrustReportReviewPage: React.FC = () => {
       setSelectedReport(null);
       loadReports();
     } catch (err) {
-      addNotification({ type: 'error', title: 'Error', message: 'Failed to resolve report.' });
+      addNotification({ type: 'error', title: 'Error', message: t('trustReportReview.failedResolve') });
     } finally {
       setActionLoading(false);
     }
@@ -114,7 +116,7 @@ const TrustReportReviewPage: React.FC = () => {
       setSelectedReport(null);
       loadReports();
     } catch (err) {
-      addNotification({ type: 'error', title: 'Error', message: 'Failed to dismiss report.' });
+      addNotification({ type: 'error', title: 'Error', message: t('trustReportReview.failedDismiss') });
     } finally {
       setActionLoading(false);
     }
@@ -129,7 +131,7 @@ const TrustReportReviewPage: React.FC = () => {
       setAssignTarget(null);
       loadReports();
     } catch (err) {
-      addNotification({ type: 'error', title: 'Error', message: 'Failed to assign report.' });
+      addNotification({ type: 'error', title: 'Error', message: t('trustReportReview.failedAssign') });
     } finally {
       setActionLoading(false);
     }
@@ -185,7 +187,7 @@ const TrustReportReviewPage: React.FC = () => {
             className="flex items-center gap-2 text-sm text-tdop-primary hover:underline focus:outline-none focus:ring-2 focus:ring-tdop-primary rounded"
             aria-label="Go back to reports list"
           >
-            <ArrowLeft className="w-4 h-4" /> Back to reports
+            <ArrowLeft className="w-4 h-4" /> {t('trustReportReview.backToReports')}
           </button>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -204,56 +206,56 @@ const TrustReportReviewPage: React.FC = () => {
                 <div className="mt-6 space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="text-sm font-medium text-gray-700">Target Type</label>
+                      <label className="text-sm font-medium text-gray-700">{t('trustReportReview.targetType')}</label>
                       <p className="mt-1 text-sm text-gray-600 capitalize">{selectedReport.targetType?.replace('_', ' ')}</p>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-gray-700">Target ID</label>
+                      <label className="text-sm font-medium text-gray-700">{t('trustReportReview.targetId')}</label>
                       <p className="mt-1 text-sm text-gray-600">#{selectedReport.targetId}</p>
                     </div>
                   </div>
                   {selectedReport.description && (
                     <div>
-                      <label className="text-sm font-medium text-gray-700">Description</label>
+                      <label className="text-sm font-medium text-gray-700">{t('trustReportReview.description')}</label>
                       <p className="mt-1 text-sm text-gray-600 bg-gray-50 p-3 rounded-lg whitespace-pre-wrap">{selectedReport.description}</p>
                     </div>
                   )}
                   {selectedReport.reporter && (
                     <div>
-                      <label className="text-sm font-medium text-gray-700">Reported by</label>
+                      <label className="text-sm font-medium text-gray-700">{t('trustReportReview.reportedBy')}</label>
                       <p className="mt-1 text-sm text-gray-600">{selectedReport.reporter.firstName} {selectedReport.reporter.lastName} ({selectedReport.reporter.email})</p>
                     </div>
                   )}
                   {selectedReport.investigationNotes && (
                     <div>
-                      <label className="text-sm font-medium text-gray-700">Investigation Notes</label>
+                      <label className="text-sm font-medium text-gray-700">{t('trustReportReview.investigationNotes')}</label>
                       <p className="mt-1 text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">{selectedReport.investigationNotes}</p>
                     </div>
                   )}
                   {selectedReport.resolution && (
                     <div>
-                      <label className="text-sm font-medium text-gray-700">Resolution</label>
+                      <label className="text-sm font-medium text-gray-700">{t('trustReportReview.resolution')}</label>
                       <p className="mt-1 text-sm text-gray-600 bg-teal-50 p-3 rounded-lg">{selectedReport.resolution}</p>
                     </div>
                   )}
                   <div>
-                    <label className="text-sm font-medium text-gray-700">Created</label>
+                      <label className="text-sm font-medium text-gray-700">{t('trustReportReview.created')}</label>
                     <p className="mt-1 text-sm text-gray-600">{selectedReport.createdAt ? new Date(selectedReport.createdAt).toLocaleString() : '—'}</p>
                   </div>
                 </div>
                 {selectedReport.status !== 'ACTIONED' && (
                   <div className="mt-6 flex flex-wrap gap-3">
                     <Button onClick={() => setResolveTarget({ id: selectedReport.id, reason: selectedReport.reason })} disabled={actionLoading} className="bg-tdop-secondary hover:bg-teal-700 text-white">
-                      <CheckCircle className="w-4 h-4 mr-2" /> Resolve
+                       <CheckCircle className="w-4 h-4 mr-2" /> {t('trustReportReview.resolve')}
                     </Button>
                     <Button onClick={() => setDismissTarget({ id: selectedReport.id, reason: selectedReport.reason })} variant="outline" disabled={actionLoading}>
-                      <XCircle className="w-4 h-4 mr-2" /> Dismiss
+                       <XCircle className="w-4 h-4 mr-2" /> {t('trustReportReview.dismiss')}
                     </Button>
                     <Button onClick={() => setAssignTarget({ id: selectedReport.id, reason: selectedReport.reason })} variant="outline" disabled={actionLoading}>
-                      <User className="w-4 h-4 mr-2" /> Assign
+                       <User className="w-4 h-4 mr-2" /> {t('trustReportReview.assign')}
                     </Button>
                     <Button onClick={() => setNotesTarget({ id: selectedReport.id, reason: selectedReport.reason })} variant="outline" disabled={actionLoading}>
-                      <MessageSquare className="w-4 h-4 mr-2" /> Add Notes
+                       <MessageSquare className="w-4 h-4 mr-2" /> {t('trustReportReview.addNotes')}
                     </Button>
                   </div>
                 )}
@@ -262,18 +264,18 @@ const TrustReportReviewPage: React.FC = () => {
 
             <div>
               <Card className="p-6">
-                <h3 className="text-lg font-semibold text-tdop-navy mb-4">Assignment</h3>
+                <h3 className="text-lg font-semibold text-tdop-navy mb-4">{t('trustReportReview.assignment')}</h3>
                 {selectedReport.assignedTo ? (
                   <div className="p-3 bg-teal-50 rounded-lg border border-teal-200">
                     <p className="text-sm font-medium text-tdop-navy">{selectedReport.assignedTo.firstName} {selectedReport.assignedTo.lastName}</p>
                     <p className="text-xs text-gray-500">{selectedReport.assignedTo.email}</p>
                   </div>
                 ) : (
-                  <p className="text-sm text-gray-500">Not assigned</p>
+                  <p className="text-sm text-gray-500">{t('trustReportReview.notAssigned')}</p>
                 )}
                 {selectedReport.status !== 'ACTIONED' && (
                   <Button onClick={() => setAssignTarget({ id: selectedReport.id, reason: selectedReport.reason })} variant="outline" className="w-full mt-3" size="sm">
-                    <User className="w-4 h-4 mr-2" /> Reassign
+                     <User className="w-4 h-4 mr-2" /> {t('trustReportReview.reassign')}
                   </Button>
                 )}
               </Card>
@@ -287,20 +289,20 @@ const TrustReportReviewPage: React.FC = () => {
               <Flag className="w-7 h-7 text-red-500" />
               Reports Center
             </h1>
-            <p className="text-sm text-gray-500 mt-1">Review and act on user-submitted reports</p>
+            <p className="text-sm text-gray-500 mt-1">{t('trustReportReview.subtitle')}</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <Card className="p-4 bg-amber-50 border border-amber-200">
-              <div className="flex items-center gap-2 text-amber-600"><Clock className="w-5 h-5" /><span className="text-sm font-medium">Pending</span></div>
+              <div className="flex items-center gap-2 text-amber-600"><Clock className="w-5 h-5" /><span className="text-sm font-medium">{t('trustReportReview.pending')}</span></div>
               <p className="text-2xl font-bold text-tdop-navy mt-1">{stats.pending}</p>
             </Card>
             <Card className="p-4 bg-blue-50 border border-blue-200">
-              <div className="flex items-center gap-2 text-tdop-primary"><Eye className="w-5 h-5" /><span className="text-sm font-medium">Reviewed</span></div>
+              <div className="flex items-center gap-2 text-tdop-primary"><Eye className="w-5 h-5" /><span className="text-sm font-medium">{t('trustReportReview.reviewed')}</span></div>
               <p className="text-2xl font-bold text-tdop-navy mt-1">{stats.reviewed}</p>
             </Card>
             <Card className="p-4 bg-teal-50 border border-teal-200">
-              <div className="flex items-center gap-2 text-tdop-secondary"><CheckCircle className="w-5 h-5" /><span className="text-sm font-medium">Actioned</span></div>
+              <div className="flex items-center gap-2 text-tdop-secondary"><CheckCircle className="w-5 h-5" /><span className="text-sm font-medium">{t('trustReportReview.actioned')}</span></div>
               <p className="text-2xl font-bold text-tdop-navy mt-1">{stats.actioned}</p>
             </Card>
           </div>
@@ -309,7 +311,7 @@ const TrustReportReviewPage: React.FC = () => {
             <div className="flex flex-col md:flex-row gap-3">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <input type="text" placeholder="Search reports..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
+                <input type="text" placeholder={t('trustReportReview.searchPlaceholder')} value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-tdop-primary focus:border-transparent"
                   aria-label="Search reports"
                 />
@@ -317,10 +319,10 @@ const TrustReportReviewPage: React.FC = () => {
               <select value={filterStatus} onChange={e => setFilterStatus(e.target.value)} className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-tdop-primary"
                 aria-label="Filter by status"
               >
-                <option value="all">All Status</option>
-                <option value="pending">Pending</option>
-                <option value="reviewed">Reviewed</option>
-                <option value="actioned">Actioned</option>
+                <option value="all">{t('trustReportReview.allStatus')}</option>
+                <option value="pending">{t('trustReportReview.pending')}</option>
+                <option value="reviewed">{t('trustReportReview.reviewed')}</option>
+                <option value="actioned">{t('trustReportReview.actioned')}</option>
               </select>
             </div>
           </Card>
@@ -329,7 +331,7 @@ const TrustReportReviewPage: React.FC = () => {
             {paginated.length === 0 ? (
               <div className="p-12 text-center text-gray-500">
                 <Flag className="w-12 h-12 mx-auto text-gray-300 mb-3" />
-                <p className="font-medium">No reports found</p>
+                <p className="font-medium">{t('trustReportReview.noReports')}</p>
               </div>
             ) : (
               <div className="divide-y" role="list" aria-label="Reports list">
@@ -366,15 +368,15 @@ const TrustReportReviewPage: React.FC = () => {
         </>
       )}
 
-      <InputDialog open={!!resolveTarget} onCancel={() => setResolveTarget(null)} onConfirm={handleResolve} title="Resolve Report" label="Resolution details" placeholder="Describe the resolution taken..." loading={actionLoading} />
-      <ConfirmDialog open={!!dismissTarget} onCancel={() => setDismissTarget(null)} onConfirm={handleDismiss} title="Dismiss Report" message={`Dismiss report: "${dismissTarget?.reason}"? This action cannot be undone.`} confirmLabel="Dismiss" loading={actionLoading} />
+      <InputDialog open={!!resolveTarget} onCancel={() => setResolveTarget(null)} onConfirm={handleResolve} title={t('trustReportReview.resolveReport')} label="Resolution details" placeholder="Describe the resolution taken..." loading={actionLoading} />
+      <ConfirmDialog open={!!dismissTarget} onCancel={() => setDismissTarget(null)} onConfirm={handleDismiss} title={t('trustReportReview.dismissReport')} message={`Dismiss report: "${dismissTarget?.reason}"? This action cannot be undone.`} confirmLabel={t('trustReportReview.dismiss')} loading={actionLoading} />
 
       {assignTarget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Assign report">
           <div className="fixed inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setAssignTarget(null)} />
           <div className="relative bg-white rounded-2xl shadow-xl max-w-md w-full p-6">
-            <h3 className="text-lg font-semibold text-tdop-navy mb-4">Assign Report</h3>
-            <p className="text-sm text-gray-500 mb-4">Select an officer to assign this report to:</p>
+            <h3 className="text-lg font-semibold text-tdop-navy mb-4">{t('trustReportReview.assignReport')}</h3>
+            <p className="text-sm text-gray-500 mb-4">{t('trustReportReview.selectOfficer')}</p>
             <div className="space-y-2 max-h-60 overflow-y-auto">
               {officers.filter(o => o.role === 'VERIFICATION_OFFICER' || o.role === 'MODERATOR' || o.role === 'ADMIN').map(officer => (
                 <button key={officer.id}
@@ -390,13 +392,13 @@ const TrustReportReviewPage: React.FC = () => {
               ))}
             </div>
             <div className="mt-4 flex justify-end">
-              <Button variant="outline" onClick={() => setAssignTarget(null)}>Cancel</Button>
+              <Button variant="outline" onClick={() => setAssignTarget(null)}>{t('trustReportReview.cancel')}</Button>
             </div>
           </div>
         </div>
       )}
 
-      <InputDialog open={!!notesTarget} onCancel={() => setNotesTarget(null)} onConfirm={handleAddNotes} title="Add Investigation Notes" label="Notes" placeholder="Enter investigation notes..." multiline loading={actionLoading} />
+      <InputDialog open={!!notesTarget} onCancel={() => setNotesTarget(null)} onConfirm={handleAddNotes} title={t('trustReportReview.addInvestigationNotes')} label="Notes" placeholder="Enter investigation notes..." multiline loading={actionLoading} />
     </div>
   );
 };

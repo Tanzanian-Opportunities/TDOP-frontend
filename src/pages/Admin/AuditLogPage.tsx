@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
@@ -21,6 +22,7 @@ interface AuditLog {
 const PAGE_SIZE = 20;
 
 const AuditLogPage: React.FC = () => {
+  const { t } = useTranslation();
   const [logs, setLogs] = useState<AuditLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -74,26 +76,26 @@ const AuditLogPage: React.FC = () => {
     );
   }
 
-  if (error) return <PageError message="Failed to load audit logs." onRetry={fetchLogs} />;
+  if (error) return <PageError message={t('adminAuditLog.failedToLoad')} onRetry={fetchLogs} />;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">
       <div>
         <h1 className="text-3xl font-bold text-tdop-navy flex items-center gap-2">
-          <ScrollText className="w-8 h-8 text-tdop-primary" /> Audit Log
+          <ScrollText className="w-8 h-8 text-tdop-primary" /> {t('adminAuditLog.title')}
         </h1>
-        <p className="text-gray-500 mt-1">{total.toLocaleString()} total entries</p>
+        <p className="text-gray-500 mt-1">{total.toLocaleString()} {t('adminAuditLog.totalEntries')}</p>
       </div>
 
       <div className="flex items-center gap-3">
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-          <input type="text" placeholder="Filter by action or entity..." value={searchAction}
+          <input type="text" placeholder={t('adminAuditLog.searchPlaceholder')} value={searchAction}
             onChange={e => setSearchAction(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && handleSearch()}
             className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm text-tdop-navy placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-tdop-primary/20 focus:border-tdop-primary" />
         </div>
-        <Button variant="outline" size="sm" onClick={handleSearch}>Search</Button>
+        <Button variant="outline" size="sm" onClick={handleSearch}>{t('adminAuditLog.search')}</Button>
         <button onClick={() => { setSearchAction(''); setActiveFilter(''); setPage(0); }}
           className="px-3 py-2.5 border border-gray-200 rounded-xl text-gray-500 hover:bg-gray-50 transition-colors">
           <RefreshCw className="w-4 h-4" />
@@ -105,7 +107,7 @@ const AuditLogPage: React.FC = () => {
           {logs.length === 0 ? (
             <div className="p-8 text-center text-gray-500">
               <ScrollText className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-              <p>No audit logs found</p>
+              <p>{t('adminAuditLog.noLogs')}</p>
             </div>
           ) : logs.map(log => (
             <div key={log.id} className="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors">
@@ -119,8 +121,8 @@ const AuditLogPage: React.FC = () => {
                     <Badge variant={getActionColor(log.action) as any}>{log.entityType}</Badge>
                   </div>
                   <p className="text-xs text-gray-500 mt-1">
-                    {log.entityId && <span>Entity #{log.entityId}</span>}
-                    {log.userId && <span> • User #{log.userId}</span>}
+                    {log.entityId && <span>{t('adminAuditLog.entity')} #{log.entityId}</span>}
+                    {log.userId && <span> • {t('adminAuditLog.user')} #{log.userId}</span>}
                   </p>
                 </div>
               </div>
@@ -138,10 +140,10 @@ const AuditLogPage: React.FC = () => {
           <p className="text-sm text-gray-500">Page {page + 1} of {totalPages}</p>
           <div className="flex items-center gap-2">
             <Button variant="outline" size="sm" disabled={page === 0} onClick={() => setPage(p => p - 1)}>
-              <ChevronLeft className="w-4 h-4" /> Previous
+              <ChevronLeft className="w-4 h-4" /> {t('adminAuditLog.previous')}
             </Button>
             <Button variant="outline" size="sm" disabled={page >= totalPages - 1} onClick={() => setPage(p => p + 1)}>
-              Next <ChevronRight className="w-4 h-4" />
+              {t('adminAuditLog.next')} <ChevronRight className="w-4 h-4" />
             </Button>
           </div>
         </div>

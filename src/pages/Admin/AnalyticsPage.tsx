@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { PageError } from '@/components/ui/PageStates';
@@ -19,6 +20,7 @@ interface AnalyticsData {
 }
 
 const AnalyticsPage: React.FC = () => {
+  const { t } = useTranslation();
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [dashboardStats, setDashboardStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -76,36 +78,36 @@ const AnalyticsPage: React.FC = () => {
     );
   }
 
-  if (error) return <PageError message="Failed to load analytics. Please try again." onRetry={fetchData} />;
+  if (error) return <PageError message={t('adminAnalytics.failedToLoad')} onRetry={fetchData} />;
 
   const statCards = [
     {
-      label: 'Total users',
+      label: t('adminAnalytics.totalUsers'),
       value: dashboardStats?.totalUsers || analytics?.users?.total || 0,
       icon: <Users className="w-5 h-5" />,
       color: 'bg-tdop-primary/10 text-tdop-primary',
-      sub: analytics?.users?.active ? `${analytics.users.active} active` : undefined,
+      sub: analytics?.users?.active ? `${analytics.users.active} ${t('adminAnalytics.active')}` : undefined,
     },
     {
-      label: 'Organizations',
+      label: t('adminAnalytics.organizations'),
       value: dashboardStats?.totalOrganizations || analytics?.organizations?.total || 0,
       icon: <Building2 className="w-5 h-5" />,
       color: 'bg-purple-50 text-purple-600',
-      sub: analytics?.organizations?.verified ? `${analytics.organizations.verified} verified` : undefined,
+      sub: analytics?.organizations?.verified ? `${analytics.organizations.verified} ${t('adminAnalytics.verified')}` : undefined,
     },
     {
-      label: 'Opportunities',
+      label: t('adminAnalytics.opportunities'),
       value: dashboardStats?.totalOpportunities || analytics?.opportunities?.total || 0,
       icon: <Briefcase className="w-5 h-5" />,
       color: 'bg-emerald-50 text-tdop-secondary',
-      sub: analytics?.opportunities?.newThisWeek ? `${analytics.opportunities.newThisWeek} new this week` : undefined,
+      sub: analytics?.opportunities?.newThisWeek ? `${analytics.opportunities.newThisWeek} ${t('adminAnalytics.newThisWeek')}` : undefined,
     },
     {
-      label: 'Applications',
+      label: t('adminAnalytics.applications'),
       value: dashboardStats?.totalApplications || analytics?.applications?.total || 0,
       icon: <FileText className="w-5 h-5" />,
       color: 'bg-amber-50 text-amber-600',
-      sub: analytics?.applications?.newThisWeek ? `${analytics.applications.newThisWeek} new this week` : undefined,
+      sub: analytics?.applications?.newThisWeek ? `${analytics.applications.newThisWeek} ${t('adminAnalytics.newThisWeek')}` : undefined,
     },
   ];
 
@@ -116,9 +118,9 @@ const AnalyticsPage: React.FC = () => {
         <div>
           <h1 className="text-3xl font-bold text-tdop-navy flex items-center gap-2">
             <BarChart3 className="w-8 h-8 text-tdop-primary" />
-            Analytics
+            {t('adminAnalytics.title')}
           </h1>
-          <p className="text-gray-500 mt-1">Platform performance and growth metrics</p>
+          <p className="text-gray-500 mt-1">{t('adminAnalytics.subtitle')}</p>
         </div>
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-xl px-3 py-2">
@@ -129,7 +131,7 @@ const AnalyticsPage: React.FC = () => {
               onChange={(e) => setDateFrom(e.target.value)}
               className="text-sm text-tdop-navy border-none outline-none"
             />
-            <span className="text-gray-400">to</span>
+            <span className="text-gray-400">{t('adminAnalytics.to')}</span>
             <input
               type="date"
               value={dateTo}
@@ -141,7 +143,7 @@ const AnalyticsPage: React.FC = () => {
             onClick={handleDateFilter}
             className="px-3 py-2 bg-tdop-primary text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition-colors"
           >
-            Filter
+            {t('adminAnalytics.filter')}
           </button>
           <button
             onClick={fetchData}
@@ -168,35 +170,35 @@ const AnalyticsPage: React.FC = () => {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <DashboardSection title="User growth" icon={<Users className="w-4 h-4" />}>
+        <DashboardSection title={t('adminAnalytics.userGrowth')} icon={<Users className="w-4 h-4" />}>
           <div className="p-6 space-y-4">
             <div className="flex items-center justify-between p-3 bg-tdop-light rounded-xl">
-              <span className="text-sm text-gray-600">Total registered</span>
+              <span className="text-sm text-gray-600">{t('adminAnalytics.totalRegistered')}</span>
               <span className="font-bold text-tdop-navy">{statCards[0].value}</span>
             </div>
             <div className="flex items-center justify-between p-3 bg-tdop-light rounded-xl">
-              <span className="text-sm text-gray-600">Active users</span>
+              <span className="text-sm text-gray-600">{t('adminAnalytics.activeUsers')}</span>
               <span className="font-bold text-tdop-navy">{analytics?.users?.active || '—'}</span>
             </div>
             <div className="flex items-center justify-between p-3 bg-tdop-light rounded-xl">
-              <span className="text-sm text-gray-600">New this week</span>
+              <span className="text-sm text-gray-600">{t('adminAnalytics.newUsersThisWeek')}</span>
               <span className="font-bold text-tdop-secondary">{analytics?.users?.newThisWeek || '—'}</span>
             </div>
           </div>
         </DashboardSection>
 
-        <DashboardSection title="Platform activity" icon={<TrendingUp className="w-4 h-4" />}>
+        <DashboardSection title={t('adminAnalytics.platformActivity')} icon={<TrendingUp className="w-4 h-4" />}>
           <div className="p-6 space-y-4">
             <div className="flex items-center justify-between p-3 bg-tdop-light rounded-xl">
-              <span className="text-sm text-gray-600">Active opportunities</span>
+              <span className="text-sm text-gray-600">{t('adminAnalytics.activeOpportunities')}</span>
               <span className="font-bold text-tdop-navy">{dashboardStats?.activeOpportunities || '—'}</span>
             </div>
             <div className="flex items-center justify-between p-3 bg-tdop-light rounded-xl">
-              <span className="text-sm text-gray-600">Verified organizations</span>
+              <span className="text-sm text-gray-600">{t('adminAnalytics.verifiedOrganizations')}</span>
               <span className="font-bold text-tdop-secondary">{dashboardStats?.verifiedOrganizations || '—'}</span>
             </div>
             <div className="flex items-center justify-between p-3 bg-tdop-light rounded-xl">
-              <span className="text-sm text-gray-600">Pending moderation</span>
+              <span className="text-sm text-gray-600">{t('adminAnalytics.pendingModeration')}</span>
               <span className={`font-bold ${dashboardStats?.pendingModeration ? 'text-amber-600' : 'text-tdop-secondary'}`}>
                 {dashboardStats?.pendingModeration || 0}
               </span>

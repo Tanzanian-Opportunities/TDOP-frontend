@@ -11,19 +11,23 @@ import { useOpportunities } from '@/hooks/useOpportunities';
 import { useTranslation } from 'react-i18next';
 import { MapPin, Briefcase, Clock, Calendar, Users, FileText, Bookmark } from 'lucide-react';
 
-const typeLabels: Record<string, string> = {
- 'internship': 'Internship',
- 'full-time': 'Full-time',
- 'part-time': 'Part-time',
- 'freelance': 'Freelance',
- 'volunteer': 'Volunteer',
- 'apprenticeship': 'Apprenticeship',
-};
+interface OpportunityCardProps {
+ opportunity: Opportunity;
+ className?: string;
+}
 
 export const OpportunityCard: React.FC<OpportunityCardProps> = ({ opportunity, className = '' }) => {
  const { saveOpportunity, unsaveOpportunity, savedOpportunities } = useOpportunities();
  const { isAuthenticated: isAuth } = useAuth();
  const { t } = useTranslation();
+ const typeLabels: Record<string, string> = {
+  'internship': t('opportunities.type.internship'),
+  'full-time': t('opportunities.type.full-time'),
+  'part-time': t('opportunities.type.part-time'),
+  'freelance': t('opportunities.type.freelance'),
+  'volunteer': t('opportunities.type.volunteer'),
+  'apprenticeship': t('opportunities.type.apprenticeship'),
+ };
  const isSaved = savedOpportunities.some(opp => opp.id === opportunity.id);
 
  const handleSave = async (e: React.MouseEvent) => {
@@ -97,8 +101,3 @@ export const OpportunityCard: React.FC<OpportunityCardProps> = ({ opportunity, c
  </Card>
  );
 };
-
-interface OpportunityCardProps {
- opportunity: Opportunity;
- className?: string;
-}

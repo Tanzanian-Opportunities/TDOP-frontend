@@ -20,16 +20,16 @@ const ContactPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
-      addNotification({ type: 'error', title: 'Error', message: 'Please fill in all required fields.' });
+      addNotification({ type: 'error', title: t('contactForm.error'), message: t('contactForm.fillRequired') });
       return;
     }
     setIsSubmitting(true);
     try {
       await axiosInstance.post('/public/contact', formData);
-      addNotification({ type: 'success', title: 'Sent!', message: 'Your message has been sent. We will get back to you soon.' });
+      addNotification({ type: 'success', title: t('contactForm.sent'), message: t('contactForm.sentDesc') });
       setFormData({ name: '', email: '', subject: '', message: '' });
     } catch {
-      addNotification({ type: 'success', title: 'Sent!', message: 'Your message has been received. We will get back to you soon.' });
+      addNotification({ type: 'success', title: t('contactForm.sent'), message: t('contactForm.sentDesc') });
       setFormData({ name: '', email: '', subject: '', message: '' });
     } finally {
       setIsSubmitting(false);
@@ -49,22 +49,22 @@ const ContactPage: React.FC = () => {
       <Card className="p-6">
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Input label="Full Name" name="name" value={formData.name} onChange={handleChange}
-              placeholder="Your name" required />
-            <Input label="Email" name="email" type="email" value={formData.email} onChange={handleChange}
-              placeholder="you@example.com" required />
+            <Input label={t('contactForm.fullName')} name="name" value={formData.name} onChange={handleChange}
+              placeholder={t('contactForm.namePlaceholder')} required />
+            <Input label={t('contactForm.email')} name="email" type="email" value={formData.email} onChange={handleChange}
+              placeholder={t('contactForm.emailPlaceholder')} required />
           </div>
-          <Input label="Subject" name="subject" value={formData.subject} onChange={handleChange}
-            placeholder="How can we help?" />
+          <Input label={t('contactForm.subject')} name="subject" value={formData.subject} onChange={handleChange}
+            placeholder={t('contactForm.subjectPlaceholder')} />
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Message *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{t('contactForm.message')}</label>
             <textarea name="message" value={formData.message} onChange={handleChange} rows={5} required
-              placeholder="Describe your question or issue..."
+              placeholder={t('contactForm.messagePlaceholder')}
               className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tdop-primary focus:border-transparent" />
           </div>
           <Button type="submit" loading={isSubmitting} className="w-full">
             <Send className="w-4 h-4 mr-2" />
-            Send Message
+            {t('contactForm.sendMessage')}
           </Button>
         </form>
       </Card>
@@ -72,18 +72,18 @@ const ContactPage: React.FC = () => {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
         <Card className="p-4">
           <Mail className="w-6 h-6 text-tdop-primary mx-auto mb-2" />
-          <p className="text-sm font-medium text-tdop-navy">Email</p>
+          <p className="text-sm font-medium text-tdop-navy">{t('contactForm.email')}</p>
           <p className="text-sm text-gray-500">support@tdop.co.tz</p>
         </Card>
         <Card className="p-4">
           <MessageSquare className="w-6 h-6 text-tdop-secondary mx-auto mb-2" />
-          <p className="text-sm font-medium text-tdop-navy">Response Time</p>
-          <p className="text-sm text-gray-500">Within 24 hours</p>
+          <p className="text-sm font-medium text-tdop-navy">{t('contactForm.responseTime')}</p>
+          <p className="text-sm text-gray-500">{t('contactForm.within24Hours')}</p>
         </Card>
         <Card className="p-4">
           <Send className="w-6 h-6 text-tdop-accent mx-auto mb-2" />
-          <p className="text-sm font-medium text-tdop-navy">Availability</p>
-          <p className="text-sm text-gray-500">Mon-Fri, 8AM-5PM EAT</p>
+          <p className="text-sm font-medium text-tdop-navy">{t('contactForm.availability')}</p>
+          <p className="text-sm text-gray-500">{t('contactForm.monFri')}</p>
         </Card>
       </div>
     </div>

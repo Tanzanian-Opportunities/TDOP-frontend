@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -26,6 +27,7 @@ interface QueueItem {
 }
 
 const TrustWorkQueuePage: React.FC = () => {
+  const { t } = useTranslation();
   const { addNotification } = useNotificationContext();
   const [data, setData] = useState<TrustQueueData>({});
   const [loading, setLoading] = useState(true);
@@ -45,7 +47,7 @@ const TrustWorkQueuePage: React.FC = () => {
     } catch (err) {
       console.error(err);
       setError(true);
-      addNotification({ type: 'error', title: 'Error', message: 'Failed to load work queue.' });
+      addNotification({ type: 'error', title: 'Error', message: t('trustWorkQueue.failedToLoad') });
     } finally {
       setLoading(false);
     }
@@ -74,21 +76,21 @@ const TrustWorkQueuePage: React.FC = () => {
   const paginatedItems = filteredItems.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
   const tabs: { key: QueueTab; label: string; count: number; icon: React.ReactNode }[] = [
-    { key: 'all', label: 'All', count: allItems.length, icon: <ClipboardList className="w-4 h-4" /> },
-    { key: 'verification', label: 'Verifications', count: data.verifications?.length || 0, icon: <CheckCircle className="w-4 h-4" /> },
-    { key: 'moderation', label: 'Moderation', count: data.moderation?.length || 0, icon: <Eye className="w-4 h-4" /> },
-    { key: 'reports', label: 'Reports', count: data.reports?.length || 0, icon: <Flag className="w-4 h-4" /> },
-    { key: 'fraud', label: 'Fraud', count: data.fraudSignals?.length || 0, icon: <AlertTriangle className="w-4 h-4" /> },
+    { key: 'all', label: t('trustWorkQueue.all'), count: allItems.length, icon: <ClipboardList className="w-4 h-4" /> },
+    { key: 'verification', label: t('trustWorkQueue.verifications'), count: data.verifications?.length || 0, icon: <CheckCircle className="w-4 h-4" /> },
+    { key: 'moderation', label: t('trustWorkQueue.moderation'), count: data.moderation?.length || 0, icon: <Eye className="w-4 h-4" /> },
+    { key: 'reports', label: t('trustWorkQueue.reports'), count: data.reports?.length || 0, icon: <Flag className="w-4 h-4" /> },
+    { key: 'fraud', label: t('trustWorkQueue.fraud'), count: data.fraudSignals?.length || 0, icon: <AlertTriangle className="w-4 h-4" /> },
   ];
 
   const getStatusBadge = (status: string) => {
     switch (status?.toUpperCase()) {
-      case 'PENDING': return <Badge variant="danger">Pending</Badge>;
-      case 'REVIEWED': return <Badge variant="primary">Reviewed</Badge>;
-      case 'APPROVED': return <Badge className="bg-tdop-secondary text-white">Approved</Badge>;
-      case 'REJECTED': return <Badge variant="danger">Rejected</Badge>;
-      case 'ACTIONED': return <Badge variant="primary">Actioned</Badge>;
-      default: return <Badge variant="secondary">{status || 'Unknown'}</Badge>;
+      case 'PENDING': return <Badge variant="danger">{t('trustWorkQueue.pending')}</Badge>;
+      case 'REVIEWED': return <Badge variant="primary">{t('trustWorkQueue.reviewed')}</Badge>;
+      case 'APPROVED': return <Badge className="bg-tdop-secondary text-white">{t('trustWorkQueue.approved')}</Badge>;
+      case 'REJECTED': return <Badge variant="danger">{t('trustWorkQueue.rejected')}</Badge>;
+      case 'ACTIONED': return <Badge variant="primary">{t('trustWorkQueue.actioned')}</Badge>;
+      default: return <Badge variant="secondary">{status || t('trustWorkQueue.unknown')}</Badge>;
     }
   };
 
@@ -123,7 +125,7 @@ const TrustWorkQueuePage: React.FC = () => {
         if (type === 'moderation') { await trustApi.approveModeration(id); successCount++; }
       } catch { /* skip failed */ }
     }
-    addNotification({ type: 'success', title: 'Bulk Approved', message: `${successCount} item(s) approved.` });
+    addNotification({ type: 'success', title: t('trustWorkQueue.bulkApproved'), message: t('trustWorkQueue.itemsApproved', { count: successCount }) });
     setSelectedIds(new Set());
     setBulkActionLoading(false);
     loadQueue();
@@ -139,7 +141,7 @@ const TrustWorkQueuePage: React.FC = () => {
         if (type === 'moderation') { await trustApi.rejectModeration(id, reason); successCount++; }
       } catch { /* skip failed */ }
     }
-    addNotification({ type: 'info', title: 'Bulk Rejected', message: `${successCount} item(s) rejected.` });
+    addNotification({ type: 'info', title: t('trustWorkQueue.bulkRejected'), message: t('trustWorkQueue.itemsRejected', { count: successCount }) });
     setBulkRejectTarget(null);
     setSelectedIds(new Set());
     setBulkActionLoading(false);
@@ -157,16 +159,16 @@ const TrustWorkQueuePage: React.FC = () => {
             <ClipboardList className="w-7 h-7 text-tdop-primary" />
             Work Queue
           </h1>
-          <p className="text-sm text-gray-500 mt-1">{filteredItems.length} items across all queues</p>
+          <p className="text-sm text-gray-500 mt-1">{filteredItems.length} {t('trustWorkQueue.itemsAcrossQueues')}</p>
         </div>
         {selectedIds.size > 0 && (
           <div className="flex items-center gap-2 bg-tdop-primary/10 px-4 py-2 rounded-lg">
-            <span className="text-sm font-medium text-tdop-primary">{selectedIds.size} selected</span>
+            <span className="text-sm font-medium text-tdop-primary">{selectedIds.size} {t('trustWorkQueue.selected')}</span>
             <Button size="sm" onClick={handleBulkApprove} disabled={bulkActionLoading} className="bg-tdop-secondary hover:bg-teal-700 text-white">
-              <CheckCircle className="w-3 h-3 mr-1" /> Approve All
+              <CheckCircle className="w-3 h-3 mr-1" /> {t('trustWorkQueue.approveAll')}
             </Button>
             <Button size="sm" variant="danger" onClick={() => setBulkRejectTarget({ type: 'bulk', count: selectedIds.size })} disabled={bulkActionLoading}>
-              Reject All
+              {t('trustWorkQueue.rejectAll')}
             </Button>
           </div>
         )}
@@ -192,7 +194,7 @@ const TrustWorkQueuePage: React.FC = () => {
             aria-label={allSelected ? 'Deselect all' : 'Select all'}
           >
             {allSelected ? <CheckSquare className="w-4 h-4 text-tdop-primary" /> : <Square className="w-4 h-4" />}
-            {allSelected ? 'Deselect all' : 'Select all'}
+            {allSelected ? t('trustWorkQueue.deselectAll') : t('trustWorkQueue.selectAll')}
           </button>
         </div>
       )}
@@ -201,8 +203,8 @@ const TrustWorkQueuePage: React.FC = () => {
         {paginatedItems.length === 0 ? (
           <div className="p-12 text-center text-gray-500">
             <ClipboardList className="w-12 h-12 mx-auto text-gray-300 mb-3" />
-            <p className="font-medium">No items in queue</p>
-            <p className="text-sm mt-1">All items have been processed.</p>
+            <p className="font-medium">{t('trustWorkQueue.noItems')}</p>
+            <p className="text-sm mt-1">{t('trustWorkQueue.allProcessed')}</p>
           </div>
         ) : (
           <div className="divide-y" role="list" aria-label="Work queue items">
@@ -259,7 +261,7 @@ const TrustWorkQueuePage: React.FC = () => {
       )}
 
       <RejectDialog open={!!bulkRejectTarget} onCancel={() => setBulkRejectTarget(null)} onConfirm={handleBulkReject}
-        title={`Bulk Reject ${bulkRejectTarget?.count || 0} items`} loading={bulkActionLoading} />
+        title={`${t('trustWorkQueue.rejectAll')} ${bulkRejectTarget?.count || 0} items`} loading={bulkActionLoading} />
     </div>
   );
 };

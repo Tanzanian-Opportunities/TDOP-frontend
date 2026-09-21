@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
@@ -24,6 +25,7 @@ interface VerificationRequest {
 }
 
 const VerificationOfficerPage: React.FC = () => {
+  const { t } = useTranslation();
   const { addNotification } = useNotificationContext();
   const [requests, setRequests] = useState<VerificationRequest[]>([]);
   const [loading, setLoading] = useState(true);
@@ -62,7 +64,7 @@ const VerificationOfficerPage: React.FC = () => {
       addNotification({ type: 'success', title: 'Approved', message: 'Verification approved.' });
       fetchData();
     } catch (err) {
-      addNotification({ type: 'error', title: 'Error', message: 'Failed to approve verification.' });
+      addNotification({ type: 'error', title: 'Error', message: t('adminVerificationOfficer.failedApprove') });
       console.error(err);
     }
   };
@@ -75,7 +77,7 @@ const VerificationOfficerPage: React.FC = () => {
       setRejectTarget(null);
       fetchData();
     } catch (err) {
-      addNotification({ type: 'error', title: 'Error', message: 'Failed to reject verification.' });
+      addNotification({ type: 'error', title: 'Error', message: t('adminVerificationOfficer.failedReject') });
       console.error(err);
     } finally {
       setActionLoading(false);
@@ -90,7 +92,7 @@ const VerificationOfficerPage: React.FC = () => {
       setInfoTarget(null);
       fetchData();
     } catch (err) {
-      addNotification({ type: 'error', title: 'Error', message: 'Failed to request info.' });
+      addNotification({ type: 'error', title: 'Error', message: t('adminVerificationOfficer.failedInfo') });
       console.error(err);
     } finally {
       setActionLoading(false);
@@ -125,7 +127,7 @@ const VerificationOfficerPage: React.FC = () => {
     );
   }
 
-  if (error) return <PageError message="Failed to load verification queue. Please try again." onRetry={fetchData} />;
+  if (error) return <PageError message={t('adminVerificationOfficer.failedToLoad')} onRetry={fetchData} />;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">
@@ -133,12 +135,12 @@ const VerificationOfficerPage: React.FC = () => {
       <div className="rounded-3xl bg-gradient-to-r from-tdop-navy to-tdop-primary p-8 text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" />
         <div className="relative">
-          <h1 className="text-3xl font-bold font-display">Verification Officer Dashboard</h1>
-          <p className="text-white/70 mt-1">Review and process organization verification requests.</p>
+          <h1 className="text-3xl font-bold font-display">{t('adminVerificationOfficer.title')}</h1>
+          <p className="text-white/70 mt-1">{t('adminVerificationOfficer.subtitle')}</p>
           {stats.pending > 0 && (
             <div className="mt-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-amber-500/20 text-sm font-medium">
               <Clock className="w-4 h-4" />
-              {stats.pending} pending review
+              {stats.pending} {t('adminVerificationOfficer.pendingReview')}
             </div>
           )}
         </div>
@@ -148,21 +150,21 @@ const VerificationOfficerPage: React.FC = () => {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <StatCard
           value={stats.pending}
-          label="Pending review"
+          label={t('adminVerificationOfficer.pendingReview')}
           icon={<Clock className="w-5 h-5" />}
           color={stats.pending ? 'bg-amber-50 text-amber-600' : 'bg-emerald-50 text-tdop-secondary'}
           trend={stats.pending ? 'up' : 'neutral'}
         />
         <StatCard
           value={approved}
-          label="Approved"
+          label={t('adminVerificationOfficer.approved')}
           icon={<CheckCircle className="w-5 h-5" />}
           color="bg-emerald-50 text-tdop-secondary"
           trend="neutral"
         />
         <StatCard
           value={rejected}
-          label="Rejected"
+          label={t('adminVerificationOfficer.rejected')}
           icon={<XCircle className="w-5 h-5" />}
           color="bg-red-50 text-red-600"
           trend="neutral"
@@ -175,7 +177,7 @@ const VerificationOfficerPage: React.FC = () => {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
             type="text"
-            placeholder="Search by organization or document..."
+            placeholder={t('adminVerificationOfficer.searchPlaceholder')}
             value={searchQuery}
             onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
             className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm text-tdop-navy placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-tdop-primary/20 focus:border-tdop-primary"
@@ -192,7 +194,7 @@ const VerificationOfficerPage: React.FC = () => {
                   : 'text-gray-500 hover:text-gray-700'
               }`}
             >
-              {status === 'all' ? 'All' : status}
+              {status === 'all' ? t('adminVerificationOfficer.all') : status}
             </button>
           ))}
         </div>
@@ -200,17 +202,17 @@ const VerificationOfficerPage: React.FC = () => {
 
       {/* Verification Queue */}
       <DashboardSection
-        title="Verification requests"
+        title={t('adminVerificationOfficer.verificationRequests')}
         icon={<FileText className="w-4 h-4" />}
         empty={filtered.length === 0}
       >
         {filtered.length === 0 ? (
           <EmptyState
             icon={<CheckCircle className="w-8 h-8 text-emerald-400" />}
-            title="All clear"
+            title={t('adminVerificationOfficer.allClear')}
             description={searchQuery || filterStatus !== 'all'
-              ? "No requests match your filters."
-              : "No pending verification requests."}
+              ? t('adminVerificationOfficer.noRequestsMatch')
+              : t('adminVerificationOfficer.noPendingRequests')}
           />
         ) : (
           <div className="divide-y divide-gray-100">
@@ -228,22 +230,22 @@ const VerificationOfficerPage: React.FC = () => {
                       </Badge>
                     </div>
                     <p className="text-sm text-gray-500 mt-1">
-                      Document: <span className="text-tdop-navy font-medium">{req.document}</span>
+                      {t('adminVerificationOfficer.document')} <span className="text-tdop-navy font-medium">{req.document}</span>
                     </p>
-                    {req.notes && <p className="text-sm text-gray-500 mt-1">Notes: {req.notes}</p>}
+                    {req.notes && <p className="text-sm text-gray-500 mt-1">{t('adminVerificationOfficer.notes')} {req.notes}</p>}
                     <p className="text-xs text-gray-400 mt-1">
-                      Submitted {new Date(req.createdAt).toLocaleDateString()}
+                      {t('adminVerificationOfficer.submitted')} {new Date(req.createdAt).toLocaleDateString()}
                     </p>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
                     <Button size="sm" onClick={() => handleApprove(req.id)}>
-                      <CheckCircle className="w-4 h-4 mr-1" /> Approve
+                      <CheckCircle className="w-4 h-4 mr-1" /> {t('adminVerificationOfficer.approve')}
                     </Button>
                     <Button size="sm" variant="outline" onClick={() => setInfoTarget({ id: req.id, orgName: req.organization?.orgName || 'Unknown' })}>
-                      <FileText className="w-4 h-4 mr-1" /> Info
+                      <FileText className="w-4 h-4 mr-1" /> {t('adminVerificationOfficer.info')}
                     </Button>
                     <Button size="sm" variant="danger" onClick={() => setRejectTarget({ id: req.id, orgName: req.organization?.orgName || 'Unknown' })}>
-                      <XCircle className="w-4 h-4 mr-1" /> Reject
+                      <XCircle className="w-4 h-4 mr-1" /> {t('adminVerificationOfficer.reject')}
                     </Button>
                   </div>
                 </div>
@@ -258,8 +260,8 @@ const VerificationOfficerPage: React.FC = () => {
       <InputDialog
         open={!!rejectTarget}
         title={`Reject "${rejectTarget?.orgName || ''}"?`}
-        label="Provide a rejection reason"
-        placeholder="Missing documentation..."
+        label={t('adminVerificationOfficer.rejectionReason')}
+        placeholder={t('adminVerificationOfficer.rejectionPlaceholder')}
         multiline
         onConfirm={handleReject}
         onCancel={() => setRejectTarget(null)}
@@ -268,8 +270,8 @@ const VerificationOfficerPage: React.FC = () => {
       <InputDialog
         open={!!infoTarget}
         title={`Request info from "${infoTarget?.orgName || ''}"`}
-        label="What information is needed?"
-        placeholder="Please provide your business registration certificate..."
+        label={t('adminVerificationOfficer.infoNeeded')}
+        placeholder={t('adminVerificationOfficer.infoPlaceholder')}
         multiline
         onConfirm={handleRequestInfo}
         onCancel={() => setInfoTarget(null)}

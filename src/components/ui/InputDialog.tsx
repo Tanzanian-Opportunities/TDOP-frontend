@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface InputDialogProps {
   open: boolean;
@@ -24,6 +25,7 @@ const InputDialog: React.FC<InputDialogProps> = ({
   onCancel,
   loading = false,
 }) => {
+  const { t } = useTranslation();
   const [value, setValue] = useState('');
   const inputRef = React.useRef<HTMLInputElement | HTMLTextAreaElement>(null);
 
@@ -61,7 +63,7 @@ const InputDialog: React.FC<InputDialogProps> = ({
         <button
           onClick={onCancel}
           className="absolute top-4 right-4 p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
-          aria-label="Close"
+          aria-label={t('app.close')}
         >
           <X className="w-5 h-5" />
         </button>
@@ -97,14 +99,14 @@ const InputDialog: React.FC<InputDialogProps> = ({
             disabled={loading}
             className="px-4 py-2 text-sm font-medium text-gray-600 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors disabled:opacity-50"
           >
-            Cancel
+            {t('app.cancel')}
           </button>
           <button
             onClick={handleSubmit}
             disabled={loading || (required && !value.trim())}
             className="px-4 py-2 text-sm font-medium rounded-lg bg-tdop-primary hover:bg-blue-700 text-white transition-colors disabled:opacity-50"
           >
-            {loading ? 'Processing...' : 'Confirm'}
+            {loading ? t('common.loading') : t('app.confirm')}
           </button>
         </div>
       </div>

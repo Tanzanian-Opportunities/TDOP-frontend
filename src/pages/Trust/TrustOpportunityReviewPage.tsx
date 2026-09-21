@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -38,6 +39,7 @@ interface ModerationHistoryEntry {
 const PAGE_SIZE = 10;
 
 const TrustOpportunityReviewPage: React.FC = () => {
+  const { t } = useTranslation();
   const { addNotification } = useNotificationContext();
   const [searchParams, setSearchParams] = useSearchParams();
   const [items, setItems] = useState<ModerationItem[]>([]);
@@ -102,7 +104,7 @@ const TrustOpportunityReviewPage: React.FC = () => {
       setHistory([]);
       loadItems();
     } catch (err) {
-      addNotification({ type: 'error', title: 'Error', message: 'Failed to approve opportunity.' });
+      addNotification({ type: 'error', title: 'Error', message: t('trustOpportunityReview.failedApprove') });
     } finally {
       setActionLoading(false);
     }
@@ -119,7 +121,7 @@ const TrustOpportunityReviewPage: React.FC = () => {
       setHistory([]);
       loadItems();
     } catch (err) {
-      addNotification({ type: 'error', title: 'Error', message: 'Failed to reject opportunity.' });
+      addNotification({ type: 'error', title: 'Error', message: t('trustOpportunityReview.failedReject') });
     } finally {
       setActionLoading(false);
     }
@@ -136,7 +138,7 @@ const TrustOpportunityReviewPage: React.FC = () => {
       setHistory([]);
       loadItems();
     } catch (err) {
-      addNotification({ type: 'error', title: 'Error', message: 'Failed to suspend opportunity.' });
+      addNotification({ type: 'error', title: 'Error', message: t('trustOpportunityReview.failedSuspend') });
     } finally {
       setActionLoading(false);
     }
@@ -151,7 +153,7 @@ const TrustOpportunityReviewPage: React.FC = () => {
       setInfoTarget(null);
       loadItems();
     } catch (err) {
-      addNotification({ type: 'error', title: 'Error', message: 'Failed to request information.' });
+      addNotification({ type: 'error', title: 'Error', message: t('trustOpportunityReview.failedInfo') });
     } finally {
       setActionLoading(false);
     }
@@ -205,7 +207,7 @@ const TrustOpportunityReviewPage: React.FC = () => {
             className="flex items-center gap-2 text-sm text-tdop-primary hover:underline focus:outline-none focus:ring-2 focus:ring-tdop-primary rounded"
             aria-label="Go back to moderation queue"
           >
-            <ArrowLeft className="w-4 h-4" /> Back to queue
+            <ArrowLeft className="w-4 h-4" /> {t('trustOpportunityReview.backToQueue')}
           </button>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -215,7 +217,7 @@ const TrustOpportunityReviewPage: React.FC = () => {
                   <div>
                     <h2 className="text-xl font-bold text-tdop-navy">{selectedItem.title}</h2>
                     <p className="text-sm text-gray-500 mt-1">
-                      {selectedItem.companyName || selectedItem.organization?.orgName || 'Unknown organization'}
+                      {selectedItem.companyName || selectedItem.organization?.orgName || t('trustOpportunityReview.unknownOrg')}
                     </p>
                   </div>
                   <Badge variant={
@@ -227,18 +229,18 @@ const TrustOpportunityReviewPage: React.FC = () => {
                 <div className="mt-6 space-y-4">
                   {selectedItem.description && (
                     <div>
-                      <label className="text-sm font-medium text-gray-700">Description</label>
+                      <label className="text-sm font-medium text-gray-700">{t('trustOpportunityReview.description')}</label>
                       <p className="mt-1 text-sm text-gray-600 bg-gray-50 p-3 rounded-lg whitespace-pre-wrap">{selectedItem.description}</p>
                     </div>
                   )}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="text-sm font-medium text-gray-700">Created</label>
+                      <label className="text-sm font-medium text-gray-700">{t('trustOpportunityReview.created')}</label>
                       <p className="mt-1 text-sm text-gray-600">{selectedItem.createdAt ? new Date(selectedItem.createdAt).toLocaleString() : '—'}</p>
                     </div>
                     {selectedItem.createdByUser && (
                       <div>
-                        <label className="text-sm font-medium text-gray-700">Submitted by</label>
+                        <label className="text-sm font-medium text-gray-700">{t('trustOpportunityReview.submittedBy')}</label>
                         <p className="mt-1 text-sm text-gray-600">{selectedItem.createdByUser.firstName} {selectedItem.createdByUser.lastName}</p>
                       </div>
                     )}
@@ -247,16 +249,16 @@ const TrustOpportunityReviewPage: React.FC = () => {
                 {(selectedItem.status === 'PENDING_REVIEW' || selectedItem.status === 'UNDER_REVIEW') && (
                   <div className="mt-6 flex flex-wrap gap-3">
                     <Button onClick={() => handleApprove(selectedItem.id)} disabled={actionLoading} className="bg-tdop-secondary hover:bg-teal-700 text-white">
-                      <CheckCircle className="w-4 h-4 mr-2" /> Approve
+                       <CheckCircle className="w-4 h-4 mr-2" /> {t('trustOpportunityReview.approve')}
                     </Button>
                     <Button onClick={() => setRejectTarget({ id: selectedItem.id, title: selectedItem.title })} variant="danger" disabled={actionLoading}>
-                      <XCircle className="w-4 h-4 mr-2" /> Reject
+                       <XCircle className="w-4 h-4 mr-2" /> {t('trustOpportunityReview.reject')}
                     </Button>
                     <Button onClick={() => setSuspendTarget({ id: selectedItem.id, title: selectedItem.title })} variant="outline" disabled={actionLoading} className="border-amber-300 text-amber-700 hover:bg-amber-50">
-                      <Pause className="w-4 h-4 mr-2" /> Suspend
+                       <Pause className="w-4 h-4 mr-2" /> {t('trustOpportunityReview.suspend')}
                     </Button>
                     <Button onClick={() => setInfoTarget({ id: selectedItem.id, title: selectedItem.title })} variant="outline" disabled={actionLoading}>
-                      <FileText className="w-4 h-4 mr-2" /> Request Info
+                       <FileText className="w-4 h-4 mr-2" /> {t('trustOpportunityReview.requestInfo')}
                     </Button>
                   </div>
                 )}
@@ -267,12 +269,12 @@ const TrustOpportunityReviewPage: React.FC = () => {
               <Card className="p-6">
                 <h3 className="text-lg font-semibold text-tdop-navy flex items-center gap-2 mb-4">
                   <History className="w-5 h-5 text-tdop-primary" />
-                  Case History
+                   {t('trustOpportunityReview.caseHistory')}
                 </h3>
                 {loadingHistory ? (
                   <div className="flex items-center gap-2 text-sm text-gray-500">
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-tdop-primary" />
-                    Loading history...
+                    {t('trustOpportunityReview.loadingHistory')}
                   </div>
                 ) : history.length > 0 ? (
                   <div className="space-y-3" role="list" aria-label="Moderation history timeline">
@@ -291,7 +293,7 @@ const TrustOpportunityReviewPage: React.FC = () => {
                         {entry.details && <p className="text-xs text-gray-600 mt-1">{entry.details}</p>}
                         {entry.moderator && (
                           <p className="text-xs text-gray-400 mt-1">
-                            by {entry.moderator.firstName} {entry.moderator.lastName}
+                            {t('trustOpportunityReview.by')} {entry.moderator.firstName} {entry.moderator.lastName}
                           </p>
                         )}
                       </div>
@@ -300,7 +302,7 @@ const TrustOpportunityReviewPage: React.FC = () => {
                 ) : (
                   <div className="text-center py-4 text-gray-400 text-sm">
                     <History className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                    No history records
+                    {t('trustOpportunityReview.noHistory')}
                   </div>
                 )}
               </Card>
@@ -314,24 +316,24 @@ const TrustOpportunityReviewPage: React.FC = () => {
               <Eye className="w-7 h-7 text-tdop-primary" />
               Moderation Queue
             </h1>
-            <p className="text-sm text-gray-500 mt-1">Review and moderate pending opportunities</p>
+            <p className="text-sm text-gray-500 mt-1">{t('trustOpportunityReview.subtitle')}</p>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Card className="p-4 bg-amber-50 border border-amber-200">
-              <div className="flex items-center gap-2 text-amber-600"><Clock className="w-5 h-5" /><span className="text-sm font-medium">Pending</span></div>
+              <div className="flex items-center gap-2 text-amber-600"><Clock className="w-5 h-5" /><span className="text-sm font-medium">{t('trustOpportunityReview.pending')}</span></div>
               <p className="text-2xl font-bold text-tdop-navy mt-1">{stats.pending}</p>
             </Card>
             <Card className="p-4 bg-teal-50 border border-teal-200">
-              <div className="flex items-center gap-2 text-tdop-secondary"><CheckCircle className="w-5 h-5" /><span className="text-sm font-medium">Approved</span></div>
+              <div className="flex items-center gap-2 text-tdop-secondary"><CheckCircle className="w-5 h-5" /><span className="text-sm font-medium">{t('trustOpportunityReview.approved')}</span></div>
               <p className="text-2xl font-bold text-tdop-navy mt-1">{stats.approved}</p>
             </Card>
             <Card className="p-4 bg-red-50 border border-red-200">
-              <div className="flex items-center gap-2 text-red-600"><XCircle className="w-5 h-5" /><span className="text-sm font-medium">Rejected</span></div>
+              <div className="flex items-center gap-2 text-red-600"><XCircle className="w-5 h-5" /><span className="text-sm font-medium">{t('trustOpportunityReview.rejected')}</span></div>
               <p className="text-2xl font-bold text-tdop-navy mt-1">{stats.rejected}</p>
             </Card>
             <Card className="p-4 bg-gray-50 border border-gray-200">
-              <div className="flex items-center gap-2 text-gray-600"><Pause className="w-5 h-5" /><span className="text-sm font-medium">Suspended</span></div>
+              <div className="flex items-center gap-2 text-gray-600"><Pause className="w-5 h-5" /><span className="text-sm font-medium">{t('trustOpportunityReview.suspended')}</span></div>
               <p className="text-2xl font-bold text-tdop-navy mt-1">{stats.suspended}</p>
             </Card>
           </div>
@@ -340,7 +342,7 @@ const TrustOpportunityReviewPage: React.FC = () => {
             <div className="flex flex-col md:flex-row gap-3">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <input type="text" placeholder="Search by title..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
+                <input type="text" placeholder={t('trustOpportunityReview.searchPlaceholder')} value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-tdop-primary focus:border-transparent"
                   aria-label="Search moderation items"
                 />
@@ -348,12 +350,12 @@ const TrustOpportunityReviewPage: React.FC = () => {
               <select value={filterStatus} onChange={e => setFilterStatus(e.target.value)} className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-tdop-primary"
                 aria-label="Filter by status"
               >
-                <option value="all">All Status</option>
-                <option value="pending_review">Pending Review</option>
-                <option value="under_review">Under Review</option>
-                <option value="approved">Approved</option>
-                <option value="rejected">Rejected</option>
-                <option value="suspended">Suspended</option>
+                <option value="all">{t('trustOpportunityReview.allStatus')}</option>
+                <option value="pending_review">{t('trustOpportunityReview.pendingReview')}</option>
+                <option value="under_review">{t('trustOpportunityReview.underReview')}</option>
+                <option value="approved">{t('trustOpportunityReview.approved')}</option>
+                <option value="rejected">{t('trustOpportunityReview.rejected')}</option>
+                <option value="suspended">{t('trustOpportunityReview.suspended')}</option>
               </select>
             </div>
           </Card>
@@ -362,7 +364,7 @@ const TrustOpportunityReviewPage: React.FC = () => {
             {paginated.length === 0 ? (
               <div className="p-12 text-center text-gray-500">
                 <Eye className="w-12 h-12 mx-auto text-gray-300 mb-3" />
-                <p className="font-medium">No items in moderation queue</p>
+                <p className="font-medium">{t('trustOpportunityReview.noItems')}</p>
               </div>
             ) : (
               <div className="divide-y" role="list" aria-label="Moderation queue items">
@@ -400,8 +402,8 @@ const TrustOpportunityReviewPage: React.FC = () => {
       )}
 
       <RejectDialog open={!!rejectTarget} onCancel={() => setRejectTarget(null)} onConfirm={handleReject} title={`Reject Opportunity — ${rejectTarget?.title}`} loading={actionLoading} />
-      <InputDialog open={!!suspendTarget} onCancel={() => setSuspendTarget(null)} onConfirm={handleSuspend} title={`Suspend Opportunity — ${suspendTarget?.title}`} label="Reason for suspension" placeholder="Describe the reason..." loading={actionLoading} />
-      <InputDialog open={!!infoTarget} onCancel={() => setInfoTarget(null)} onConfirm={handleRequestInfo} title={`Request Information — ${infoTarget?.title}`} label="Information needed" placeholder="Describe what information is needed..." loading={actionLoading} />
+      <InputDialog open={!!suspendTarget} onCancel={() => setSuspendTarget(null)} onConfirm={handleSuspend} title={`${t('trustOpportunityReview.suspend')} — ${suspendTarget?.title}`} label={t('trustOpportunityReview.suspensionReason')} placeholder={t('trustOpportunityReview.suspensionPlaceholder')} loading={actionLoading} />
+      <InputDialog open={!!infoTarget} onCancel={() => setInfoTarget(null)} onConfirm={handleRequestInfo} title={`${t('trustOpportunityReview.requestInfo')} — ${infoTarget?.title}`} label={t('trustOpportunityReview.infoNeeded')} placeholder={t('trustOpportunityReview.infoPlaceholder')} loading={actionLoading} />
     </div>
   );
 };

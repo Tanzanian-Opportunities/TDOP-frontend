@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
 import { useOpportunities } from '@/hooks/useOpportunities';
 import { useApplications } from '@/hooks/useApplications';
@@ -22,6 +23,7 @@ import {
 } from 'lucide-react';
 
 const SeekerDashboardPage: React.FC = () => {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const { opportunities, isLoading: oppLoading } = useOpportunities();
   const { applications } = useApplications();
@@ -68,11 +70,11 @@ const SeekerDashboardPage: React.FC = () => {
   const savedCount = Array.isArray(savedData) ? savedData.length : 0;
 
   const completionSteps = [
-    { key: 'Personal info', done: !!(user?.firstName && user?.lastName), to: '/profile' },
-    { key: 'Education', done: completion >= 33, to: '/profile' },
-    { key: 'Skills', done: completion >= 50, to: '/profile' },
-    { key: 'Experience', done: completion >= 67, to: '/profile' },
-    { key: 'CV uploaded', done: completion >= 80, to: '/documents' },
+    { key: t('seekerDashboard.stepPersonalInfo'), done: !!(user?.firstName && user?.lastName), to: '/profile' },
+    { key: t('seekerDashboard.stepEducation'), done: completion >= 33, to: '/profile' },
+    { key: t('seekerDashboard.stepSkills'), done: completion >= 50, to: '/profile' },
+    { key: t('seekerDashboard.stepExperience'), done: completion >= 67, to: '/profile' },
+    { key: t('seekerDashboard.stepCvUploaded'), done: completion >= 80, to: '/documents' },
   ];
 
   const upcomingDeadlines = opportunities
@@ -107,7 +109,7 @@ const SeekerDashboardPage: React.FC = () => {
     { label: 'Jobs', search: 'jobs', icon: Briefcase, color: 'bg-blue-50 text-tdop-primary' },
   ];
 
-  if (savedError) return <PageError message="Failed to load dashboard. Please try again." onRetry={refetchSaved} />;
+  if (savedError) return <PageError message={t('common.error.retry')} onRetry={refetchSaved} />;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -120,32 +122,32 @@ const SeekerDashboardPage: React.FC = () => {
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" />
             <div className="relative">
               <h1 className="font-display text-3xl font-extrabold">
-                Hello, {user?.firstName || 'there'}!
+                {t('seekerDashboard.welcomeBack', { name: user?.firstName || 'there' })}
               </h1>
               <p className="mt-1 text-white/70 max-w-lg">
                 {completion < 80
-                  ? 'Complete your profile to unlock better recommendations.'
-                  : 'Your profile is ready. Find your next opportunity.'}
+                  ? t('seekerDashboard.completeProfile')
+                  : t('seekerDashboard.profileReady')}
               </p>
               <div className="mt-4 flex flex-wrap items-center gap-3 sm:gap-6">
                 <div className="flex items-center gap-2 bg-white/10 rounded-xl px-4 py-2">
                   <TrendingUp className="w-4 h-4 text-tdop-accent" />
-                  <span className="text-sm font-medium">{applications.length} applications</span>
+                  <span className="text-sm font-medium">{t('seekerDashboard.applicationsCount', { count: applications.length })}</span>
                 </div>
                 <div className="flex items-center gap-2 bg-white/10 rounded-xl px-4 py-2">
                   <Bookmark className="w-4 h-4 text-tdop-accent" />
-                  <span className="text-sm font-medium">{savedCount} saved</span>
+                  <span className="text-sm font-medium">{t('seekerDashboard.savedCount', { count: savedCount })}</span>
                 </div>
                 <div className="flex items-center gap-2 bg-white/10 rounded-xl px-4 py-2">
                   <Bell className="w-4 h-4 text-tdop-accent" />
-                  <span className="text-sm font-medium">{unreadCount} unread</span>
+                  <span className="text-sm font-medium">{t('seekerDashboard.unreadCount', { count: unreadCount })}</span>
                 </div>
               </div>
             </div>
             {completion < 80 && (
               <div className="relative mt-6">
                 <div className="flex items-center justify-between text-sm font-semibold mb-2">
-                  <span className="text-white/80">Profile completion</span>
+                  <span className="text-white/80">{t('seekerDashboard.profileCompletion')}</span>
                   <span className="text-tdop-accent">{completion}%</span>
                 </div>
                 <div className="w-full h-2.5 bg-white/20 rounded-full overflow-hidden">
@@ -162,7 +164,7 @@ const SeekerDashboardPage: React.FC = () => {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <StatCard
               value={opportunities.length}
-              label="Available opportunities"
+              label={t('seekerDashboard.availableOpportunities')}
               icon={<Briefcase className="w-5 h-5" />}
               color="bg-tdop-primary/10 text-tdop-primary"
               trend="up"
@@ -170,7 +172,7 @@ const SeekerDashboardPage: React.FC = () => {
             />
             <StatCard
               value={savedCount}
-              label="Saved opportunities"
+              label={t('seekerDashboard.savedOpportunities')}
               icon={<Bookmark className="w-5 h-5" />}
               color="bg-emerald-50 text-tdop-secondary"
               trend={savedCount > 0 ? 'up' : 'neutral'}
@@ -178,7 +180,7 @@ const SeekerDashboardPage: React.FC = () => {
             />
             <StatCard
               value={applications.length}
-              label="My applications"
+              label={t('seekerDashboard.myApplications')}
               icon={<FileText className="w-5 h-5" />}
               color="bg-amber-50 text-amber-600"
               trend="neutral"
@@ -186,7 +188,7 @@ const SeekerDashboardPage: React.FC = () => {
             />
             <StatCard
               value={unreadCount}
-              label="Unread notifications"
+              label={t('seekerDashboard.unreadNotifications')}
               icon={<Bell className="w-5 h-5" />}
               color="bg-purple-50 text-purple-600"
               trend={unreadCount > 0 ? 'up' : 'neutral'}
@@ -198,7 +200,7 @@ const SeekerDashboardPage: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Pending Actions */}
             {completion < 100 && (
-              <DashboardSection title="Complete your profile" icon={<Zap className="w-4 h-4" />}>
+              <DashboardSection title={t('seekerDashboard.completeYourProfile')} icon={<Zap className="w-4 h-4" />}>
                 <div className="space-y-2 p-4">
                   {completionSteps.map(step => (
                     <Link
@@ -222,16 +224,16 @@ const SeekerDashboardPage: React.FC = () => {
 
             {/* Upcoming Deadlines */}
             <DashboardSection
-              title="Upcoming deadlines"
+              title={t('seekerDashboard.upcomingDeadlines')}
               icon={<Clock className="w-4 h-4 text-tdop-accent" />}
-              action={upcomingDeadlines.length > 0 ? { label: 'Browse all', to: '/browse' } : undefined}
+              action={upcomingDeadlines.length > 0 ? { label: t('seekerDashboard.browseAll'), to: '/browse' } : undefined}
               empty={upcomingDeadlines.length === 0}
             >
               {upcomingDeadlines.length === 0 ? (
                 <EmptyState
                   icon={<Calendar className="w-8 h-8 text-gray-300" />}
-                  title="No upcoming deadlines"
-                  description="Browse opportunities to find one with a deadline."
+                  title={t('seekerDashboard.noUpcomingDeadlines')}
+                  description={t('seekerDashboard.browseForDeadlines')}
                 />
               ) : (
                 <div className="space-y-2 p-4">
@@ -276,12 +278,12 @@ const SeekerDashboardPage: React.FC = () => {
 
           {/* Skills & Career Goals */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <DashboardSection title="My skills" icon={<Target className="w-4 h-4 text-purple-500" />} action={{ label: 'Edit', to: '/profile' }}>
+            <DashboardSection title={t('seekerDashboard.mySkills')} icon={<Target className="w-4 h-4 text-purple-500" />} action={{ label: t('common.edit'), to: '/profile' }}>
               {skills.length === 0 ? (
                 <EmptyState
                   icon={<Award className="w-8 h-8 text-gray-300" />}
-                  title="No skills added"
-                  description="Add skills to get better recommendations."
+                  title={t('seekerDashboard.noSkills')}
+                  description={t('seekerDashboard.addSkillsDescription')}
                 />
               ) : (
                 <div className="p-4">
@@ -293,7 +295,7 @@ const SeekerDashboardPage: React.FC = () => {
                     ))}
                     {skills.length > 8 && (
                       <span className="px-3 py-1.5 bg-gray-100 text-gray-500 text-xs font-medium rounded-full">
-                        +{skills.length - 8} more
+                        +{skills.length - 8} {t('seekerDashboard.more')}
                       </span>
                     )}
                   </div>
@@ -301,12 +303,12 @@ const SeekerDashboardPage: React.FC = () => {
               )}
             </DashboardSection>
 
-            <DashboardSection title="Career goals" icon={<TrendingUp className="w-4 h-4 text-emerald-500" />} action={{ label: 'Edit', to: '/profile' }}>
+            <DashboardSection title={t('seekerDashboard.careerGoals')} icon={<TrendingUp className="w-4 h-4 text-emerald-500" />} action={{ label: t('common.edit'), to: '/profile' }}>
               {!careerGoals ? (
                 <EmptyState
                   icon={<Target className="w-8 h-8 text-gray-300" />}
-                  title="No career goals set"
-                  description="Set goals to get matched with relevant opportunities."
+                  title={t('seekerDashboard.noCareerGoals')}
+                  description={t('seekerDashboard.setGoalsDescription')}
                 />
               ) : (
                 <div className="p-4 space-y-2">
@@ -335,12 +337,12 @@ const SeekerDashboardPage: React.FC = () => {
 
           {/* Documents & Saved Opportunities */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <DashboardSection title="My documents" icon={<FileText className="w-4 h-4 text-tdop-primary" />} action={{ label: 'Manage', to: '/documents' }}>
+            <DashboardSection title={t('seekerDashboard.myDocuments')} icon={<FileText className="w-4 h-4 text-tdop-primary" />} action={{ label: t('seekerDashboard.manage'), to: '/documents' }}>
               {documents.length === 0 ? (
                 <EmptyState
                   icon={<Upload className="w-8 h-8 text-gray-300" />}
-                  title="No documents uploaded"
-                  description="Upload your CV and certificates to apply faster."
+                  title={t('seekerDashboard.noDocuments')}
+                  description={t('seekerDashboard.uploadDocsDescription')}
                 />
               ) : (
                 <div className="space-y-2 p-4">
@@ -357,19 +359,19 @@ const SeekerDashboardPage: React.FC = () => {
                   ))}
                   {documents.length > 3 && (
                     <Link to="/documents" className="text-xs text-tdop-primary hover:underline font-medium flex items-center gap-1">
-                      View all {documents.length} documents <ChevronRight className="w-3 h-3" />
+                      {t('seekerDashboard.viewAllDocuments', { count: documents.length })} <ChevronRight className="w-3 h-3" />
                     </Link>
                   )}
                 </div>
               )}
             </DashboardSection>
 
-            <DashboardSection title="Saved opportunities" icon={<Bookmark className="w-4 h-4 text-amber-500" />} action={{ label: 'View all', to: '/saved' }} empty={savedCount === 0}>
+            <DashboardSection title={t('seekerDashboard.savedOpportunities')} icon={<Bookmark className="w-4 h-4 text-amber-500" />} action={{ label: t('common.viewAll'), to: '/saved' }} empty={savedCount === 0}>
               {savedCount === 0 ? (
                 <EmptyState
                   icon={<Bookmark className="w-8 h-8 text-gray-300" />}
-                  title="No saved opportunities"
-                  description="Save opportunities you're interested in."
+                  title={t('seekerDashboard.noSavedOpportunities')}
+                  description={t('seekerDashboard.saveDescription')}
                 />
               ) : (
                 <div className="space-y-2 p-4">
@@ -396,16 +398,16 @@ const SeekerDashboardPage: React.FC = () => {
 
           {/* Active Applications */}
           <DashboardSection
-            title="Active applications"
+            title={t('seekerDashboard.activeApplications')}
             icon={<FileText className="w-4 h-4 text-amber-500" />}
-            action={activeApplications.length > 0 ? { label: 'View all', to: '/applications' } : undefined}
+            action={activeApplications.length > 0 ? { label: t('common.viewAll'), to: '/applications' } : undefined}
             empty={activeApplications.length === 0}
           >
             {activeApplications.length === 0 ? (
               <EmptyState
                 icon={<FileText className="w-8 h-8 text-gray-300" />}
-                title="No active applications"
-                description="Apply to opportunities to track your progress here."
+                title={t('seekerDashboard.noActiveApplications')}
+                description={t('seekerDashboard.applyToTrack')}
               />
             ) : (
               <div className="space-y-2 p-4">
@@ -435,9 +437,9 @@ const SeekerDashboardPage: React.FC = () => {
 
           {/* Recommendations */}
           <DashboardSection
-            title="Recommended for you"
+            title={t('seekerDashboard.recommendedForYou')}
             icon={<Sparkles className="w-4 h-4 text-purple-500" />}
-            action={{ label: 'See all', to: '/recommendations' }}
+            action={{ label: t('common.seeAll'), to: '/recommendations' }}
             empty={recommendations.length === 0 && !oppLoading}
           >
             {oppLoading ? (
@@ -455,8 +457,8 @@ const SeekerDashboardPage: React.FC = () => {
             ) : recommendations.length === 0 ? (
               <EmptyState
                 icon={<Briefcase className="w-8 h-8 text-gray-300" />}
-                title="No opportunities yet"
-                description="Check back soon for new opportunities."
+                title={t('seekerDashboard.noOpportunitiesYet')}
+                description={t('seekerDashboard.checkBackSoon')}
               />
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 p-4">
@@ -481,7 +483,7 @@ const SeekerDashboardPage: React.FC = () => {
                         )}
                       </div>
                       <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-tdop-primary group-hover:gap-1.5 transition-all">
-                        View details <ArrowRight className="w-4 h-4" />
+                        {t('seekerDashboard.viewDetails')} <ArrowRight className="w-4 h-4" />
                       </span>
                     </div>
                   </Link>
@@ -493,7 +495,7 @@ const SeekerDashboardPage: React.FC = () => {
           {/* Quick Actions + Recent Notifications */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Quick Actions */}
-            <DashboardSection title="Quick actions" icon={<Zap className="w-4 h-4 text-tdop-accent" />}>
+            <DashboardSection title={t('seekerDashboard.quickActions')} icon={<Zap className="w-4 h-4 text-tdop-accent" />}>
               <div className="grid grid-cols-2 gap-3 p-4">
                 {quickLinks.map(link => {
                   const Icon = link.icon;
@@ -512,16 +514,16 @@ const SeekerDashboardPage: React.FC = () => {
 
             {/* Recent Notifications */}
             <DashboardSection
-              title="Recent notifications"
+              title={t('seekerDashboard.recentNotifications')}
               icon={<Bell className="w-4 h-4" />}
-              action={{ label: 'View all', to: '/notifications' }}
+              action={{ label: t('common.viewAll'), to: '/notifications' }}
               empty={notifications.length === 0}
             >
               {notifications.length === 0 ? (
                 <EmptyState
                   icon={<Bell className="w-8 h-8 text-gray-300" />}
-                  title="No notifications yet"
-                  description="You'll see updates about your applications here."
+                  title={t('seekerDashboard.noNotifications')}
+                  description={t('seekerDashboard.updatesDescription')}
                 />
               ) : (
                 <div className="space-y-1 p-4">

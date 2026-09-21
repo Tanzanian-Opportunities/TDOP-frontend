@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/Card';
 import { superAdminApi, EcosystemIntelligence } from '@/services/api/superAdminApi';
 import { PageError, PageLoading } from '@/components/ui/PageStates';
@@ -9,6 +10,7 @@ const formatKey = (key: string): string => {
 };
 
 const SuperAdminIntelligencePage: React.FC = () => {
+  const { t } = useTranslation();
   const [data, setData] = useState<EcosystemIntelligence | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -24,10 +26,10 @@ const SuperAdminIntelligencePage: React.FC = () => {
   if (error || !data) return <PageError />;
 
   const sections = [
-    { title: 'Platform Dashboard Stats', data: data.platformStats },
-    { title: 'Opportunity Analytics', data: data.opportunityAnalytics },
-    { title: 'Report Analytics', data: data.reportAnalytics },
-    { title: 'Platform Activity', data: data.platformActivity },
+    { title: t('superAdminDetail.platformDashboardStats'), data: data.platformStats },
+    { title: t('superAdminDetail.opportunityAnalytics'), data: data.opportunityAnalytics },
+    { title: t('superAdminDetail.reportAnalytics'), data: data.reportAnalytics },
+    { title: t('superAdminDetail.platformActivity'), data: data.platformActivity },
   ];
 
   return (
@@ -37,7 +39,7 @@ const SuperAdminIntelligencePage: React.FC = () => {
           <Brain className="w-7 h-7 text-tdop-primary" />
           Ecosystem Intelligence
         </h1>
-        <p className="text-sm text-gray-500 mt-1">Cross-cutting analytics and intelligence across the platform</p>
+        <p className="text-sm text-gray-500 mt-1">{t('superAdmin.crossCuttingAnalytics')}</p>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {sections.map((section) => (
@@ -53,7 +55,7 @@ const SuperAdminIntelligencePage: React.FC = () => {
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-gray-400">No data available</p>
+              <p className="text-sm text-gray-400">{t('superAdminDetail.noDataAvailable')}</p>
             )}
           </Card>
         ))}

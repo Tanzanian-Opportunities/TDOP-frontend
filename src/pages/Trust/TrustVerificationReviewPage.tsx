@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -34,6 +35,7 @@ interface VerificationRequest {
 const PAGE_SIZE = 10;
 
 const TrustVerificationReviewPage: React.FC = () => {
+  const { t } = useTranslation();
   const { addNotification } = useNotificationContext();
   const [searchParams, setSearchParams] = useSearchParams();
   const [requests, setRequests] = useState<VerificationRequest[]>([]);
@@ -99,7 +101,7 @@ const TrustVerificationReviewPage: React.FC = () => {
       setDocuments([]);
       loadRequests();
     } catch (err) {
-      addNotification({ type: 'error', title: 'Error', message: 'Failed to approve verification.' });
+      addNotification({ type: 'error', title: 'Error', message: t('trustVerificationReview.failedApprove') });
     } finally {
       setActionLoading(false);
     }
@@ -116,7 +118,7 @@ const TrustVerificationReviewPage: React.FC = () => {
       setDocuments([]);
       loadRequests();
     } catch (err) {
-      addNotification({ type: 'error', title: 'Error', message: 'Failed to reject verification.' });
+      addNotification({ type: 'error', title: 'Error', message: t('trustVerificationReview.failedReject') });
     } finally {
       setActionLoading(false);
     }
@@ -131,7 +133,7 @@ const TrustVerificationReviewPage: React.FC = () => {
       setInfoTarget(null);
       loadRequests();
     } catch (err) {
-      addNotification({ type: 'error', title: 'Error', message: 'Failed to request information.' });
+      addNotification({ type: 'error', title: 'Error', message: t('trustVerificationReview.failedInfo') });
     } finally {
       setActionLoading(false);
     }
@@ -164,7 +166,7 @@ const TrustVerificationReviewPage: React.FC = () => {
             className="flex items-center gap-2 text-sm text-tdop-primary hover:underline focus:outline-none focus:ring-2 focus:ring-tdop-primary rounded"
             aria-label="Go back to verification queue"
           >
-            <ArrowLeft className="w-4 h-4" /> Back to queue
+            <ArrowLeft className="w-4 h-4" /> {t('trustVerificationReview.backToQueue')}
           </button>
 
           <Card className="p-6">
@@ -180,18 +182,18 @@ const TrustVerificationReviewPage: React.FC = () => {
 
             <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="text-sm font-medium text-gray-700">Submitted Document</label>
-                <p className="mt-1 text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">{selectedRequest.document || 'No document provided'}</p>
+                <label className="text-sm font-medium text-gray-700">{t('trustVerificationReview.submittedDocument')}</label>
+                <p className="mt-1 text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">{selectedRequest.document || t('trustVerificationReview.noDocument')}</p>
               </div>
               <div>
-                <label className="text-sm font-medium text-gray-700">Submitted</label>
+                <label className="text-sm font-medium text-gray-700">{t('trustVerificationReview.submitted')}</label>
                 <p className="mt-1 text-sm text-gray-600">{selectedRequest.createdAt ? new Date(selectedRequest.createdAt).toLocaleString() : '—'}</p>
               </div>
             </div>
 
             {selectedRequest.notes && (
               <div className="mt-4">
-                <label className="text-sm font-medium text-gray-700">Notes</label>
+                <label className="text-sm font-medium text-gray-700">{t('trustVerificationReview.notes')}</label>
                 <p className="mt-1 text-sm text-gray-600">{selectedRequest.notes}</p>
               </div>
             )}
@@ -199,12 +201,12 @@ const TrustVerificationReviewPage: React.FC = () => {
             <div className="mt-6">
               <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
                 <File className="w-4 h-4" />
-                Evidence Documents ({documents.length})
+                 {t('trustVerificationReview.evidenceDocuments', { count: documents.length })}
               </label>
               {loadingDocs ? (
                 <div className="mt-2 flex items-center gap-2 text-sm text-gray-500">
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-tdop-primary" />
-                  Loading documents...
+                   {t('trustVerificationReview.loadingDocuments')}
                 </div>
               ) : documents.length > 0 ? (
                 <div className="mt-2 space-y-2">
@@ -213,7 +215,7 @@ const TrustVerificationReviewPage: React.FC = () => {
                       <FileText className="w-5 h-5 text-tdop-primary shrink-0" />
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-tdop-navy truncate">
-                          {doc.documentType || 'Document'} — {doc.documentUrl.split('/').pop()}
+                           {doc.documentType || t('trustVerificationReview.document')} — {doc.documentUrl.split('/').pop()}
                         </p>
                         <p className="text-xs text-gray-400">
                           Uploaded {doc.uploadedAt ? new Date(doc.uploadedAt).toLocaleDateString() : '—'}
@@ -232,20 +234,20 @@ const TrustVerificationReviewPage: React.FC = () => {
                   ))}
                 </div>
               ) : (
-                <p className="mt-2 text-sm text-gray-500 bg-gray-50 p-3 rounded-lg">No documents uploaded</p>
+                <p className="mt-2 text-sm text-gray-500 bg-gray-50 p-3 rounded-lg">{t('trustVerificationReview.noDocuments')}</p>
               )}
             </div>
 
             {selectedRequest.status === 'PENDING' && (
               <div className="mt-6 flex flex-wrap gap-3">
                 <Button onClick={() => handleApprove(selectedRequest.id)} disabled={actionLoading} className="bg-tdop-secondary hover:bg-teal-700 text-white">
-                  <CheckCircle className="w-4 h-4 mr-2" /> Approve
+                   <CheckCircle className="w-4 h-4 mr-2" /> {t('trustVerificationReview.approve')}
                 </Button>
                 <Button onClick={() => setRejectTarget({ id: selectedRequest.id, name: selectedRequest.organization?.orgName })} variant="danger" disabled={actionLoading}>
-                  <XCircle className="w-4 h-4 mr-2" /> Reject
+                   <XCircle className="w-4 h-4 mr-2" /> {t('trustVerificationReview.reject')}
                 </Button>
                 <Button onClick={() => setInfoTarget({ id: selectedRequest.id, name: selectedRequest.organization?.orgName })} variant="outline" disabled={actionLoading}>
-                  <FileText className="w-4 h-4 mr-2" /> Request Info
+                   <FileText className="w-4 h-4 mr-2" /> {t('trustVerificationReview.requestInfo')}
                 </Button>
               </div>
             )}
@@ -258,20 +260,20 @@ const TrustVerificationReviewPage: React.FC = () => {
               <Shield className="w-7 h-7 text-tdop-primary" />
               Verification Queue
             </h1>
-            <p className="text-sm text-gray-500 mt-1">Review and process organization verification requests</p>
+            <p className="text-sm text-gray-500 mt-1">{t('trustVerificationReview.subtitle')}</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <Card className="p-4 bg-amber-50 border border-amber-200">
-              <div className="flex items-center gap-2 text-amber-600"><Clock className="w-5 h-5" /><span className="text-sm font-medium">Pending</span></div>
+              <div className="flex items-center gap-2 text-amber-600"><Clock className="w-5 h-5" /><span className="text-sm font-medium">{t('trustVerificationReview.pending')}</span></div>
               <p className="text-2xl font-bold text-tdop-navy mt-1">{stats.pending}</p>
             </Card>
             <Card className="p-4 bg-teal-50 border border-teal-200">
-              <div className="flex items-center gap-2 text-tdop-secondary"><CheckCircle className="w-5 h-5" /><span className="text-sm font-medium">Approved</span></div>
+              <div className="flex items-center gap-2 text-tdop-secondary"><CheckCircle className="w-5 h-5" /><span className="text-sm font-medium">{t('trustVerificationReview.approved')}</span></div>
               <p className="text-2xl font-bold text-tdop-navy mt-1">{stats.approved}</p>
             </Card>
             <Card className="p-4 bg-red-50 border border-red-200">
-              <div className="flex items-center gap-2 text-red-600"><XCircle className="w-5 h-5" /><span className="text-sm font-medium">Rejected</span></div>
+              <div className="flex items-center gap-2 text-red-600"><XCircle className="w-5 h-5" /><span className="text-sm font-medium">{t('trustVerificationReview.rejected')}</span></div>
               <p className="text-2xl font-bold text-tdop-navy mt-1">{stats.rejected}</p>
             </Card>
           </div>
@@ -282,7 +284,7 @@ const TrustVerificationReviewPage: React.FC = () => {
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="Search by organization name..."
+                  placeholder={t('trustVerificationReview.searchPlaceholder')}
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-tdop-primary focus:border-transparent"
@@ -295,10 +297,10 @@ const TrustVerificationReviewPage: React.FC = () => {
                 className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-tdop-primary"
                 aria-label="Filter by status"
               >
-                <option value="all">All Status</option>
-                <option value="pending">Pending</option>
-                <option value="approved">Approved</option>
-                <option value="rejected">Rejected</option>
+                <option value="all">{t('trustVerificationReview.allStatus')}</option>
+                <option value="pending">{t('trustVerificationReview.pending')}</option>
+                <option value="approved">{t('trustVerificationReview.approved')}</option>
+                <option value="rejected">{t('trustVerificationReview.rejected')}</option>
               </select>
             </div>
           </Card>
@@ -307,7 +309,7 @@ const TrustVerificationReviewPage: React.FC = () => {
             {paginated.length === 0 ? (
               <div className="p-12 text-center text-gray-500">
                 <CheckCircle className="w-12 h-12 mx-auto text-gray-300 mb-3" />
-                <p className="font-medium">No verification requests</p>
+                <p className="font-medium">{t('trustVerificationReview.noRequests')}</p>
               </div>
             ) : (
               <div className="divide-y" role="list" aria-label="Verification requests">
@@ -354,9 +356,9 @@ const TrustVerificationReviewPage: React.FC = () => {
         open={!!infoTarget}
         onCancel={() => setInfoTarget(null)}
         onConfirm={handleRequestInfo}
-        title={`Request Information — ${infoTarget?.name}`}
-        label="Information needed"
-        placeholder="Describe what information is needed..."
+        title={`${t('trustVerificationReview.requestInfo')} — ${infoTarget?.name}`}
+        label={t('trustVerificationReview.infoNeeded')}
+        placeholder={t('trustVerificationReview.infoPlaceholder')}
         loading={actionLoading}
       />
     </div>

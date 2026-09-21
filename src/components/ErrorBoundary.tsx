@@ -1,9 +1,12 @@
 import React from 'react';
 import { AlertTriangle, RefreshCcw } from 'lucide-react';
+import { withTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 
 interface ErrorBoundaryProps {
   children: React.ReactNode;
   fallback?: React.ReactNode;
+  t: TFunction;
 }
 
 interface ErrorBoundaryState {
@@ -11,7 +14,7 @@ interface ErrorBoundaryState {
   error: Error | null;
 }
 
-export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
   constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false, error: null };
@@ -39,16 +42,16 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
             <div className="w-16 h-16 rounded-2xl bg-red-50 text-red-500 flex items-center justify-center mx-auto mb-4">
               <AlertTriangle className="w-8 h-8" />
             </div>
-            <h2 className="text-xl font-bold text-tdop-navy mb-2">Something went wrong</h2>
+            <h2 className="text-xl font-bold text-tdop-navy mb-2">{this.props.t('errorBoundary.title')}</h2>
             <p className="text-gray-500 text-sm mb-6">
-              An unexpected error occurred. Please try refreshing the page.
+              {this.props.t('errorBoundary.message')}
             </p>
             <button
               onClick={() => window.location.reload()}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-tdop-primary text-white text-sm font-semibold hover:bg-blue-700 transition-colors"
             >
               <RefreshCcw className="w-4 h-4" />
-              Refresh page
+              {this.props.t('errorBoundary.refreshPage')}
             </button>
           </div>
         </div>
@@ -58,3 +61,5 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
     return this.props.children;
   }
 }
+
+export default withTranslation()(ErrorBoundary);

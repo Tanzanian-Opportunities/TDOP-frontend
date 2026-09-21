@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
@@ -27,6 +28,7 @@ createdAt: string;
 }
 
 const ReportsPage: React.FC = () => {
+const { t } = useTranslation();
 const { addNotification } = useNotificationContext();
 const [reports, setReports] = useState<Report[]>([]);
 const [loading, setLoading] = useState(true);
@@ -66,7 +68,7 @@ await adminApi.resolveReport(String(resolveTarget.id), resolution);
 setResolveTarget(null);
 fetchData();
 } catch (err) {
-addNotification({ type: 'error', title: 'Error', message: 'Failed to resolve report.' });
+addNotification({ type: 'error', title: 'Error', message: t('adminReports.failedResolve') });
 console.error(err);
 } finally {
 setActionLoading(false);
@@ -81,7 +83,7 @@ await adminApi.dismissReport(String(dismissTarget.id));
 setDismissTarget(null);
 fetchData();
 } catch (err) {
-addNotification({ type: 'error', title: 'Error', message: 'Failed to dismiss report.' });
+addNotification({ type: 'error', title: 'Error', message: t('adminReports.failedDismiss') });
 console.error(err);
 } finally {
 setActionLoading(false);
@@ -90,9 +92,9 @@ setActionLoading(false);
 
 const getStatusBadge = (status: string) => {
 switch (status) {
-case 'PENDING': return <Badge variant="warning"><Clock className="w-3 h-3 mr-1" /> Pending</Badge>;
-case 'REVIEWED': return <Badge variant="info"><AlertTriangle className="w-3 h-3 mr-1" /> Reviewed</Badge>;
-case 'ACTIONED': return <Badge variant="success"><CheckCircle className="w-3 h-3 mr-1" /> Actioned</Badge>;
+case 'PENDING': return <Badge variant="warning"><Clock className="w-3 h-3 mr-1" /> {t('adminReports.pending')}</Badge>;
+case 'REVIEWED': return <Badge variant="info"><AlertTriangle className="w-3 h-3 mr-1" /> {t('adminReports.reviewed')}</Badge>;
+case 'ACTIONED': return <Badge variant="success"><CheckCircle className="w-3 h-3 mr-1" /> {t('adminReports.actioned')}</Badge>;
 default: return <Badge variant="default">{status}</Badge>;
 }
 };
@@ -116,41 +118,41 @@ return (
 );
 }
 
-if (error) return <PageError message="Failed to load reports. Please try again." onRetry={fetchData} />;
+if (error) return <PageError message={t('adminReports.failedToLoad')} onRetry={fetchData} />;
 
 return (
 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">
 <div>
 <h1 className="text-3xl font-bold text-tdop-navy flex items-center gap-2">
 <Flag className="w-8 h-8 text-tdop-primary" />
-Reports
+{t('adminReports.title')}
 </h1>
-<p className="text-gray-500 mt-1">Investigate and resolve user reports</p>
+<p className="text-gray-500 mt-1">{t('adminReports.subtitle')}</p>
 </div>
 
 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
 <Card>
 <div className="text-center">
 <p className="text-2xl font-bold text-tdop-navy">{stats.total}</p>
-<p className="text-xs text-gray-500">Total Reports</p>
+<p className="text-xs text-gray-500">{t('adminReports.totalReports')}</p>
 </div>
 </Card>
 <Card>
 <div className="text-center">
 <p className="text-2xl font-bold text-orange-600">{stats.pending}</p>
-<p className="text-xs text-gray-500">Pending</p>
+<p className="text-xs text-gray-500">{t('adminReports.pending')}</p>
 </div>
 </Card>
 <Card>
 <div className="text-center">
 <p className="text-2xl font-bold text-blue-600">{stats.reviewed}</p>
-<p className="text-xs text-gray-500">Reviewed</p>
+<p className="text-xs text-gray-500">{t('adminReports.reviewed')}</p>
 </div>
 </Card>
 <Card>
 <div className="text-center">
 <p className="text-2xl font-bold text-green-600">{stats.actioned}</p>
-<p className="text-xs text-gray-500">Actioned</p>
+<p className="text-xs text-gray-500">{t('adminReports.actioned')}</p>
 </div>
 </Card>
 </div>
@@ -160,13 +162,13 @@ Reports
 onClick={() => { setTab('pending'); setCurrentPage(1); }}
 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${tab === 'pending' ? 'bg-tdop-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
 >
-Pending ({stats.pending})
+{t('adminReports.pending')} ({stats.pending})
 </button>
 <button
 onClick={() => { setTab('all'); setCurrentPage(1); }}
 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${tab === 'all' ? 'bg-tdop-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
 >
-All Reports ({stats.total})
+{t('adminReports.allReports')} ({stats.total})
 </button>
 </div>
 
@@ -175,7 +177,7 @@ All Reports ({stats.total})
 {filteredReports.length === 0 ? (
 <div className="p-8 text-center text-gray-500">
 <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-3" />
-<p>No {tab === 'pending' ? 'pending' : ''} reports found</p>
+<p>No {tab === 'pending' ? t('adminReports.pending').toLowerCase() : ''} {t('adminReports.noReports')}</p>
 </div>
 ) : (
 paginatedReports.map((report) => (
@@ -191,22 +193,22 @@ paginatedReports.map((report) => (
 <p className="text-sm text-gray-500 mt-1">{report.description}</p>
 )}
 <div className="flex items-center gap-4 mt-2 text-xs text-gray-400">
-{report.reporter && <span>Reported by: {report.reporter.fullName}</span>}
-{report.assignedTo && <span>Assigned to: {report.assignedTo.fullName}</span>}
-<span>Target #{report.targetId}</span>
+{report.reporter && <span>{t('adminReports.reportedBy')} {report.reporter.fullName}</span>}
+{report.assignedTo && <span>{t('adminReports.assignedTo')} {report.assignedTo.fullName}</span>}
+<span>{t('adminReports.target')} #{report.targetId}</span>
 <span>{new Date(report.createdAt).toLocaleDateString()}</span>
 </div>
 {report.resolution && (
-<p className="text-sm text-green-600 mt-2">Resolution: {report.resolution}</p>
+<p className="text-sm text-green-600 mt-2">{t('adminReports.resolution')} {report.resolution}</p>
 )}
 </div>
 {report.status === 'PENDING' && (
 <div className="flex items-center gap-2 ml-4">
 <Button size="sm" onClick={() => setResolveTarget({ id: report.id, reason: report.reason })}>
-  <CheckCircle className="w-4 h-4 mr-1" /> Resolve
+  <CheckCircle className="w-4 h-4 mr-1" /> {t('adminReports.resolve')}
 </Button>
 <Button size="sm" variant="outline" onClick={() => setDismissTarget({ id: report.id, reason: report.reason })}>
-  <XCircle className="w-4 h-4 mr-1" /> Dismiss
+  <XCircle className="w-4 h-4 mr-1" /> {t('adminReports.dismiss')}
 </Button>
 </div>
 )}
@@ -221,7 +223,7 @@ paginatedReports.map((report) => (
 
 <InputDialog
   open={!!resolveTarget}
-  title="Resolve Report"
+  title={t('adminReports.resolveReport')}
   label={`Provide a resolution for: "${resolveTarget?.reason || ''}"`}
   placeholder="Issue addressed, user warned..."
   multiline
@@ -231,9 +233,9 @@ paginatedReports.map((report) => (
 />
 <ConfirmDialog
   open={!!dismissTarget}
-  title="Dismiss Report"
-  message={`Dismiss the report "${dismissTarget?.reason || ''}"? This action cannot be undone.`}
-  confirmLabel="Dismiss"
+  title={t('adminReports.dismissReport')}
+  message={`Dismiss the report "${dismissTarget?.reason || ''}"? ${t('adminReports.cannotUndo')}`}
+  confirmLabel={t('adminReports.dismiss')}
   variant="warning"
   onConfirm={handleDismiss}
   onCancel={() => setDismissTarget(null)}

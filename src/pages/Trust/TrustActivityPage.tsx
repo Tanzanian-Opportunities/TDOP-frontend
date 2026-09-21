@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import Pagination from '@/components/ui/Pagination';
@@ -21,6 +22,7 @@ interface AuditEntry {
 const PAGE_SIZE = 15;
 
 const TrustActivityPage: React.FC = () => {
+  const { t } = useTranslation();
   const { addNotification } = useNotificationContext();
   const [entries, setEntries] = useState<AuditEntry[]>([]);
   const [loading, setLoading] = useState(true);
@@ -40,7 +42,7 @@ const TrustActivityPage: React.FC = () => {
     } catch (err) {
       console.error(err);
       setError(true);
-      addNotification({ type: 'error', title: 'Error', message: 'Failed to load activity log.' });
+      addNotification({ type: 'error', title: 'Error', message: t('trustActivity.failedToLoad') });
     } finally {
       setLoading(false);
     }
@@ -83,7 +85,7 @@ const TrustActivityPage: React.FC = () => {
           <Activity className="w-7 h-7 text-tdop-primary" />
           Activity Log
         </h1>
-        <p className="text-sm text-gray-500 mt-1">Audit trail for trust & quality operations</p>
+        <p className="text-sm text-gray-500 mt-1">{t('trustActivity.subtitle')}</p>
       </div>
 
       <Card className="p-4">
@@ -92,7 +94,7 @@ const TrustActivityPage: React.FC = () => {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
               type="text"
-              placeholder="Search by action, entity, user..."
+              placeholder={t('trustActivity.searchPlaceholder')}
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-tdop-primary focus:border-transparent"
@@ -103,7 +105,7 @@ const TrustActivityPage: React.FC = () => {
             onChange={e => setFilterAction(e.target.value)}
             className="px-4 py-2 border border-gray-300 rounded-lg text-sm"
           >
-            <option value="all">All Actions</option>
+            <option value="all">{t('trustActivity.allActions')}</option>
             {actionTypes.map(a => (
               <option key={a} value={a.toLowerCase()}>{a}</option>
             ))}
@@ -115,7 +117,7 @@ const TrustActivityPage: React.FC = () => {
         {paginated.length === 0 ? (
           <div className="p-12 text-center text-gray-500">
             <Clock className="w-12 h-12 mx-auto text-gray-300 mb-3" />
-            <p className="font-medium">No activity records</p>
+            <p className="font-medium">{t('trustActivity.noActivity')}</p>
           </div>
         ) : (
           <div className="divide-y">

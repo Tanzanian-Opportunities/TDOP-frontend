@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
@@ -30,6 +31,7 @@ interface Escalation {
 const PAGE_SIZE = 10;
 
 const TrustEscalationPage: React.FC = () => {
+  const { t } = useTranslation();
   const { addNotification } = useNotificationContext();
   const [escalations, setEscalations] = useState<Escalation[]>([]);
   const [loading, setLoading] = useState(true);
@@ -75,7 +77,7 @@ const TrustEscalationPage: React.FC = () => {
       setCreateTarget(false);
       loadEscalations();
     } catch (err) {
-      addNotification({ type: 'error', title: 'Error', message: 'Failed to create escalation.' });
+      addNotification({ type: 'error', title: 'Error', message: t('trustEscalation.failedCreate') });
     } finally {
       setActionLoading(false);
     }
@@ -91,7 +93,7 @@ const TrustEscalationPage: React.FC = () => {
       setSelectedEscalation(null);
       loadEscalations();
     } catch (err) {
-      addNotification({ type: 'error', title: 'Error', message: 'Failed to resolve.' });
+      addNotification({ type: 'error', title: 'Error', message: t('trustEscalation.failedResolve') });
     } finally {
       setActionLoading(false);
     }
@@ -107,7 +109,7 @@ const TrustEscalationPage: React.FC = () => {
       setSelectedEscalation(null);
       loadEscalations();
     } catch (err) {
-      addNotification({ type: 'error', title: 'Error', message: 'Failed to dismiss.' });
+      addNotification({ type: 'error', title: 'Error', message: t('trustEscalation.failedDismiss') });
     } finally {
       setActionLoading(false);
     }
@@ -122,7 +124,7 @@ const TrustEscalationPage: React.FC = () => {
       setAssignTarget(null);
       loadEscalations();
     } catch (err) {
-      addNotification({ type: 'error', title: 'Error', message: 'Failed to assign.' });
+      addNotification({ type: 'error', title: 'Error', message: t('trustEscalation.failedAssign') });
     } finally {
       setActionLoading(false);
     }
@@ -149,10 +151,10 @@ const TrustEscalationPage: React.FC = () => {
 
   const getStatusBadge = (status: string) => {
     switch (status?.toUpperCase()) {
-      case 'OPEN': return <Badge variant="danger">Open</Badge>;
-      case 'IN_PROGRESS': return <Badge variant="primary">In Progress</Badge>;
-      case 'RESOLVED': return <Badge className="bg-tdop-secondary text-white">Resolved</Badge>;
-      case 'DISMISSED': return <Badge variant="secondary">Dismissed</Badge>;
+      case 'OPEN': return <Badge variant="danger">{t('trustEscalation.open')}</Badge>;
+      case 'IN_PROGRESS': return <Badge variant="primary">{t('trustEscalation.inProgress')}</Badge>;
+      case 'RESOLVED': return <Badge className="bg-tdop-secondary text-white">{t('trustEscalation.resolved')}</Badge>;
+      case 'DISMISSED': return <Badge variant="secondary">{t('trustEscalation.dismissed')}</Badge>;
       default: return <Badge variant="secondary">{status}</Badge>;
     }
   };
@@ -162,7 +164,7 @@ const TrustEscalationPage: React.FC = () => {
       {selectedEscalation ? (
         <div className="space-y-6">
           <button onClick={() => setSelectedEscalation(null)} className="flex items-center gap-2 text-sm text-tdop-primary hover:underline focus:outline-none focus:ring-2 focus:ring-tdop-primary rounded" aria-label="Go back">
-            ← Back to escalations
+            {t('trustEscalation.backToEscalations')}
           </button>
           <Card className="p-6">
             <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
@@ -178,35 +180,35 @@ const TrustEscalationPage: React.FC = () => {
             <div className="mt-6 space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium text-gray-700">Target</label>
+                  <label className="text-sm font-medium text-gray-700">{t('trustEscalation.target')}</label>
                   <p className="mt-1 text-sm text-gray-600 capitalize">{selectedEscalation.targetType?.replace('_', ' ')} #{selectedEscalation.targetId}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-700">Created</label>
+                  <label className="text-sm font-medium text-gray-700">{t('trustEscalation.created')}</label>
                   <p className="mt-1 text-sm text-gray-600">{selectedEscalation.createdAt ? new Date(selectedEscalation.createdAt).toLocaleString() : '—'}</p>
                 </div>
               </div>
               {selectedEscalation.description && (
                 <div>
-                  <label className="text-sm font-medium text-gray-700">Description</label>
+                  <label className="text-sm font-medium text-gray-700">{t('trustEscalation.description')}</label>
                   <p className="mt-1 text-sm text-gray-600 bg-gray-50 p-3 rounded-lg whitespace-pre-wrap">{selectedEscalation.description}</p>
                 </div>
               )}
               {selectedEscalation.escalatedBy && (
                 <div>
-                  <label className="text-sm font-medium text-gray-700">Escalated by</label>
+                  <label className="text-sm font-medium text-gray-700">{t('trustEscalation.escalatedBy')}</label>
                   <p className="mt-1 text-sm text-gray-600">{selectedEscalation.escalatedBy.firstName} {selectedEscalation.escalatedBy.lastName}</p>
                 </div>
               )}
               {selectedEscalation.assignedTo && (
                 <div>
-                  <label className="text-sm font-medium text-gray-700">Assigned to</label>
+                  <label className="text-sm font-medium text-gray-700">{t('trustEscalation.assignedTo')}</label>
                   <p className="mt-1 text-sm text-gray-600">{selectedEscalation.assignedTo.firstName} {selectedEscalation.assignedTo.lastName}</p>
                 </div>
               )}
               {selectedEscalation.resolution && (
                 <div>
-                  <label className="text-sm font-medium text-gray-700">Resolution</label>
+                  <label className="text-sm font-medium text-gray-700">{t('trustEscalation.resolution')}</label>
                   <p className="mt-1 text-sm text-gray-600 bg-teal-50 p-3 rounded-lg">{selectedEscalation.resolution}</p>
                 </div>
               )}
@@ -214,13 +216,13 @@ const TrustEscalationPage: React.FC = () => {
             {selectedEscalation.status !== 'RESOLVED' && selectedEscalation.status !== 'DISMISSED' && (
               <div className="mt-6 flex flex-wrap gap-3">
                 <Button onClick={() => setResolveTarget({ id: selectedEscalation.id, reason: selectedEscalation.reason })} disabled={actionLoading} className="bg-tdop-secondary hover:bg-teal-700 text-white">
-                  <CheckCircle className="w-4 h-4 mr-2" /> Resolve
+                   <CheckCircle className="w-4 h-4 mr-2" /> {t('trustEscalation.resolve')}
                 </Button>
                 <Button onClick={() => setAssignTarget({ id: selectedEscalation.id, reason: selectedEscalation.reason })} variant="outline" disabled={actionLoading}>
-                  <User className="w-4 h-4 mr-2" /> Assign
+                   <User className="w-4 h-4 mr-2" /> {t('trustEscalation.assign')}
                 </Button>
                 <Button onClick={() => setDismissTarget({ id: selectedEscalation.id, reason: selectedEscalation.reason })} variant="danger" disabled={actionLoading}>
-                  <XCircle className="w-4 h-4 mr-2" /> Dismiss
+                   <XCircle className="w-4 h-4 mr-2" /> {t('trustEscalation.dismiss')}
                 </Button>
               </div>
             )}
@@ -234,28 +236,28 @@ const TrustEscalationPage: React.FC = () => {
                 <ArrowUp className="w-7 h-7 text-amber-500" />
                 Escalations
               </h1>
-              <p className="text-sm text-gray-500 mt-1">Track and resolve escalated trust issues</p>
+              <p className="text-sm text-gray-500 mt-1">{t('trustEscalation.subtitle')}</p>
             </div>
             <Button onClick={() => setCreateTarget(true)} className="bg-tdop-primary hover:bg-blue-700 text-white">
-              <AlertTriangle className="w-4 h-4 mr-2" /> New Escalation
+              <AlertTriangle className="w-4 h-4 mr-2" /> {t('trustEscalation.newEscalation')}
             </Button>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Card className="p-4 bg-red-50 border border-red-200">
-              <div className="flex items-center gap-2 text-red-600"><AlertTriangle className="w-5 h-5" /><span className="text-sm font-medium">Open</span></div>
+              <div className="flex items-center gap-2 text-red-600"><AlertTriangle className="w-5 h-5" /><span className="text-sm font-medium">{t('trustEscalation.open')}</span></div>
               <p className="text-2xl font-bold text-tdop-navy mt-1">{stats.open}</p>
             </Card>
             <Card className="p-4 bg-blue-50 border border-blue-200">
-              <div className="flex items-center gap-2 text-tdop-primary"><Clock className="w-5 h-5" /><span className="text-sm font-medium">In Progress</span></div>
+              <div className="flex items-center gap-2 text-tdop-primary"><Clock className="w-5 h-5" /><span className="text-sm font-medium">{t('trustEscalation.inProgress')}</span></div>
               <p className="text-2xl font-bold text-tdop-navy mt-1">{stats.inProgress}</p>
             </Card>
             <Card className="p-4 bg-teal-50 border border-teal-200">
-              <div className="flex items-center gap-2 text-tdop-secondary"><CheckCircle className="w-5 h-5" /><span className="text-sm font-medium">Resolved</span></div>
+              <div className="flex items-center gap-2 text-tdop-secondary"><CheckCircle className="w-5 h-5" /><span className="text-sm font-medium">{t('trustEscalation.resolved')}</span></div>
               <p className="text-2xl font-bold text-tdop-navy mt-1">{stats.resolved}</p>
             </Card>
             <Card className="p-4 bg-gray-50 border border-gray-200">
-              <div className="flex items-center gap-2 text-gray-600"><XCircle className="w-5 h-5" /><span className="text-sm font-medium">Dismissed</span></div>
+              <div className="flex items-center gap-2 text-gray-600"><XCircle className="w-5 h-5" /><span className="text-sm font-medium">{t('trustEscalation.dismissed')}</span></div>
               <p className="text-2xl font-bold text-tdop-navy mt-1">{stats.dismissed}</p>
             </Card>
           </div>
@@ -264,17 +266,17 @@ const TrustEscalationPage: React.FC = () => {
             <div className="flex flex-col md:flex-row gap-3">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <input type="text" placeholder="Search escalations..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
+                <input type="text" placeholder={t('trustEscalation.searchPlaceholder')} value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-tdop-primary focus:border-transparent"
                   aria-label="Search escalations"
                 />
               </div>
               <select value={filterStatus} onChange={e => setFilterStatus(e.target.value)} className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-tdop-primary" aria-label="Filter by status">
-                <option value="all">All Status</option>
-                <option value="open">Open</option>
-                <option value="in_progress">In Progress</option>
-                <option value="resolved">Resolved</option>
-                <option value="dismissed">Dismissed</option>
+                <option value="all">{t('trustEscalation.allStatus')}</option>
+                <option value="open">{t('trustEscalation.open')}</option>
+                <option value="in_progress">{t('trustEscalation.inProgress')}</option>
+                <option value="resolved">{t('trustEscalation.resolved')}</option>
+                <option value="dismissed">{t('trustEscalation.dismissed')}</option>
               </select>
             </div>
           </Card>
@@ -283,7 +285,7 @@ const TrustEscalationPage: React.FC = () => {
             {paginated.length === 0 ? (
               <div className="p-12 text-center text-gray-500">
                 <AlertTriangle className="w-12 h-12 mx-auto text-gray-300 mb-3" />
-                <p className="font-medium">No escalations</p>
+                <p className="font-medium">{t('trustEscalation.noEscalations')}</p>
               </div>
             ) : (
               <div className="divide-y" role="list" aria-label="Escalations list">
@@ -314,15 +316,15 @@ const TrustEscalationPage: React.FC = () => {
         </>
       )}
 
-      <InputDialog open={!!createTarget} onCancel={() => setCreateTarget(false)} onConfirm={handleCreate} title="New Escalation" label="Reason" placeholder="Describe the reason for escalation..." loading={actionLoading} />
-      <InputDialog open={!!resolveTarget} onCancel={() => setResolveTarget(null)} onConfirm={handleResolve} title="Resolve Escalation" label="Resolution" placeholder="Describe the resolution..." loading={actionLoading} />
-      <ConfirmDialog open={!!dismissTarget} onCancel={() => setDismissTarget(null)} onConfirm={handleDismiss} title="Dismiss Escalation" message={`Dismiss: "${dismissTarget?.reason}"?`} confirmLabel="Dismiss" loading={actionLoading} />
+      <InputDialog open={!!createTarget} onCancel={() => setCreateTarget(false)} onConfirm={handleCreate} title={t('trustEscalation.newEscalation')} label={t('trustEscalation.reason')} placeholder={t('trustEscalation.reasonPlaceholder')} loading={actionLoading} />
+      <InputDialog open={!!resolveTarget} onCancel={() => setResolveTarget(null)} onConfirm={handleResolve} title={t('trustEscalation.resolveEscalation')} label={t('trustEscalation.resolution')} placeholder={t('trustEscalation.resolvePlaceholder')} loading={actionLoading} />
+      <ConfirmDialog open={!!dismissTarget} onCancel={() => setDismissTarget(null)} onConfirm={handleDismiss} title={t('trustEscalation.dismissEscalation')} message={`Dismiss: "${dismissTarget?.reason}"?`} confirmLabel={t('trustEscalation.dismiss')} loading={actionLoading} />
 
       {assignTarget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Assign escalation">
           <div className="fixed inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setAssignTarget(null)} />
           <div className="relative bg-white rounded-2xl shadow-xl max-w-md w-full p-6">
-            <h3 className="text-lg font-semibold text-tdop-navy mb-4">Assign Escalation</h3>
+            <h3 className="text-lg font-semibold text-tdop-navy mb-4">{t('trustEscalation.assignEscalation')}</h3>
             <div className="space-y-2 max-h-60 overflow-y-auto">
               {officers.filter(o => o.role === 'VERIFICATION_OFFICER' || o.role === 'MODERATOR' || o.role === 'ADMIN').map(officer => (
                 <button key={officer.id} onClick={() => handleAssign(String(officer.id))}
@@ -337,7 +339,7 @@ const TrustEscalationPage: React.FC = () => {
               ))}
             </div>
             <div className="mt-4 flex justify-end">
-              <Button variant="outline" onClick={() => setAssignTarget(null)}>Cancel</Button>
+              <Button variant="outline" onClick={() => setAssignTarget(null)}>{t('trustEscalation.cancel')}</Button>
             </div>
           </div>
         </div>

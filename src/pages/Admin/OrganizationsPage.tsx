@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
@@ -26,6 +27,7 @@ interface Organization {
 }
 
 const OrganizationsPage: React.FC = () => {
+  const { t } = useTranslation();
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -78,7 +80,7 @@ const OrganizationsPage: React.FC = () => {
     );
   }
 
-  if (error) return <PageError message="Failed to load organizations. Please try again." onRetry={fetchData} />;
+  if (error) return <PageError message={t('adminOrganizations.failedToLoad')} onRetry={fetchData} />;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-slide-up">
@@ -86,31 +88,31 @@ const OrganizationsPage: React.FC = () => {
         <div>
           <h1 className="text-3xl font-bold text-tdop-navy flex items-center gap-2">
             <Building2 className="w-8 h-8 text-tdop-primary" />
-            Organizations
+            {t('adminOrganizations.title')}
           </h1>
-          <p className="text-gray-500 mt-1">Manage registered organizations and verification status</p>
+          <p className="text-gray-500 mt-1">{t('adminOrganizations.subtitle')}</p>
         </div>
         <Button onClick={fetchData} variant="outline" size="sm">
-          <RefreshCw className="w-4 h-4 mr-1" /> Refresh
+          <RefreshCw className="w-4 h-4 mr-1" /> {t('adminOrganizations.refresh')}
         </Button>
       </div>
 
       {stats && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <Card className="p-4">
-            <p className="text-sm text-gray-500">Total</p>
+            <p className="text-sm text-gray-500">{t('adminOrganizations.total')}</p>
             <p className="text-2xl font-bold text-tdop-navy">{stats.totalOrganizations || organizations.length}</p>
           </Card>
           <Card className="p-4">
-            <p className="text-sm text-gray-500">Verified</p>
+            <p className="text-sm text-gray-500">{t('adminOrganizations.verified')}</p>
             <p className="text-2xl font-bold text-tdop-secondary">{organizations.filter(o => o.verified).length}</p>
           </Card>
           <Card className="p-4">
-            <p className="text-sm text-gray-500">Pending Verification</p>
+            <p className="text-sm text-gray-500">{t('adminOrganizations.pendingVerification')}</p>
             <p className="text-2xl font-bold text-tdop-accent">{stats.pendingVerifications || organizations.filter(o => !o.verified).length}</p>
           </Card>
           <Card className="p-4">
-            <p className="text-sm text-gray-500">With Opportunities</p>
+            <p className="text-sm text-gray-500">{t('adminOrganizations.withOpportunities')}</p>
             <p className="text-2xl font-bold text-tdop-primary">{organizations.filter(o => o.opportunities && o.opportunities.length > 0).length}</p>
           </Card>
         </div>
@@ -121,7 +123,7 @@ const OrganizationsPage: React.FC = () => {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
             type="text"
-            placeholder="Search organizations..."
+            placeholder={t('adminOrganizations.searchPlaceholder')}
             value={searchQuery}
             onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
             className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm text-tdop-navy placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-tdop-primary/20 focus:border-tdop-primary"
@@ -138,7 +140,7 @@ const OrganizationsPage: React.FC = () => {
                   : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
               }`}
             >
-              {status === 'all' ? 'All' : status === 'verified' ? 'Verified' : 'Pending'}
+              {status === 'all' ? t('adminOrganizations.all') : status === 'verified' ? t('adminOrganizations.verified') : t('adminOrganizations.pending')}
             </button>
           ))}
         </div>
@@ -149,12 +151,12 @@ const OrganizationsPage: React.FC = () => {
           <table className="w-full">
             <thead>
               <tr className="border-b border-gray-200">
-                <th className="text-left p-4 text-sm font-medium text-gray-500">Organization</th>
-                <th className="text-left p-4 text-sm font-medium text-gray-500">Industry</th>
-                <th className="text-left p-4 text-sm font-medium text-gray-500">Owner</th>
-                <th className="text-left p-4 text-sm font-medium text-gray-500">Status</th>
-                <th className="text-left p-4 text-sm font-medium text-gray-500">Opportunities</th>
-                <th className="text-right p-4 text-sm font-medium text-gray-500">Actions</th>
+                <th className="text-left p-4 text-sm font-medium text-gray-500">{t('adminOrganizations.org')}</th>
+                <th className="text-left p-4 text-sm font-medium text-gray-500">{t('adminOrganizations.industry')}</th>
+                <th className="text-left p-4 text-sm font-medium text-gray-500">{t('adminOrganizations.owner')}</th>
+                <th className="text-left p-4 text-sm font-medium text-gray-500">{t('adminOrganizations.status')}</th>
+                <th className="text-left p-4 text-sm font-medium text-gray-500">{t('adminOrganizations.opportunities')}</th>
+                <th className="text-right p-4 text-sm font-medium text-gray-500">{t('adminOrganizations.actions')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
@@ -189,11 +191,11 @@ const OrganizationsPage: React.FC = () => {
                   <td className="p-4">
                     {org.verified ? (
                       <Badge variant="success" className="flex items-center gap-1">
-                        <ShieldCheck className="w-3 h-3" /> Verified
+                        <ShieldCheck className="w-3 h-3" /> {t('adminOrganizations.verified')}
                       </Badge>
                     ) : (
                       <Badge variant="warning" className="flex items-center gap-1">
-                        <ShieldAlert className="w-3 h-3" /> Pending
+                        <ShieldAlert className="w-3 h-3" /> {t('adminOrganizations.pending')}
                       </Badge>
                     )}
                   </td>
@@ -206,7 +208,7 @@ const OrganizationsPage: React.FC = () => {
                         to={`/organizations/${org.id}`}
                         className="text-xs text-tdop-primary hover:underline flex items-center gap-1"
                       >
-                        View <ExternalLink className="w-3 h-3" />
+                        {t('adminOrganizations.view')} <ExternalLink className="w-3 h-3" />
                       </Link>
                     </div>
                   </td>
@@ -217,8 +219,8 @@ const OrganizationsPage: React.FC = () => {
           {filtered.length === 0 && (
             <div className="text-center py-12">
               <Building2 className="w-12 h-12 mx-auto text-gray-300 mb-3" />
-              <p className="text-gray-500">No organizations found</p>
-              <p className="text-sm text-gray-400 mt-1">Try adjusting your search or filters</p>
+              <p className="text-gray-500">{t('adminOrganizations.noOrganizations')}</p>
+              <p className="text-sm text-gray-400 mt-1">{t('adminOrganizations.tryAdjusting')}</p>
             </div>
           )}
         </div>

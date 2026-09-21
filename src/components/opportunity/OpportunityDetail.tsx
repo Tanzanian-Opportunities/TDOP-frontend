@@ -75,11 +75,11 @@ export const OpportunityDetail: React.FC = () => {
         <div className="w-16 h-16 rounded-2xl bg-tdop-light flex items-center justify-center mx-auto mb-4">
           <AlertCircle className="w-8 h-8 text-gray-400" />
         </div>
-        <h2 className="text-xl font-semibold text-tdop-navy mb-2">Opportunity Not Found</h2>
-        <p className="text-gray-500 mb-6">The opportunity you're looking for doesn't exist or has been removed.</p>
+        <h2 className="text-xl font-semibold text-tdop-navy mb-2">{t('opportunities.empty')}</h2>
+        <p className="text-gray-500 mb-6">{t('opportunities.notFoundDescription')}</p>
         <Link to="/browse" className="inline-flex items-center gap-2 px-4 py-2 bg-tdop-primary text-white rounded-lg hover:bg-blue-700 transition-colors">
           <ArrowLeft className="w-4 h-4" />
-          Browse Opportunities
+          {t('opportunities.browseTitle')}
         </Link>
       </div>
     );
@@ -90,19 +90,19 @@ export const OpportunityDetail: React.FC = () => {
 
   const eligibilityChecks = [
     {
-      label: 'Education level',
+      label: t('opportunities.educationLevel'),
       met: !!opportunity.educationLevel,
-      detail: opportunity.educationLevel || 'Not specified',
+      detail: opportunity.educationLevel || t('opportunities.notSpecified'),
     },
     {
-      label: 'Experience level',
+      label: t('opportunities.experienceLevel'),
       met: !!opportunity.experienceLevel,
-      detail: opportunity.experienceLevel || 'Not specified',
+      detail: opportunity.experienceLevel || t('opportunities.notSpecified'),
     },
     {
-      label: 'Skills match',
+      label: t('opportunities.skillsMatch'),
       met: opportunity.skills?.length > 0,
-      detail: opportunity.skills?.length ? `${opportunity.skills.length} skills required` : 'No specific skills required',
+      detail: opportunity.skills?.length ? t('opportunities.skillsRequired', { count: opportunity.skills.length }) : t('opportunities.noSkillsRequired'),
     },
   ];
 
@@ -119,9 +119,9 @@ export const OpportunityDetail: React.FC = () => {
       setShowApplyModal(false);
       setCoverLetter('');
       setSelectedDocs([]);
-      addNotification({ type: 'success', title: 'Application submitted', message: `Applied for ${opportunity.title}` });
+      addNotification({ type: 'success', title: t('opportunities.applicationSubmitted'), message: t('opportunities.appliedFor', { title: opportunity.title }) });
     } catch (err: any) {
-      setApplyError(err?.message || 'Failed to submit application.');
+      setApplyError(err?.message || t('opportunities.applicationFailed'));
     }
   };
 
@@ -133,7 +133,7 @@ export const OpportunityDetail: React.FC = () => {
       } catch {}
     } else {
       await navigator.clipboard.writeText(url);
-      addNotification({ type: 'info', title: 'Link copied', message: 'Opportunity link copied to clipboard.' });
+      addNotification({ type: 'info', title: t('opportunities.linkCopied'), message: t('opportunities.linkCopiedDescription') });
     }
   };
 
@@ -150,7 +150,7 @@ export const OpportunityDetail: React.FC = () => {
       setReportSubmitted(true);
       setTimeout(() => { setShowReportModal(false); setReportSubmitted(false); setReportReason(''); setReportDescription(''); }, 2000);
     } catch {
-      addNotification({ type: 'error', title: 'Error', message: 'Failed to submit report.' });
+      addNotification({ type: 'error', title: t('common.error'), message: t('opportunities.reportFailed') });
     }
   };
 
@@ -168,14 +168,14 @@ export const OpportunityDetail: React.FC = () => {
     <div className="max-w-4xl mx-auto space-y-6 animate-slide-up">
       <div className="flex items-center justify-between">
         <Link to="/browse" className="inline-flex items-center gap-1.5 text-tdop-primary text-sm font-medium hover:gap-2.5 transition-all">
-          <ArrowLeft className="w-4 h-4" /> Back to opportunities
+          <ArrowLeft className="w-4 h-4" /> {t('opportunities.backToOpportunities')}
         </Link>
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="sm" onClick={handleShare}>
-            <Share2 className="w-4 h-4 mr-1" /> Share
+            <Share2 className="w-4 h-4 mr-1" /> {t('opportunities.share')}
           </Button>
           <Button variant="ghost" size="sm" onClick={() => setShowReportModal(true)} className="text-gray-500 hover:text-red-600">
-            <Flag className="w-4 h-4 mr-1" /> Report
+            <Flag className="w-4 h-4 mr-1" /> {t('opportunities.report')}
           </Button>
         </div>
       </div>
@@ -193,13 +193,13 @@ export const OpportunityDetail: React.FC = () => {
             <div className="flex gap-2">
               {opportunity.isVerified && (
                 <div className="group relative">
-                  <Badge variant="success"><Shield className="w-3 h-3 mr-1 inline" />Verified</Badge>
+                  <Badge variant="success"><Shield className="w-3 h-3 mr-1 inline" />{t('opportunities.verified')}</Badge>
                   <div className="absolute right-0 top-full mt-2 w-64 p-3 bg-white rounded-xl shadow-elevated border border-gray-100 text-xs text-gray-600 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-10">
                     This opportunity has been verified by TDOP. The organization and listing details have been reviewed.
                   </div>
                 </div>
               )}
-              {opportunity.isFeatured && <Badge variant="warning">Featured</Badge>}
+              {opportunity.isFeatured && <Badge variant="warning">{t('opportunities.featured')}</Badge>}
             </div>
           </div>
 
@@ -223,7 +223,7 @@ export const OpportunityDetail: React.FC = () => {
             )}
             <div className="flex items-center gap-2 text-sm text-gray-500">
               <Users className="w-4 h-4" />
-              {opportunity.applicationsCount} applicants
+              {opportunity.applicationsCount} {t('opportunities.applicants')}
             </div>
             {opportunity.category && (
               <Badge variant="gray">{opportunity.category}</Badge>
@@ -233,29 +233,29 @@ export const OpportunityDetail: React.FC = () => {
 
         <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card>
-            <p className="text-sm text-gray-500">Salary</p>
+            <p className="text-sm text-gray-500">{t('opportunities.salary')}</p>
             <p className="text-xl font-bold text-tdop-navy mt-1">
               {formatSalary(opportunity.salaryMin, opportunity.salaryMax, opportunity.salaryCurrency)}
             </p>
           </Card>
           <Card>
-            <p className="text-sm text-gray-500">Type</p>
+            <p className="text-sm text-gray-500">{t('opportunities.typeLabel')}</p>
             <p className="text-xl font-bold text-tdop-navy mt-1 capitalize">{opportunity.type}</p>
           </Card>
           <Card>
-            <p className="text-sm text-gray-500">Experience</p>
+            <p className="text-sm text-gray-500">{t('opportunities.experienceLabel')}</p>
             <p className="text-xl font-bold text-tdop-navy mt-1 capitalize">{opportunity.experienceLevel}</p>
           </Card>
         </div>
 
         <div className="p-6 space-y-4">
-          <h2 className="text-lg font-semibold text-tdop-navy">Description</h2>
+          <h2 className="text-lg font-semibold text-tdop-navy">{t('opportunities.description')}</h2>
           <p className="text-gray-600 leading-relaxed">{opportunity.description}</p>
         </div>
 
         {opportunity.skills?.length > 0 && (
           <div className="px-6 pb-4">
-            <h3 className="font-medium text-tdop-navy mb-2">Required skills</h3>
+            <h3 className="font-medium text-tdop-navy mb-2">{t('opportunities.requiredSkills')}</h3>
             <div className="flex flex-wrap gap-2">
               {opportunity.skills.map((skill, i) => (
                 <span key={i} className="px-3 py-1 bg-tdop-primary/10 text-tdop-primary text-xs font-medium rounded-full">{skill}</span>
@@ -267,7 +267,7 @@ export const OpportunityDetail: React.FC = () => {
         <div className="px-6 pb-6 space-y-4">
           {(Array.isArray(opportunity.requirements) ? opportunity.requirements : (opportunity.requirements || '').split('\n').filter(Boolean)).length > 0 && (
             <div>
-              <h3 className="font-medium text-tdop-navy mb-2">Requirements</h3>
+              <h3 className="font-medium text-tdop-navy mb-2">{t('opportunities.requirements')}</h3>
               <ul className="space-y-1">
                 {(Array.isArray(opportunity.requirements) ? opportunity.requirements : (opportunity.requirements || '').split('\n').filter(Boolean)).map((req: string, i: number) => (
                   <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
@@ -279,7 +279,7 @@ export const OpportunityDetail: React.FC = () => {
           )}
           {opportunity.responsibilities.length > 0 && (
             <div>
-              <h3 className="font-medium text-tdop-navy mb-2">Responsibilities</h3>
+              <h3 className="font-medium text-tdop-navy mb-2">{t('opportunities.responsibilities')}</h3>
               <ul className="space-y-1">
                 {opportunity.responsibilities.map((resp, i) => (
                   <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
@@ -291,7 +291,7 @@ export const OpportunityDetail: React.FC = () => {
           )}
           {(Array.isArray(opportunity.benefits) ? opportunity.benefits : (opportunity.benefits || '').split('\n').filter(Boolean)).length > 0 && (
             <div>
-              <h3 className="font-medium text-tdop-navy mb-2">Benefits</h3>
+              <h3 className="font-medium text-tdop-navy mb-2">{t('opportunities.benefits')}</h3>
               <ul className="space-y-1">
                 {(Array.isArray(opportunity.benefits) ? opportunity.benefits : (opportunity.benefits || '').split('\n').filter(Boolean)).map((benefit: string, i: number) => (
                   <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
@@ -325,7 +325,7 @@ export const OpportunityDetail: React.FC = () => {
           {completion < 80 && (
             <div className="mt-3 p-3 bg-amber-50 rounded-xl text-sm text-amber-700 flex items-start gap-2">
               <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0" />
-              <span>Complete your profile to improve your match score. <Link to="/profile" className="underline font-medium">Edit profile</Link></span>
+              <span>{t('opportunities.completeProfileForMatch')} <Link to="/profile" className="underline font-medium">{t('common.editProfile')}</Link></span>
             </div>
           )}
         </Card>
@@ -334,7 +334,7 @@ export const OpportunityDetail: React.FC = () => {
       {/* Related Opportunities */}
       {related.length > 0 && (
         <Card>
-          <h3 className="font-semibold text-tdop-navy mb-3">Related opportunities</h3>
+          <h3 className="font-semibold text-tdop-navy mb-3">{t('opportunities.relatedOpportunities')}</h3>
           <div className="space-y-2">
             {related.map((rel: any) => (
               <Link
@@ -363,12 +363,12 @@ export const OpportunityDetail: React.FC = () => {
         <div className="sticky bottom-4 flex items-center justify-center gap-4">
           {isExpired ? (
             <div className="bg-white rounded-2xl shadow-elevated border border-gray-100 px-6 py-4 text-center">
-              <p className="text-gray-500 font-medium">This opportunity is no longer accepting applications.</p>
+              <p className="text-gray-500 font-medium">{t('opportunities.noLongerAccepting')}</p>
             </div>
           ) : (
             <Button size="lg" onClick={() => setShowApplyModal(true)} className="w-full md:w-auto">
               <FileText className="w-5 h-5 mr-2" />
-              Apply now
+              {t('opportunities.applyNow')}
             </Button>
           )}
         </div>
@@ -380,8 +380,8 @@ export const OpportunityDetail: React.FC = () => {
           <div className="bg-white rounded-2xl shadow-elevated w-full max-w-lg max-h-[90vh] overflow-y-auto animate-modal-in">
             <div className="flex items-center justify-between p-6 border-b border-gray-100">
               <div>
-                <h2 className="text-lg font-bold text-tdop-navy">Apply for {opportunity.title}</h2>
-                <p className="text-sm text-gray-500 mt-0.5">at {opportunity.company}</p>
+                <h2 className="text-lg font-bold text-tdop-navy">{t('opportunities.applyFor', { title: opportunity.title })}</h2>
+                <p className="text-sm text-gray-500 mt-0.5">{t('opportunities.atCompany', { company: opportunity.company })}</p>
               </div>
               <button onClick={() => setShowApplyModal(false)} className="p-2 rounded-lg hover:bg-gray-100" aria-label="Close">
                 <X className="w-5 h-5 text-gray-400" />
@@ -399,34 +399,34 @@ export const OpportunityDetail: React.FC = () => {
                 <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-700 flex items-start gap-2">
                   <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0" />
                   <div>
-                    <p className="font-medium">Your profile is incomplete ({completion}%)</p>
-                    <p className="mt-1">A complete profile improves your chances. <Link to="/profile" className="underline" onClick={() => setShowApplyModal(false)}>Complete profile</Link></p>
+                    <p className="font-medium">{t('opportunities.profileIncomplete', { percent: completion })}</p>
+                    <p className="mt-1">{t('opportunities.completeProfileDescription')} <Link to="/profile" className="underline" onClick={() => setShowApplyModal(false)}>{t('common.completeProfile')}</Link></p>
                   </div>
                 </div>
               )}
 
               <div>
                 <label className="block text-sm font-medium text-tdop-navy mb-2">
-                  Cover letter <span className="text-gray-400 font-normal">(optional)</span>
+                  {t('opportunities.coverLetter')} <span className="text-gray-400 font-normal">({t('common.optional')})</span>
                 </label>
                 <textarea
                   value={coverLetter}
                   onChange={(e) => setCoverLetter(e.target.value)}
                   rows={5}
-                  placeholder="Tell the employer why you're a great fit for this role..."
+                  placeholder={t('opportunities.coverLetterPlaceholder')}
                   className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-tdop-navy placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-tdop-primary/20 focus:border-tdop-primary resize-none"
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-tdop-navy mb-2">
-                  Attach documents <span className="text-gray-400 font-normal">(optional)</span>
+                  {t('opportunities.attachDocuments')} <span className="text-gray-400 font-normal">({t('common.optional')})</span>
                 </label>
                 {documents.length === 0 ? (
                   <div className="text-center py-6 border-2 border-dashed border-gray-200 rounded-xl">
                     <FileText className="w-8 h-8 text-gray-300 mx-auto mb-2" />
-                    <p className="text-sm text-gray-500">No documents uploaded yet.</p>
-                    <Link to="/documents" className="text-sm text-tdop-primary hover:underline mt-1 inline-block">Upload documents</Link>
+                    <p className="text-sm text-gray-500">{t('opportunities.noDocumentsUploaded')}</p>
+                    <Link to="/documents" className="text-sm text-tdop-primary hover:underline mt-1 inline-block">{t('opportunities.uploadDocuments')}</Link>
                   </div>
                 ) : (
                   <div className="space-y-2 max-h-40 overflow-y-auto">
@@ -448,8 +448,8 @@ export const OpportunityDetail: React.FC = () => {
             </div>
 
             <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-100">
-              <Button variant="ghost" onClick={() => setShowApplyModal(false)}>Cancel</Button>
-              <Button onClick={handleApply} loading={isApplying}>Submit application</Button>
+              <Button variant="ghost" onClick={() => setShowApplyModal(false)}>{t('common.cancel')}</Button>
+              <Button onClick={handleApply} loading={isApplying}>{t('opportunities.submitApplication')}</Button>
             </div>
           </div>
         </div>
@@ -460,7 +460,7 @@ export const OpportunityDetail: React.FC = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" role="dialog" aria-modal="true" aria-label="Report opportunity">
           <div className="bg-white rounded-2xl shadow-elevated w-full max-w-md animate-modal-in">
             <div className="flex items-center justify-between p-6 border-b border-gray-100">
-              <h2 className="text-lg font-bold text-tdop-navy">Report opportunity</h2>
+              <h2 className="text-lg font-bold text-tdop-navy">{t('opportunities.reportOpportunity')}</h2>
               <button onClick={() => setShowReportModal(false)} className="p-2 rounded-lg hover:bg-gray-100" aria-label="Close">
                 <X className="w-5 h-5 text-gray-400" />
               </button>
@@ -471,34 +471,34 @@ export const OpportunityDetail: React.FC = () => {
                   <div className="w-12 h-12 rounded-full bg-emerald-100 text-tdop-secondary flex items-center justify-center mx-auto mb-3">
                     <Check className="w-6 h-6" />
                   </div>
-                  <p className="font-medium text-tdop-navy">Report submitted</p>
-                  <p className="text-sm text-gray-500 mt-1">Thank you for helping keep TDOP safe.</p>
+                  <p className="font-medium text-tdop-navy">{t('opportunities.reportSubmitted')}</p>
+                  <p className="text-sm text-gray-500 mt-1">{t('opportunities.reportSubmittedDescription')}</p>
                 </div>
               ) : (
                 <>
                   <div>
-                    <label className="block text-sm font-medium text-tdop-navy mb-2">Reason</label>
+                    <label className="block text-sm font-medium text-tdop-navy mb-2">{t('opportunities.reason')}</label>
                     <select
                       value={reportReason}
                       onChange={(e) => setReportReason(e.target.value)}
                       className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm text-tdop-navy focus:outline-none focus:ring-2 focus:ring-tdop-primary/20 focus:border-tdop-primary"
                     >
-                      <option value="">Select a reason</option>
-                      <option value="scam">Suspected scam or fraud</option>
-                      <option value="misleading">Misleading information</option>
-                      <option value="expired">Expired opportunity</option>
-                      <option value="duplicate">Duplicate listing</option>
-                      <option value="inappropriate">Inappropriate content</option>
-                      <option value="other">Other</option>
+                      <option value="">{t('opportunities.selectReason')}</option>
+                      <option value="scam">{t('opportunities.reasonScam')}</option>
+                      <option value="misleading">{t('opportunities.reasonMisleading')}</option>
+                      <option value="expired">{t('opportunities.reasonExpired')}</option>
+                      <option value="duplicate">{t('opportunities.reasonDuplicate')}</option>
+                      <option value="inappropriate">{t('opportunities.reasonInappropriate')}</option>
+                      <option value="other">{t('common.other')}</option>
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-tdop-navy mb-2">Additional details <span className="text-gray-400 font-normal">(optional)</span></label>
+                    <label className="block text-sm font-medium text-tdop-navy mb-2">{t('opportunities.additionalDetails')} <span className="text-gray-400 font-normal">({t('common.optional')})</span></label>
                     <textarea
                       value={reportDescription}
                       onChange={(e) => setReportDescription(e.target.value)}
                       rows={3}
-                      placeholder="Provide any additional context..."
+                      placeholder={t('opportunities.additionalDetailsPlaceholder')}
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-tdop-navy placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-tdop-primary/20 focus:border-tdop-primary resize-none"
                     />
                   </div>
@@ -507,8 +507,8 @@ export const OpportunityDetail: React.FC = () => {
             </div>
             {!reportSubmitted && (
               <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-100">
-                <Button variant="ghost" onClick={() => setShowReportModal(false)}>Cancel</Button>
-                <Button variant="danger" onClick={handleReport} disabled={!reportReason}>Submit report</Button>
+                <Button variant="ghost" onClick={() => setShowReportModal(false)}>{t('common.cancel')}</Button>
+                <Button variant="danger" onClick={handleReport} disabled={!reportReason}>{t('opportunities.submitReport')}</Button>
               </div>
             )}
           </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { AlertTriangle, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface ConfirmDialogProps {
   open: boolean;
@@ -17,15 +18,18 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   open,
   title,
   message,
-  confirmLabel = 'Confirm',
-  cancelLabel = 'Cancel',
+  confirmLabel,
+  cancelLabel,
   variant = 'danger',
   onConfirm,
   onCancel,
   loading = false,
 }) => {
+  const { t } = useTranslation();
   const dialogRef = React.useRef<HTMLDivElement>(null);
   const cancelRef = React.useRef<HTMLButtonElement>(null);
+  const resolvedConfirmLabel = confirmLabel || t('app.confirm');
+  const resolvedCancelLabel = cancelLabel || t('app.cancel');
 
   React.useEffect(() => {
     if (open) {
@@ -69,7 +73,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
         <button
           onClick={onCancel}
           className="absolute top-4 right-4 p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
-          aria-label="Close"
+          aria-label={t('app.close')}
         >
           <X className="w-5 h-5" />
         </button>
@@ -88,14 +92,14 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
             disabled={loading}
             className="px-4 py-2 text-sm font-medium text-gray-600 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors disabled:opacity-50"
           >
-            {cancelLabel}
+            {resolvedCancelLabel}
           </button>
           <button
             onClick={onConfirm}
             disabled={loading}
             className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors disabled:opacity-50 ${styles.btn}`}
           >
-            {loading ? 'Processing...' : confirmLabel}
+            {loading ? t('common.loading') : resolvedConfirmLabel}
           </button>
         </div>
       </div>

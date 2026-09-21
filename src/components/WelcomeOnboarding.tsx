@@ -3,43 +3,45 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/Button';
 import { User, FileText, Search, Sparkles, ArrowRight, Check } from 'lucide-react';
-
-const steps = [
-  {
-    icon: User,
-    title: 'Complete your profile',
-    description: 'Add your skills, education, and experience so we can match you with the best opportunities.',
-    color: 'bg-tdop-primary/10 text-tdop-primary',
-    to: '/profile',
-  },
-  {
-    icon: FileText,
-    title: 'Upload your documents',
-    description: 'Upload your CV, certificates, and cover letters to apply faster.',
-    color: 'bg-emerald-50 text-tdop-secondary',
-    to: '/documents',
-  },
-  {
-    icon: Search,
-    title: 'Discover opportunities',
-    description: 'Browse scholarships, jobs, internships, and training programs across Tanzania.',
-    color: 'bg-amber-50 text-amber-600',
-    to: '/browse',
-  },
-  {
-    icon: Sparkles,
-    title: 'Get personalized matches',
-    description: 'Complete your profile to receive AI-powered opportunity recommendations.',
-    color: 'bg-purple-50 text-purple-600',
-    to: '/recommendations',
-  },
-];
+import { useTranslation } from 'react-i18next';
 
 const WelcomeOnboarding: React.FC = () => {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
+
+  const steps = [
+    {
+      icon: User,
+      title: t('onboarding.completeProfile'),
+      description: t('onboarding.completeProfileDesc'),
+      color: 'bg-tdop-primary/10 text-tdop-primary',
+      to: '/profile',
+    },
+    {
+      icon: FileText,
+      title: t('onboarding.uploadDocs'),
+      description: t('onboarding.uploadDocsDesc'),
+      color: 'bg-emerald-50 text-tdop-secondary',
+      to: '/documents',
+    },
+    {
+      icon: Search,
+      title: t('onboarding.discoverOpps'),
+      description: t('onboarding.discoverOppsDesc'),
+      color: 'bg-amber-50 text-amber-600',
+      to: '/browse',
+    },
+    {
+      icon: Sparkles,
+      title: t('onboarding.personalizedMatches'),
+      description: t('onboarding.personalizedMatchesDesc'),
+      color: 'bg-purple-50 text-purple-600',
+      to: '/recommendations',
+    },
+  ];
 
   useEffect(() => {
     const dismissed = localStorage.getItem('tdop-onboarding-dismissed');
@@ -67,14 +69,14 @@ const WelcomeOnboarding: React.FC = () => {
   const isLast = currentStep === steps.length - 1;
 
   return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" role="dialog" aria-modal="true" aria-label="Welcome to TDOP">
+    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" role="dialog" aria-modal="true" aria-label={t('onboarding.welcomeTo')}>
       <div className="bg-white rounded-3xl shadow-elevated w-full max-w-md overflow-hidden animate-modal-in">
         <div className="p-8 text-center">
           <div className={`w-16 h-16 rounded-2xl ${step.color} flex items-center justify-center mx-auto mb-4`}>
             <Icon className="w-8 h-8" />
           </div>
           <h2 className="text-2xl font-bold text-tdop-navy mb-2">
-            {currentStep === 0 ? `Welcome, ${user?.firstName || 'there'}!` : step.title}
+            {currentStep === 0 ? t('onboarding.welcomeUser', { name: user?.firstName || 'there' }) : step.title}
           </h2>
           <p className="text-gray-500 text-sm leading-relaxed">{step.description}</p>
 
@@ -92,12 +94,12 @@ const WelcomeOnboarding: React.FC = () => {
 
         <div className="flex items-center justify-between px-8 pb-8">
           <Button variant="ghost" size="sm" onClick={handleDismiss}>
-            Skip for now
+            {t('onboarding.skipForNow')}
           </Button>
           <div className="flex items-center gap-2">
             {currentStep > 0 && (
               <Button variant="ghost" size="sm" onClick={() => setCurrentStep(s => s - 1)}>
-                Back
+                {t('onboarding.back')}
               </Button>
             )}
             <Button
@@ -112,7 +114,7 @@ const WelcomeOnboarding: React.FC = () => {
                 }
               }}
             >
-              {isLast ? 'Get started' : 'Continue'}
+              {isLast ? t('onboarding.getStarted') : t('onboarding.continue')}
               <ArrowRight className="w-4 h-4 ml-1" />
             </Button>
           </div>

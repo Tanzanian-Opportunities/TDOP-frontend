@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { superAdminApi } from '@/services/api/superAdminApi';
@@ -13,6 +14,7 @@ interface FeatureFlag {
 }
 
 const SuperAdminFeatureControlsPage: React.FC = () => {
+  const { t } = useTranslation();
   const [flags, setFlags] = useState<FeatureFlag[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -70,35 +72,35 @@ const SuperAdminFeatureControlsPage: React.FC = () => {
             <ToggleLeft className="w-7 h-7 text-tdop-primary" />
             Feature Controls
           </h1>
-          <p className="text-sm text-gray-500 mt-1">Enable or disable platform features via configuration flags</p>
+          <p className="text-sm text-gray-500 mt-1">{t('superAdminDetail.enableDisableFeatures')}</p>
         </div>
         <button onClick={() => setShowAdd(!showAdd)} className="flex items-center gap-2 px-4 py-2 bg-tdop-primary text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
-          <Plus className="w-4 h-4" /> {showAdd ? 'Cancel' : 'Add Feature Flag'}
+          <Plus className="w-4 h-4" /> {showAdd ? t('superAdminDetail.cancel') : t('superAdminDetail.addFeatureFlag')}
         </button>
       </div>
       {showAdd && (
         <Card className="p-5">
-          <h3 className="text-sm font-semibold text-tdop-navy mb-3">New Feature Flag</h3>
+          <h3 className="text-sm font-semibold text-tdop-navy mb-3">{t('superAdminDetail.newFeatureFlag')}</h3>
           <form onSubmit={handleAdd} className="space-y-3">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Key (auto-prefixed with feature.)</label>
+                <label className="block text-xs font-medium text-gray-600 mb-1">{t('superAdminDetail.keyFeature')}</label>
                 <input type="text" value={newKey} onChange={(e) => setNewKey(e.target.value)} placeholder="e.g. darkMode" className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-tdop-primary focus:border-transparent" required />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Value</label>
+                <label className="block text-xs font-medium text-gray-600 mb-1">{t('superAdminDetail.value')}</label>
                 <select value={newValue} onChange={(e) => setNewValue(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-tdop-primary focus:border-transparent">
-                  <option value="true">Enabled</option>
-                  <option value="false">Disabled</option>
+                  <option value="true">{t('superAdminDetail.enabled')}</option>
+                  <option value="false">{t('superAdminDetail.disabled')}</option>
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Description</label>
+                <label className="block text-xs font-medium text-gray-600 mb-1">{t('superAdminDetail.description')}</label>
                 <input type="text" value={newDesc} onChange={(e) => setNewDesc(e.target.value)} placeholder="Optional" className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-tdop-primary focus:border-transparent" />
               </div>
             </div>
             <button type="submit" disabled={saving} className="px-4 py-2 bg-tdop-primary text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 text-sm font-medium">
-              {saving ? 'Saving...' : 'Save Flag'}
+              {saving ? t('superAdminDetail.saving') : t('superAdminDetail.saveFlag')}
             </button>
           </form>
         </Card>
@@ -108,10 +110,10 @@ const SuperAdminFeatureControlsPage: React.FC = () => {
           <table className="w-full">
             <thead>
               <tr className="bg-gray-50 border-b">
-                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">Feature</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">Status</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">Description</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">Actions</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">{t('superAdminDetail.feature')}</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">{t('superAdminDetail.status')}</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">{t('superAdminDetail.description')}</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">{t('superAdminDetail.actions')}</th>
               </tr>
             </thead>
             <tbody className="divide-y">
@@ -121,7 +123,7 @@ const SuperAdminFeatureControlsPage: React.FC = () => {
                   <td className="px-4 py-3">
                     <button onClick={() => handleToggle(flag)} className="focus:outline-none">
                       <Badge variant={flag.value === 'true' ? 'secondary' : 'danger'}>
-                        {flag.value === 'true' ? 'ENABLED' : 'DISABLED'}
+                        {flag.value === 'true' ? t('superAdminDetail.enabledBadge') : t('superAdminDetail.disabledBadge')}
                       </Badge>
                     </button>
                   </td>
@@ -134,7 +136,7 @@ const SuperAdminFeatureControlsPage: React.FC = () => {
                 </tr>
               ))}
               {flags.length === 0 && (
-                <tr><td colSpan={4} className="px-4 py-8 text-center text-gray-500 text-sm">No feature flags configured. Click "Add Feature Flag" to create one.</td></tr>
+                <tr><td colSpan={4} className="px-4 py-8 text-center text-gray-500 text-sm">{t('superAdminDetail.noFeatureFlags')}</td></tr>
               )}
             </tbody>
           </table>

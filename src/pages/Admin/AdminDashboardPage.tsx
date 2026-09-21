@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -31,6 +32,7 @@ interface DashboardStats {
 }
 
 const AdminDashboardPage: React.FC = () => {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -46,7 +48,7 @@ const AdminDashboardPage: React.FC = () => {
       const data = await adminApi.getDashboardStats();
       setStats(data);
     } catch (err) {
-      setError('Failed to load dashboard stats');
+      setError(t('adminDashboard.failedToLoad'));
       console.error(err);
     } finally {
       setLoading(false);
@@ -83,7 +85,7 @@ const AdminDashboardPage: React.FC = () => {
               onClick={fetchStats}
               className="px-4 py-2 bg-tdop-primary text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
-              Retry
+              {t('adminDashboard.retry')}
             </button>
           </div>
         </Card>
@@ -92,21 +94,21 @@ const AdminDashboardPage: React.FC = () => {
   }
 
   const adminStats = [
-    { label: 'Total users', value: stats?.totalUsers || 0, icon: Users, color: 'bg-tdop-primary/10 text-tdop-primary', trend: 'neutral' as const },
-    { label: 'Organizations', value: stats?.totalOrganizations || 0, icon: Building2, color: 'bg-purple-50 text-purple-600', trend: 'neutral' as const },
-    { label: 'Verified orgs', value: stats?.verifiedOrganizations || 0, icon: CheckCircle, color: 'bg-emerald-50 text-tdop-secondary', trend: 'neutral' as const },
-    { label: 'Active opportunities', value: stats?.activeOpportunities || 0, icon: Briefcase, color: 'bg-blue-50 text-blue-600', trend: 'neutral' as const },
-    { label: 'Total applications', value: stats?.totalApplications || 0, icon: FileText, color: 'bg-amber-50 text-amber-600', trend: 'neutral' as const },
-    { label: 'Pending verifications', value: stats?.pendingVerifications || 0, icon: Clock, color: stats?.pendingVerifications ? 'bg-red-50 text-red-600' : 'bg-emerald-50 text-tdop-secondary', trend: stats?.pendingVerifications ? ('up' as const) : ('neutral' as const), to: '/admin/verification' },
-    { label: 'Pending moderation', value: stats?.pendingModeration || 0, icon: Eye, color: stats?.pendingModeration ? 'bg-amber-50 text-amber-600' : 'bg-emerald-50 text-tdop-secondary', trend: stats?.pendingModeration ? ('up' as const) : ('neutral' as const), to: '/admin/moderation' },
-    { label: 'Pending reports', value: stats?.pendingReports || 0, icon: Flag, color: stats?.pendingReports ? 'bg-red-50 text-red-600' : 'bg-emerald-50 text-tdop-secondary', trend: stats?.pendingReports ? ('up' as const) : ('neutral' as const), to: '/admin/reports' },
+    { label: t('adminDashboard.totalUsers'), value: stats?.totalUsers || 0, icon: Users, color: 'bg-tdop-primary/10 text-tdop-primary', trend: 'neutral' as const },
+    { label: t('adminDashboard.organizations'), value: stats?.totalOrganizations || 0, icon: Building2, color: 'bg-purple-50 text-purple-600', trend: 'neutral' as const },
+    { label: t('adminDashboard.verifiedOrgs'), value: stats?.verifiedOrganizations || 0, icon: CheckCircle, color: 'bg-emerald-50 text-tdop-secondary', trend: 'neutral' as const },
+    { label: t('adminDashboard.activeOpportunities'), value: stats?.activeOpportunities || 0, icon: Briefcase, color: 'bg-blue-50 text-blue-600', trend: 'neutral' as const },
+    { label: t('adminDashboard.totalApplications'), value: stats?.totalApplications || 0, icon: FileText, color: 'bg-amber-50 text-amber-600', trend: 'neutral' as const },
+    { label: t('adminDashboard.pendingVerifications'), value: stats?.pendingVerifications || 0, icon: Clock, color: stats?.pendingVerifications ? 'bg-red-50 text-red-600' : 'bg-emerald-50 text-tdop-secondary', trend: stats?.pendingVerifications ? ('up' as const) : ('neutral' as const), to: '/admin/verification' },
+    { label: t('adminDashboard.pendingModeration'), value: stats?.pendingModeration || 0, icon: Eye, color: stats?.pendingModeration ? 'bg-amber-50 text-amber-600' : 'bg-emerald-50 text-tdop-secondary', trend: stats?.pendingModeration ? ('up' as const) : ('neutral' as const), to: '/admin/moderation' },
+    { label: t('adminDashboard.pendingReports'), value: stats?.pendingReports || 0, icon: Flag, color: stats?.pendingReports ? 'bg-red-50 text-red-600' : 'bg-emerald-50 text-tdop-secondary', trend: stats?.pendingReports ? ('up' as const) : ('neutral' as const), to: '/admin/reports' },
   ];
 
   const pendingItems = [
-    { label: 'Pending verifications', value: stats?.pendingVerifications || 0, icon: <Clock className="w-4 h-4" />, to: '/admin/verification', color: 'bg-amber-50 text-amber-600' },
-    { label: 'Pending moderation', value: stats?.pendingModeration || 0, icon: <Eye className="w-4 h-4" />, to: '/admin/moderation', color: 'bg-amber-50 text-amber-600' },
-    { label: 'Pending reports', value: stats?.pendingReports || 0, icon: <Flag className="w-4 h-4" />, to: '/admin/reports', color: 'bg-red-50 text-red-600' },
-    { label: 'High risk signals', value: stats?.highRiskSignals || 0, icon: <AlertTriangle className="w-4 h-4" />, to: '/admin/reports', color: stats?.highRiskSignals ? 'bg-red-50 text-red-600' : 'bg-emerald-50 text-tdop-secondary' },
+    { label: t('adminDashboard.pendingVerifications'), value: stats?.pendingVerifications || 0, icon: <Clock className="w-4 h-4" />, to: '/admin/verification', color: 'bg-amber-50 text-amber-600' },
+    { label: t('adminDashboard.pendingModeration'), value: stats?.pendingModeration || 0, icon: <Eye className="w-4 h-4" />, to: '/admin/moderation', color: 'bg-amber-50 text-amber-600' },
+    { label: t('adminDashboard.pendingReports'), value: stats?.pendingReports || 0, icon: <Flag className="w-4 h-4" />, to: '/admin/reports', color: 'bg-red-50 text-red-600' },
+    { label: t('adminDashboard.highRiskSignals'), value: stats?.highRiskSignals || 0, icon: <AlertTriangle className="w-4 h-4" />, to: '/admin/reports', color: stats?.highRiskSignals ? 'bg-red-50 text-red-600' : 'bg-emerald-50 text-tdop-secondary' },
   ].filter(item => item.value > 0);
 
   return (
@@ -115,8 +117,8 @@ const AdminDashboardPage: React.FC = () => {
       <div className="rounded-3xl bg-gradient-to-r from-tdop-navy to-tdop-primary p-5 sm:p-8 text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" />
         <div className="relative">
-          <h1 className="text-3xl font-bold font-display">Admin Dashboard</h1>
-          <p className="text-white/70 mt-1">Platform overview and management</p>
+          <h1 className="text-3xl font-bold font-display">{t('adminDashboard.title')}</h1>
+          <p className="text-white/70 mt-1">{t('adminDashboard.subtitle')}</p>
           {pendingItems.length > 0 && (
             <div className="mt-4 flex flex-wrap items-center gap-3">
               {pendingItems.map(item => (
@@ -155,58 +157,58 @@ const AdminDashboardPage: React.FC = () => {
       {/* Quick Actions + Platform Health */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Quick Actions */}
-        <DashboardSection title="Quick actions" icon={<Zap className="w-4 h-4 text-tdop-accent" />}>
+        <DashboardSection title={t('adminDashboard.quickActions')} icon={<Zap className="w-4 h-4 text-tdop-accent" />}>
           <div className="grid grid-cols-2 gap-3 p-4">
             <QuickAction
-              label="Manage users"
+              label={t('adminDashboard.manageUsers')}
               icon={<Users className="w-5 h-5" />}
               to="/admin/users"
               color="bg-tdop-primary/10 text-tdop-primary"
             />
             <QuickAction
-              label="Organizations"
+              label={t('adminDashboard.organizations')}
               icon={<Building2 className="w-5 h-5" />}
               to="/admin/organizations"
               color="bg-purple-50 text-purple-600"
             />
             <QuickAction
-              label="Moderation"
+              label={t('adminDashboard.moderation')}
               icon={<Eye className="w-5 h-5" />}
               to="/admin/moderation"
               color="bg-purple-50 text-purple-600"
             />
             <QuickAction
-              label="Reports"
+              label={t('adminDashboard.reports')}
               icon={<Flag className="w-5 h-5" />}
               to="/admin/reports"
               color="bg-red-50 text-red-600"
             />
             <QuickAction
-              label="Analytics"
+              label={t('adminDashboard.analytics')}
               icon={<BarChart3 className="w-5 h-5" />}
               to="/admin/analytics"
               color="bg-emerald-50 text-tdop-secondary"
             />
             <QuickAction
-              label="Verification"
+              label={t('adminDashboard.verification')}
               icon={<CheckCircle className="w-5 h-5" />}
               to="/admin/verification"
               color="bg-amber-50 text-amber-600"
             />
             <QuickAction
-              label="Audit log"
+              label={t('adminDashboard.auditLog')}
               icon={<Clock className="w-5 h-5" />}
               to="/admin/audit-log"
               color="bg-gray-100 text-gray-600"
             />
             <QuickAction
-              label="Opportunities"
+              label={t('adminDashboard.opportunities')}
               icon={<Briefcase className="w-5 h-5" />}
               to="/admin/opportunities"
               color="bg-blue-50 text-blue-600"
             />
             <QuickAction
-              label="Config"
+              label={t('adminDashboard.config')}
               icon={<Wrench className="w-5 h-5" />}
               to="/admin/config"
               color="bg-gray-100 text-gray-600"
@@ -215,13 +217,13 @@ const AdminDashboardPage: React.FC = () => {
         </DashboardSection>
 
         {/* Platform Health */}
-        <DashboardSection title="Platform health" icon={<Shield className="w-4 h-4 text-tdop-secondary" />}>
+        <DashboardSection title={t('adminDashboard.platformHealth')} icon={<Shield className="w-4 h-4 text-tdop-secondary" />}>
           <div className="space-y-3 p-4">
             {[
-              { label: 'Suspended opportunities', value: stats?.suspendedOpportunities || 0, warn: !!stats?.suspendedOpportunities },
-              { label: 'High risk signals', value: stats?.highRiskSignals || 0, warn: !!stats?.highRiskSignals },
-              { label: 'Pending verifications', value: stats?.pendingVerifications || 0, warn: !!stats?.pendingVerifications },
-              { label: 'Pending reports', value: stats?.pendingReports || 0, warn: !!stats?.pendingReports },
+              { label: t('adminDashboard.suspendedOpportunities'), value: stats?.suspendedOpportunities || 0, warn: !!stats?.suspendedOpportunities },
+              { label: t('adminDashboard.highRiskSignals'), value: stats?.highRiskSignals || 0, warn: !!stats?.highRiskSignals },
+              { label: t('adminDashboard.pendingVerifications'), value: stats?.pendingVerifications || 0, warn: !!stats?.pendingVerifications },
+              { label: t('adminDashboard.pendingReports'), value: stats?.pendingReports || 0, warn: !!stats?.pendingReports },
             ].map(item => (
               <div key={item.label} className="flex items-center justify-between p-3 rounded-xl bg-tdop-light">
                 <span className="text-sm text-gray-600">{item.label}</span>
@@ -237,7 +239,7 @@ const AdminDashboardPage: React.FC = () => {
         <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6">
           <h3 className="font-semibold text-tdop-navy flex items-center gap-2 mb-3">
             <AlertTriangle className="w-5 h-5 text-amber-600" />
-            Action needed
+            {t('adminDashboard.actionNeeded')}
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {pendingItems.map(item => (

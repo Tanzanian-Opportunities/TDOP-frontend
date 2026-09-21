@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/Card';
 import { superAdminApi } from '@/services/api/superAdminApi';
 import { PageError, PageLoading } from '@/components/ui/PageStates';
@@ -11,6 +12,7 @@ interface ConfigEntry {
 }
 
 const SuperAdminConfigPage: React.FC = () => {
+  const { t } = useTranslation();
   const [configs, setConfigs] = useState<ConfigEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -67,35 +69,35 @@ const SuperAdminConfigPage: React.FC = () => {
             <Wrench className="w-7 h-7 text-tdop-primary" />
             Platform Configuration
           </h1>
-          <p className="text-sm text-gray-500 mt-1">System settings and policies</p>
+          <p className="text-sm text-gray-500 mt-1">{t('superAdmin.platformConfig')}</p>
         </div>
         <button
           onClick={() => setShowAddForm(!showAddForm)}
           className="px-4 py-2 bg-tdop-primary text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
         >
-          {showAddForm ? 'Cancel' : 'Add Config'}
+          {showAddForm ? t('superAdminDetail.cancel') : t('superAdminDetail.addConfig')}
         </button>
       </div>
       {showAddForm && (
         <Card className="p-5">
-          <h3 className="text-sm font-semibold text-tdop-navy mb-3">New Configuration Entry</h3>
+          <h3 className="text-sm font-semibold text-tdop-navy mb-3">{t('superAdminDetail.newConfigurationEntry')}</h3>
           <form onSubmit={handleAddConfig} className="space-y-3">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Key</label>
+                <label className="block text-xs font-medium text-gray-600 mb-1">{t('superAdminDetail.key')}</label>
                 <input type="text" value={newKey} onChange={(e) => setNewKey(e.target.value)} placeholder="e.g. maxUploadSize" className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-tdop-primary focus:border-transparent" required />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Value</label>
+                <label className="block text-xs font-medium text-gray-600 mb-1">{t('superAdminDetail.value')}</label>
                 <input type="text" value={newValue} onChange={(e) => setNewValue(e.target.value)} placeholder="e.g. 10" className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-tdop-primary focus:border-transparent" required />
               </div>
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Description</label>
+              <label className="block text-xs font-medium text-gray-600 mb-1">{t('superAdminDetail.description')}</label>
               <input type="text" value={newDescription} onChange={(e) => setNewDescription(e.target.value)} placeholder="Optional description" className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-tdop-primary focus:border-transparent" />
             </div>
             <button type="submit" disabled={saving} className="px-4 py-2 bg-tdop-primary text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 text-sm font-medium">
-              {saving ? 'Saving...' : 'Save Configuration'}
+              {saving ? t('superAdminDetail.saving') : t('superAdminDetail.saveConfiguration')}
             </button>
           </form>
         </Card>
@@ -105,9 +107,9 @@ const SuperAdminConfigPage: React.FC = () => {
           <table className="w-full">
             <thead>
               <tr className="bg-gray-50 border-b">
-                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">Key</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">Value</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">Description</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">{t('superAdminDetail.key')}</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">{t('superAdminDetail.value')}</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">{t('superAdminDetail.description')}</th>
               </tr>
             </thead>
             <tbody className="divide-y">
@@ -119,7 +121,7 @@ const SuperAdminConfigPage: React.FC = () => {
                 </tr>
               ))}
               {configs.length === 0 && (
-                <tr><td colSpan={3} className="px-4 py-8 text-center text-gray-500 text-sm">No configuration entries found</td></tr>
+                <tr><td colSpan={3} className="px-4 py-8 text-center text-gray-500 text-sm">{t('superAdminDetail.noConfigurationEntries')}</td></tr>
               )}
             </tbody>
           </table>

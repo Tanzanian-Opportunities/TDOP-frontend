@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { superAdminApi, UserRoleAssignment } from '@/services/api/superAdminApi';
@@ -6,6 +7,7 @@ import { PageError, PageLoading } from '@/components/ui/PageStates';
 import { Lock, Shield, Users } from 'lucide-react';
 
 const SuperAdminRolesPage: React.FC = () => {
+  const { t } = useTranslation();
   const [roles, setRoles] = useState<UserRoleAssignment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -42,15 +44,15 @@ const SuperAdminRolesPage: React.FC = () => {
           <Lock className="w-7 h-7 text-tdop-primary" />
           Roles & Permissions
         </h1>
-        <p className="text-sm text-gray-500 mt-1">Platform role distribution and permission overview</p>
+        <p className="text-sm text-gray-500 mt-1">{t('superAdmin.roleDistribution')}</p>
       </div>
 
       <Card className="p-4 bg-slate-50 border">
         <div className="flex items-center gap-3">
           <Users className="w-5 h-5 text-tdop-primary" />
           <div>
-            <p className="text-sm font-semibold text-tdop-navy">{totalUsers} total users across {roles.length} roles</p>
-            <p className="text-xs text-gray-500">Role assignments are enforced server-side via Spring Security.</p>
+            <p className="text-sm font-semibold text-tdop-navy">{totalUsers} {t('superAdminDetail.totalUsersAcross')} {roles.length} {t('superAdminDetail.roles')}</p>
+            <p className="text-xs text-gray-500">{t('superAdminDetail.roleAssignmentsEnforced')}</p>
           </div>
         </div>
       </Card>
@@ -79,7 +81,7 @@ const SuperAdminRolesPage: React.FC = () => {
       </div>
 
       <Card className="p-5">
-        <h3 className="text-sm font-semibold text-tdop-navy mb-3">Role Hierarchy & Access</h3>
+        <h3 className="text-sm font-semibold text-tdop-navy mb-3">{t('superAdminDetail.roleHierarchyAccess')}</h3>
         <div className="space-y-2">
           {[
             { role: 'SUPER_ADMIN', desc: 'Full platform governance — roles, permissions, configuration, security, audit', level: 'Level 5' },

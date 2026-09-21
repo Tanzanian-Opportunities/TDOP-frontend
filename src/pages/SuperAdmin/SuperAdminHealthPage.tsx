@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { superAdminApi, PlatformHealth } from '@/services/api/superAdminApi';
@@ -6,6 +7,7 @@ import { PageError, PageLoading } from '@/components/ui/PageStates';
 import { HeartPulse, CheckCircle, AlertTriangle, XCircle, HelpCircle } from 'lucide-react';
 
 const SuperAdminHealthPage: React.FC = () => {
+  const { t } = useTranslation();
   const [health, setHealth] = useState<PlatformHealth | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -49,7 +51,7 @@ const SuperAdminHealthPage: React.FC = () => {
           <HeartPulse className="w-7 h-7 text-tdop-secondary" />
           Platform Health
         </h1>
-        <p className="text-sm text-gray-500 mt-1">System service status and infrastructure health</p>
+        <p className="text-sm text-gray-500 mt-1">{t('superAdmin.systemHealth')}</p>
       </div>
 
       <Card className="p-4 bg-slate-50 border">
@@ -58,9 +60,9 @@ const SuperAdminHealthPage: React.FC = () => {
             {operational === total ? <CheckCircle className="w-5 h-5 text-green-600" /> : <AlertTriangle className="w-5 h-5 text-amber-600" />}
           </div>
           <div>
-            <p className="text-sm font-semibold text-tdop-navy">{operational}/{total} services operational</p>
+            <p className="text-sm font-semibold text-tdop-navy">{operational}/{total} {t('superAdminDetail.servicesOperational')}</p>
             <p className="text-xs text-gray-500">
-              {operational === total ? 'All services running normally.' : `${total - operational} service(s) need attention.`}
+              {operational === total ? t('superAdminDetail.allServicesRunning') : t('superAdminDetail.servicesNeedAttention', { count: total - operational })}
             </p>
           </div>
         </div>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { superAdminApi } from '@/services/api/superAdminApi';
@@ -8,6 +9,7 @@ import { Bell, Plus } from 'lucide-react';
 interface ConfigEntry { key: string; value: string; description?: string; updatedAt?: string; }
 
 const SuperAdminNotificationConfigPage: React.FC = () => {
+  const { t } = useTranslation();
   const [configs, setConfigs] = useState<ConfigEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -58,32 +60,32 @@ const SuperAdminNotificationConfigPage: React.FC = () => {
             <Bell className="w-7 h-7 text-tdop-primary" />
             Notification Configuration
           </h1>
-          <p className="text-sm text-gray-500 mt-1">Manage notification channels and settings</p>
+          <p className="text-sm text-gray-500 mt-1">{t('superAdminDetail.manageNotificationChannels')}</p>
         </div>
         <button onClick={() => setShowAdd(!showAdd)} className="flex items-center gap-2 px-4 py-2 bg-tdop-primary text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
-          <Plus className="w-4 h-4" /> {showAdd ? 'Cancel' : 'Add Setting'}
+          <Plus className="w-4 h-4" /> {showAdd ? t('superAdminDetail.cancel') : t('superAdminDetail.addSetting')}
         </button>
       </div>
       {showAdd && (
         <Card className="p-5">
-          <h3 className="text-sm font-semibold text-tdop-navy mb-3">New Notification Setting</h3>
+          <h3 className="text-sm font-semibold text-tdop-navy mb-3">{t('superAdminDetail.newNotificationSetting')}</h3>
           <form onSubmit={handleAdd} className="space-y-3">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Key (auto-prefixed with notification.)</label>
+                <label className="block text-xs font-medium text-gray-600 mb-1">{t('superAdminDetail.keyNotification')}</label>
                 <input type="text" value={newKey} onChange={(e) => setNewKey(e.target.value)} placeholder="e.g. email.enabled" className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-tdop-primary focus:border-transparent" required />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Value</label>
+                <label className="block text-xs font-medium text-gray-600 mb-1">{t('superAdminDetail.value')}</label>
                 <input type="text" value={newValue} onChange={(e) => setNewValue(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-tdop-primary focus:border-transparent" />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Description</label>
+                <label className="block text-xs font-medium text-gray-600 mb-1">{t('superAdminDetail.description')}</label>
                 <input type="text" value={newDesc} onChange={(e) => setNewDesc(e.target.value)} placeholder="Optional" className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-tdop-primary focus:border-transparent" />
               </div>
             </div>
             <button type="submit" disabled={saving} className="px-4 py-2 bg-tdop-primary text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 text-sm font-medium">
-              {saving ? 'Saving...' : 'Save'}
+              {saving ? t('superAdminDetail.saving') : t('superAdminDetail.save')}
             </button>
           </form>
         </Card>
@@ -93,10 +95,10 @@ const SuperAdminNotificationConfigPage: React.FC = () => {
           <table className="w-full">
             <thead>
               <tr className="bg-gray-50 border-b">
-                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">Setting</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">Value</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">Description</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">Toggle</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">{t('superAdminDetail.setting')}</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">{t('superAdminDetail.value')}</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">{t('superAdminDetail.description')}</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">{t('superAdminDetail.toggle')}</th>
               </tr>
             </thead>
             <tbody className="divide-y">
@@ -108,14 +110,14 @@ const SuperAdminNotificationConfigPage: React.FC = () => {
                   <td className="px-4 py-3">
                     {(config.value === 'true' || config.value === 'false') && (
                       <button onClick={() => handleToggle(config)} className="text-xs text-tdop-primary hover:underline">
-                        {config.value === 'true' ? 'Disable' : 'Enable'}
+                        {config.value === 'true' ? t('superAdminDetail.disable') : t('superAdminDetail.enable')}
                       </button>
                     )}
                   </td>
                 </tr>
               ))}
               {configs.length === 0 && (
-                <tr><td colSpan={4} className="px-4 py-8 text-center text-gray-500 text-sm">No notification settings configured.</td></tr>
+                <tr><td colSpan={4} className="px-4 py-8 text-center text-gray-500 text-sm">{t('superAdminDetail.noNotificationSettings')}</td></tr>
               )}
             </tbody>
           </table>

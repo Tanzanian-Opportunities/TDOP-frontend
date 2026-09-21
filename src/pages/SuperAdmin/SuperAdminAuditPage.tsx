@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { superAdminApi, GovernanceChangeLog } from '@/services/api/superAdminApi';
@@ -6,6 +7,7 @@ import { PageError, PageLoading } from '@/components/ui/PageStates';
 import { Eye } from 'lucide-react';
 
 const SuperAdminAuditPage: React.FC = () => {
+  const { t } = useTranslation();
   const [data, setData] = useState<GovernanceChangeLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -33,7 +35,7 @@ const SuperAdminAuditPage: React.FC = () => {
           <Eye className="w-7 h-7 text-tdop-primary" />
           Audit &amp; Compliance
         </h1>
-        <p className="text-sm text-gray-500 mt-1">Governance change log</p>
+        <p className="text-sm text-gray-500 mt-1">{t('superAdmin.governanceChangeLog')}</p>
       </div>
       <div className="flex items-center gap-4">
         <input
@@ -50,12 +52,12 @@ const SuperAdminAuditPage: React.FC = () => {
           <table className="w-full">
             <thead>
               <tr className="bg-gray-50 border-b">
-                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">Action</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">Entity Type</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">Entity ID</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">Timestamp</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">Old Value</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">New Value</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">{t('superAdminDetail.action')}</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">{t('superAdminDetail.entityType')}</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">{t('superAdminDetail.entityId')}</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">{t('superAdminDetail.timestamp')}</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">{t('superAdminDetail.oldValue')}</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">{t('superAdminDetail.newValue')}</th>
               </tr>
             </thead>
             <tbody className="divide-y">
@@ -70,7 +72,7 @@ const SuperAdminAuditPage: React.FC = () => {
                 </tr>
               ))}
               {filteredChanges.length === 0 && (
-                <tr><td colSpan={6} className="px-4 py-8 text-center text-gray-500 text-sm">No changes match the filter</td></tr>
+                <tr><td colSpan={6} className="px-4 py-8 text-center text-gray-500 text-sm">{t('superAdminDetail.noChangesMatch')}</td></tr>
               )}
             </tbody>
           </table>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface RejectDialogProps {
   open: boolean;
@@ -16,6 +17,7 @@ const RejectDialog: React.FC<RejectDialogProps> = ({
   onCancel,
   loading = false,
 }) => {
+  const { t } = useTranslation();
   const [reason, setReason] = React.useState('');
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
 
@@ -45,7 +47,7 @@ const RejectDialog: React.FC<RejectDialogProps> = ({
         <button
           onClick={onCancel}
           className="absolute top-4 right-4 p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
-          aria-label="Close"
+          aria-label={t('app.close')}
         >
           <X className="w-5 h-5" />
         </button>
@@ -74,14 +76,14 @@ const RejectDialog: React.FC<RejectDialogProps> = ({
             disabled={loading}
             className="px-4 py-2 text-sm font-medium text-gray-600 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors disabled:opacity-50"
           >
-            Cancel
+            {t('app.cancel')}
           </button>
           <button
             onClick={() => { onConfirm(reason); setReason(''); }}
             disabled={loading || !reason.trim()}
             className="px-4 py-2 text-sm font-medium rounded-lg bg-red-600 hover:bg-red-700 text-white transition-colors disabled:opacity-50"
           >
-            {loading ? 'Rejecting...' : 'Reject Opportunity'}
+            {loading ? t('common.loading') : t('trust.reject')}
           </button>
         </div>
       </div>

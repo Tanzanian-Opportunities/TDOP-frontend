@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -7,6 +8,7 @@ import { PageError, PageLoading } from '@/components/ui/PageStates';
 import { AlertTriangle, CheckCircle, Eye, Flag, Shield, Clock, ChevronRight } from 'lucide-react';
 
 const SuperAdminAttentionPage: React.FC = () => {
+  const { t } = useTranslation();
   const [data, setData] = useState<PlatformAttention | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -23,11 +25,11 @@ const SuperAdminAttentionPage: React.FC = () => {
   if (error || !data) return <PageError />;
 
   const items = [
-    { label: 'Pending Verifications', count: data.pendingVerifications, to: '/trust/verifications', icon: <CheckCircle className="w-6 h-6" />, color: 'text-tdop-secondary', bg: 'bg-teal-50' },
-    { label: 'Pending Reports', count: data.pendingReports, to: '/trust/reports', icon: <Flag className="w-6 h-6" />, color: 'text-red-600', bg: 'bg-red-50' },
-    { label: 'High Risk Signals', count: data.highRiskSignals, to: '/super-admin/security', icon: <AlertTriangle className="w-6 h-6" />, color: 'text-tdop-accent', bg: 'bg-amber-50' },
-    { label: 'Open Escalations', count: data.openEscalations, to: '/trust/escalations', icon: <Eye className="w-6 h-6" />, color: 'text-tdop-primary', bg: 'bg-blue-50' },
-    { label: 'Pending Appeals', count: data.pendingAppeals, to: '/trust/appeals', icon: <Shield className="w-6 h-6" />, color: 'text-purple-600', bg: 'bg-purple-50' },
+    { label: t('superAdminDetail.pendingVerifications'), count: data.pendingVerifications, to: '/trust/verifications', icon: <CheckCircle className="w-6 h-6" />, color: 'text-tdop-secondary', bg: 'bg-teal-50' },
+    { label: t('superAdminDetail.pendingReports'), count: data.pendingReports, to: '/trust/reports', icon: <Flag className="w-6 h-6" />, color: 'text-red-600', bg: 'bg-red-50' },
+    { label: t('superAdminDetail.highRiskSignals'), count: data.highRiskSignals, to: '/super-admin/security', icon: <AlertTriangle className="w-6 h-6" />, color: 'text-tdop-accent', bg: 'bg-amber-50' },
+    { label: t('superAdminDetail.openEscalations'), count: data.openEscalations, to: '/trust/escalations', icon: <Eye className="w-6 h-6" />, color: 'text-tdop-primary', bg: 'bg-blue-50' },
+    { label: t('superAdminDetail.pendingAppeals'), count: data.pendingAppeals, to: '/trust/appeals', icon: <Shield className="w-6 h-6" />, color: 'text-purple-600', bg: 'bg-purple-50' },
   ];
 
   return (
@@ -38,7 +40,7 @@ const SuperAdminAttentionPage: React.FC = () => {
             <AlertTriangle className="w-7 h-7 text-amber-500" />
             Platform Attention
           </h1>
-          <p className="text-sm text-gray-500 mt-1">Items requiring super admin governance oversight</p>
+          <p className="text-sm text-gray-500 mt-1">{t('superAdmin.governanceOversight')}</p>
         </div>
       </div>
 
@@ -49,7 +51,7 @@ const SuperAdminAttentionPage: React.FC = () => {
           </div>
           <div>
             <p className={`text-sm font-semibold ${data.totalAttention > 0 ? 'text-amber-800' : 'text-green-800'}`}>
-              {data.totalAttention === 0 ? 'All clear — no governance attention required.' : `${data.totalAttention} item${data.totalAttention !== 1 ? 's' : ''} require${data.totalAttention === 1 ? 's' : ''} attention`}
+              {data.totalAttention === 0 ? t('superAdmin.allClear') : `${data.totalAttention} item${data.totalAttention !== 1 ? 's' : ''} require${data.totalAttention === 1 ? 's' : ''} attention`}
             </p>
             <p className={`text-xs ${data.totalAttention > 0 ? 'text-amber-600' : 'text-green-600'}`}>
               {data.totalAttention === 0 ? 'All systems operating within normal parameters.' : 'Review items needing governance action.'}
@@ -68,7 +70,7 @@ const SuperAdminAttentionPage: React.FC = () => {
               </div>
               <p className="mt-3 text-sm font-semibold text-tdop-navy">{item.label}</p>
               <div className="flex items-center gap-1 mt-2 text-xs text-gray-500">
-                {item.count > 0 ? 'Review now' : 'Nothing pending'}
+                {item.count > 0 ? t('superAdminDetail.reviewNow') : t('superAdminDetail.nothingPending')}
                 <ChevronRight className="w-3 h-3" />
               </div>
             </Card>
