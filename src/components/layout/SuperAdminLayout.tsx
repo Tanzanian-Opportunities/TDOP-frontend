@@ -83,6 +83,7 @@ const SuperAdminLayout: React.FC = () => {
                 <Link
                   key={item.to}
                   to={item.to}
+                  aria-current={isActive(item.to) ? 'page' : undefined}
                   className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
                     isActive(item.to)
                       ? 'bg-white/15 text-white shadow-lg shadow-black/10'

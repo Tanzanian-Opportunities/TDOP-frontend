@@ -66,7 +66,6 @@ const ComparePage: React.FC = () => {
         opportunities={selectedOpps}
         onRemove={toggleSelect}
         onClearAll={() => setSelectedIds([])}
-        onCompare={() => {}}
       />
     </div>
   );

@@ -7,6 +7,7 @@ import AdminLayout from '@/components/layout/AdminLayout';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import RoleGate from '@/components/auth/RoleGate';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { PageNotFound } from '@/components/ui/PageStates';
 import WelcomeOnboarding from '@/components/WelcomeOnboarding';
 import LoginPage from '@/pages/LoginPage';
 import RegisterPage from '@/pages/RegisterPage';
@@ -195,7 +196,7 @@ const AppRoutes: React.FC = () => {
           </Route>
         </Route>
 
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
     </ErrorBoundary>
   );

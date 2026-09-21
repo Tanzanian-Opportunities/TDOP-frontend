@@ -39,7 +39,6 @@ const fetchOrganizations = async () => {
     const data = await organizationApi.getOrganizations();
     setOrganizations(Array.isArray(data) ? data : []);
   } catch (err) {
-    console.error(err);
     setError(true);
   } finally {
     setLoading(false);
@@ -174,12 +173,12 @@ const fetchOrganizations = async () => {
                 </div>
               </div>
               {org.verified ? (
-                <Badge className="flex items-center gap-1 bg-green-100 text-green-800" size="sm">
+                <Badge className="flex items-center gap-1 bg-emerald-50 text-tdop-secondary" size="sm">
                   <ShieldCheck className="w-3 h-3" />
                   {t('organizations.verified')}
                 </Badge>
               ) : (
-                <Badge className="flex items-center gap-1 bg-amber-100 text-amber-800" size="sm">
+                <Badge className="flex items-center gap-1 bg-amber-50 text-amber-600" size="sm">
                   {t('organizations.pending')}
                 </Badge>
               )}

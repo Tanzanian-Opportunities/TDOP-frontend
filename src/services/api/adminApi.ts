@@ -95,8 +95,8 @@ export const adminApi = {
   },
 
   // Audit Log
-  getAuditLog: async (): Promise<any> => {
-    const { data } = await axiosInstance.get('/admin/audit');
+  getAuditLog: async (params?: { page?: number; limit?: number; action?: string; entityType?: string }): Promise<any> => {
+    const { data } = await axiosInstance.get('/admin/audit', { params });
     return data;
   },
 

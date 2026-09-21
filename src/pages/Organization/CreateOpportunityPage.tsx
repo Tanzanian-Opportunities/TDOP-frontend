@@ -10,6 +10,12 @@ import { useNotificationContext } from '@/context/NotificationContext';
 import { OpportunityType } from '@/types/opportunity';
 import { Save, Plus, X, ArrowLeft, Briefcase, FileText, CheckCircle, Calendar } from 'lucide-react';
 
+const CATEGORIES = [
+  'Technology', 'Healthcare', 'Education', 'Finance', 'Engineering',
+  'Marketing', 'Design', 'Agriculture', 'Government', 'Non-Profit', 'Other'
+];
+const EDUCATION_LEVELS = ['High School', 'Diploma', 'Bachelor', 'Master', 'PhD', 'None'];
+
 const CreateOpportunityPage: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();

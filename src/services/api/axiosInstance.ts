@@ -95,6 +95,10 @@ axiosInstance.interceptors.response.use(
       }
     }
 
+    if (error.response?.status === 403) {
+      console.error('Access denied - insufficient permissions');
+    }
+
     return Promise.reject(error);
   }
 );

@@ -43,7 +43,6 @@ const OrganizationProfilePage: React.FC = () => {
         logo: data?.logo || '',
       });
     } catch (err) {
-      console.error(err);
       setError(true);
     } finally {
       setLoading(false);

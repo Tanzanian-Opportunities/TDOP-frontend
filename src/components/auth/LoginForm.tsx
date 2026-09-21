@@ -64,7 +64,7 @@ const LoginForm: React.FC = () => {
         <div className="bg-white rounded-2xl shadow-elevated border border-gray-100 p-7 sm:p-8">
           <form onSubmit={onSubmit} className="space-y-5">
             {error && (
-              <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-600">
+              <div role="alert" className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-600">
                 <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
                 {error}
               </div>

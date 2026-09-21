@@ -8,6 +8,7 @@ CheckCircle, Eye, Clock, UsersRound, Wrench, Bell, AlertTriangle, ClipboardList,
 } from 'lucide-react';
 import { useApplications } from '@/hooks/useApplications';
 import { useNotifications } from '@/hooks/useNotifications';
+import { useAuth } from '@/hooks/useAuth';
 
 interface SidebarLink {
 to: string;
@@ -23,6 +24,7 @@ className?: string;
 const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
 const { t } = useTranslation();
 const location = useLocation();
+const { user } = useAuth();
 const { applications } = useApplications();
 const { unreadCount } = useNotifications();
 const [collapsed, setCollapsed] = useState(false);
@@ -100,15 +102,16 @@ const superAdminLinks: SidebarLink[] = [
   { to: '/super-admin/jobs', label: 'Background Jobs', icon: <Clock className="w-5 h-5" /> },
 ];
 
-const isOrgRoute = location.pathname.startsWith('/organization') ||
-  location.pathname === '/my-jobs' ||
-  location.pathname === '/create-opportunity' ||
-  location.pathname.startsWith('/edit-opportunity');
+const role = user?.role || '';
+const isMultiWorkspaceUser = ['admin', 'super_admin'].includes(role);
 
-const links = location.pathname.startsWith('/super-admin') ? superAdminLinks
-: location.pathname.startsWith('/trust') ? trustLinks
-: location.pathname.startsWith('/admin') ? adminLinks
-: isOrgRoute ? orgLinks : seekerLinks;
+const links = isMultiWorkspaceUser
+  ? (location.pathname.startsWith('/super-admin') ? superAdminLinks
+    : location.pathname.startsWith('/trust') ? trustLinks
+    : adminLinks)
+  : ['verification_officer', 'moderator'].includes(role) ? trustLinks
+  : ['organization', 'organization_admin', 'organization_member'].includes(role) ? orgLinks
+  : seekerLinks;
 
 return (
 <aside
@@ -132,6 +135,7 @@ return (
 key={link.label}
 to={link.to}
 title={collapsed ? link.label : undefined}
+aria-current={isActive ? 'page' : undefined}
 className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
 isActive
 ? 'bg-white/15 text-white shadow-lg shadow-black/10'

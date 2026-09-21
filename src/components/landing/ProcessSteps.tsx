@@ -9,7 +9,7 @@ const ProcessSteps: React.FC = () => {
     { icon: Compass, num: '01', titleKey: 'processStep1Title', descKey: 'processStep1Desc', color: 'bg-tdop-pastel-jobs text-tdop-primary' },
     { icon: BookOpen, num: '02', titleKey: 'processStep2Title', descKey: 'processStep2Desc', color: 'bg-tdop-pastel-internships text-amber-600' },
     { icon: PenLine, num: '03', titleKey: 'processStep3Title', descKey: 'processStep3Desc', color: 'bg-tdop-pastel-scholarships text-tdop-secondary' },
-    { icon: Send, num: '04', titleKey: 'processStep4Title', descKey: 'processStep4Desc', color: 'bg-tdop-pastel-loans text-purple-600' },
+    { icon: Send, num: '04', titleKey: 'processStep4Title', descKey: 'processStep4Desc', color: 'bg-tdop-pastel-loans text-tdop-accent' },
     { icon: Activity, num: '05', titleKey: 'processStep5Title', descKey: 'processStep5Desc', color: 'bg-tdop-pastel-tenders text-tdop-secondary' },
     { icon: Trophy, num: '06', titleKey: 'processStep6Title', descKey: 'processStep6Desc', color: 'bg-tdop-pastel-events text-tdop-accent' },
   ];
