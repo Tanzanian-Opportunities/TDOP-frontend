@@ -52,7 +52,7 @@ const WhyTDOP: React.FC = () => {
           {reasons.map(reason => {
             const Icon = reason.icon;
             return (
-              <div key={reason.titleKey} className="bg-white rounded-2xl border border-gray-100 p-7 hover:shadow-card hover:-translate-y-1 transition-all duration-200">
+              <div key={reason.titleKey} className="bento-card hover:shadow-bento-hover hover:-translate-y-1">
                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${reason.bg}`}>
                   <Icon className={`w-6 h-6 ${reason.color}`} />
                 </div>

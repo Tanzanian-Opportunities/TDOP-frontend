@@ -51,8 +51,8 @@ const SeekerLayout: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-50">
-      <aside className={`${sidebarOpen ? 'w-64' : 'w-16'} bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-white flex flex-col transition-all duration-300 shrink-0`}>
+  <div className="flex h-screen overflow-hidden bg-gray-50/50">
+    <aside className={`${sidebarOpen ? 'w-64' : 'w-16'} bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-white flex flex-col transition-all duration-300 shrink-0`}>
         <div className="p-3 border-b border-white/10">
           <button
             onClick={() => setSidebarOpen(o => !o)}
@@ -73,10 +73,10 @@ const SeekerLayout: React.FC = () => {
                 <Link
                   key={item.to}
                   to={item.to}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
                     isActive(item.to)
-                      ? 'bg-tdop-primary text-white shadow-lg shadow-tdop-primary/25'
-                      : 'text-white/70 hover:bg-white/5 hover:text-white'
+                      ? 'bg-white/15 text-white shadow-lg shadow-black/10'
+                      : 'text-white/60 hover:bg-white/5 hover:text-white'
                   } ${!sidebarOpen ? 'justify-center' : ''}`}
                 >
                   <span className="shrink-0">{item.icon}</span>
@@ -106,7 +106,7 @@ const SeekerLayout: React.FC = () => {
           </button>
         </div>
       </aside>
-      <main className="flex-1 overflow-y-auto bg-gray-50 p-6">
+      <main className="flex-1 overflow-y-auto bg-gray-50/50 p-6">
         <Outlet />
       </main>
       {notifications.slice(0, 3).map(notif => (

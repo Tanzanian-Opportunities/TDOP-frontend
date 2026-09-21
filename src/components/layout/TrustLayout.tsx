@@ -45,7 +45,7 @@ const TrustLayout: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-50">
+    <div className="flex h-screen overflow-hidden bg-gray-50/50">
       <aside className={`${sidebarOpen ? 'w-60' : 'w-16'} bg-tdop-navy text-white flex flex-col transition-all duration-300 shrink-0`}>
         <div className="p-2 border-b border-white/10">
           <button
@@ -62,10 +62,10 @@ const TrustLayout: React.FC = () => {
             <Link
               key={item.to}
               to={item.to}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
                 isActive(item.to)
-                  ? 'bg-tdop-accent text-tdop-navy font-semibold'
-                  : 'text-white/80 hover:bg-white/10 hover:text-white'
+                  ? 'bg-white/15 text-white shadow-lg shadow-black/10'
+                  : 'text-white/60 hover:bg-white/5 hover:text-white'
               } ${!sidebarOpen ? 'justify-center' : ''}`}
             >
               <span className="shrink-0">{item.icon}</span>
@@ -92,7 +92,7 @@ const TrustLayout: React.FC = () => {
           </button>
         </div>
       </aside>
-      <main className="flex-1 overflow-y-auto bg-gray-50 p-6">
+      <main className="flex-1 overflow-y-auto bg-gray-50/50 p-6">
         <Outlet />
       </main>
       {notifications.slice(0, 3).map(notif => (

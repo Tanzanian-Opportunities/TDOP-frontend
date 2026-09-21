@@ -24,8 +24,8 @@ export const StatCard: React.FC<StatCardProps> = ({
   return (
     <Wrapper
       to={to || ''}
-      className={`relative bg-white rounded-2xl border border-gray-100 shadow-card p-5 flex items-center gap-4 group ${
-        to ? 'hover:shadow-soft hover:border-tdop-primary/20 cursor-pointer transition-all' : ''
+      className={`relative bg-white rounded-bento border border-gray-100 shadow-bento p-5 flex items-center gap-4 group ${
+        to ? 'hover:shadow-bento-hover hover:border-gray-200 cursor-pointer transition-all duration-200' : ''
       }`}
     >
       <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${color}`}>

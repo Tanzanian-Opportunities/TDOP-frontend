@@ -61,7 +61,7 @@ const HeroSection: React.FC = () => {
 
             <form
               onSubmit={onSubmit}
-              className="mt-8 bg-white rounded-2xl shadow-card border border-gray-200 p-2 flex flex-col sm:flex-row gap-2"
+              className="mt-8 bg-white rounded-2xl shadow-elevated border border-gray-100 p-2 flex flex-col sm:flex-row gap-2"
             >
               <div className="flex-1 flex items-center gap-2 px-3">
                 <Search className="w-5 h-5 text-gray-400 shrink-0" />
@@ -95,7 +95,7 @@ const HeroSection: React.FC = () => {
                 <button
                   key={f.label}
                   onClick={() => navigate('/browse')}
-                  className="px-3.5 py-1.5 rounded-full bg-gray-100 text-gray-700 text-sm font-medium hover:bg-tdop-primary/10 hover:text-tdop-primary transition-colors"
+                  className="px-3.5 py-1.5 rounded-full bg-gray-50 text-gray-700 text-sm font-medium hover:bg-tdop-primary/5 hover:text-tdop-primary transition-all duration-200 border border-gray-100"
                 >
                   {f.emoji} {f.label}
                 </button>
@@ -119,7 +119,7 @@ const HeroSection: React.FC = () => {
           <div className="hidden lg:block">
             <div className="relative">
               <div className="absolute -inset-4 bg-tdop-primary/5 rounded-3xl blur-2xl" />
-              <div className="relative bg-white rounded-3xl shadow-card border border-gray-100 p-8 space-y-5">
+              <div className="relative bg-white/80 backdrop-blur-lg rounded-3xl shadow-elevated border border-white/30 p-8 space-y-5">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-tdop-primary/10 flex items-center justify-center">
                     <Search className="w-5 h-5 text-tdop-primary" />

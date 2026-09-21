@@ -61,7 +61,7 @@ const CategoryGrid: React.FC = () => {
               <Link
                 key={cat.key}
                 to="/browse"
-                className="group rounded-2xl border border-gray-100 hover:border-tdop-primary/30 hover:shadow-soft p-6 transition-all duration-200"
+                className="group bento-card hover:shadow-bento-hover hover:-translate-y-1 flex flex-col"
               >
                 <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${cat.pastel} ${cat.text} group-hover:scale-110 transition-transform`}>
                   <Icon className="w-7 h-7" />

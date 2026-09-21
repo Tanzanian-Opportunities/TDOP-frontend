@@ -112,7 +112,7 @@ const links = location.pathname.startsWith('/super-admin') ? superAdminLinks
 
 return (
 <aside
-className={`${collapsed ? 'w-20' : 'w-64'} bg-gradient-to-b from-tdop-navy via-tdop-primary to-tdop-primary text-white hidden lg:flex flex-col min-h-[calc(100vh-4rem)] transition-all duration-300 ${className}`}
+className={`${collapsed ? 'w-20' : 'w-64'} bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-white hidden lg:flex flex-col min-h-[calc(100vh-4rem)] transition-all duration-300 ${className}`}
 >
 <div className="p-3">
 <button
@@ -132,10 +132,10 @@ return (
 key={link.label}
 to={link.to}
 title={collapsed ? link.label : undefined}
-className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
 isActive
-? 'bg-tdop-accent text-tdop-navy font-semibold'
-: 'text-white/80 hover:bg-white/10 hover:text-white'
+? 'bg-white/15 text-white shadow-lg shadow-black/10'
+: 'text-white/60 hover:bg-white/5 hover:text-white'
 } ${collapsed ? 'justify-center' : ''}`}
 >
 <span className="shrink-0">{link.icon}</span>

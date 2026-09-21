@@ -45,7 +45,7 @@ const TrustSection: React.FC = () => {
           {features.map(feature => {
             const Icon = feature.icon;
             return (
-              <div key={feature.titleKey} className="text-center p-8 rounded-2xl border border-gray-100 hover:shadow-card transition-all duration-200">
+              <div key={feature.titleKey} className="text-center p-8 rounded-bento border border-gray-100 shadow-bento hover:shadow-bento-hover transition-all duration-200">
                 <div className={`w-16 h-16 mx-auto rounded-full bg-white ring-4 ${feature.ring} flex items-center justify-center`}>
                   <Icon className={`w-8 h-8 ${feature.color}`} />
                 </div>

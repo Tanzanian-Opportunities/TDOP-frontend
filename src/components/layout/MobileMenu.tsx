@@ -66,15 +66,15 @@ const MobileMenu: React.FC = () => {
  {isOpen && (
  <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={close} aria-hidden="true" />
  )}
- <div
- role="dialog"
- aria-modal="true"
- aria-label="Navigation menu"
- className={`fixed top-0 right-0 h-full w-72 bg-white shadow-xl z-50 transform transition-transform duration-300 lg:hidden dark:bg-gray-900 ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
- >
- <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
- <span className="font-heading font-bold text-lg text-tdop-primary dark:text-white">Menu</span>
- <button ref={closeButtonRef} onClick={close} className="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800" aria-label="Close menu">
+  <div
+    role="dialog"
+    aria-modal="true"
+    aria-label="Navigation menu"
+    className={`fixed top-0 right-0 h-full w-72 bg-white/95 backdrop-blur-xl shadow-elevated z-50 transform transition-transform duration-300 lg:hidden dark:bg-gray-900/95 ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
+    >
+  <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-800">
+  <span className="font-heading font-bold text-lg text-tdop-primary dark:text-white">Menu</span>
+  <button ref={closeButtonRef} onClick={close} className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" aria-label="Close menu">
  <X className="w-5 h-5 text-gray-600 dark:text-gray-300" />
  </button>
  </div>
@@ -82,17 +82,17 @@ const MobileMenu: React.FC = () => {
  {links.map(link => {
  const isActive = location.pathname === link.to;
  return (
- <Link
- key={link.to}
- to={link.to}
- onClick={close}
- aria-current={isActive ? 'page' : undefined}
- className={`block px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
- isActive
-   ? 'bg-tdop-primary/10 text-tdop-primary'
-   : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'
-   }`}
- >
+  <Link
+  key={link.to}
+  to={link.to}
+  onClick={close}
+  aria-current={isActive ? 'page' : undefined}
+  className={`block px-3 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+  isActive
+    ? 'bg-tdop-primary/10 text-tdop-primary'
+    : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800'
+  }`}
+  >
  {link.label}
  </Link>
  );

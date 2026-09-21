@@ -8,7 +8,7 @@ const CtaSection: React.FC = () => {
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <div className="relative overflow-hidden rounded-3xl bg-tdop-primary px-8 py-14 sm:px-14 text-center shadow-soft">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-tdop-primary to-blue-700 px-8 py-14 sm:px-14 text-center shadow-elevated">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(245,158,11,0.15),transparent_55%)]" />
         <div className="relative">
           <div className="w-16 h-16 mx-auto rounded-2xl bg-white/10 flex items-center justify-center">
@@ -23,7 +23,7 @@ const CtaSection: React.FC = () => {
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               to="/register"
-              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-tdop-accent hover:bg-amber-600 text-white font-semibold shadow-gold transition-colors"
+              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-tdop-accent hover:bg-amber-600 text-white font-semibold shadow-gold transition-all duration-200"
             >
               {t('landing.ctaJoin')}
               <ArrowRight className="w-4 h-4" />

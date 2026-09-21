@@ -116,7 +116,7 @@ const SeekerDashboardPage: React.FC = () => {
 
         <main className="flex-1 min-w-0 space-y-6">
           {/* Welcome Hero */}
-          <div className="rounded-3xl bg-gradient-to-r from-tdop-primary to-blue-700 p-5 sm:p-8 text-white relative overflow-hidden">
+          <div className="rounded-3xl bg-gradient-to-r from-tdop-primary to-blue-700 p-5 sm:p-8 text-white relative overflow-hidden shadow-elevated">
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" />
             <div className="relative">
               <h1 className="font-display text-3xl font-extrabold">
@@ -443,7 +443,7 @@ const SeekerDashboardPage: React.FC = () => {
             {oppLoading ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 p-4">
                 {[1, 2, 3].map(i => (
-                  <div key={i} className="rounded-2xl overflow-hidden bg-tdop-light border border-gray-100 animate-pulse">
+                  <div key={i} className="rounded-bento overflow-hidden bg-white border border-gray-100 shadow-bento animate-pulse">
                     <div className="p-4 space-y-3">
                       <div className="h-3 w-20 bg-gray-200 rounded" />
                       <div className="h-4 w-3/4 bg-gray-200 rounded" />
@@ -464,7 +464,7 @@ const SeekerDashboardPage: React.FC = () => {
                   <Link
                     key={opp.id}
                     to={`/opportunities/${opp.id}`}
-                    className="group rounded-2xl border border-gray-100 bg-tdop-light hover:shadow-card hover:-translate-y-0.5 transition-all overflow-hidden flex flex-col"
+                    className="group bento-card hover:shadow-bento-hover hover:-translate-y-0.5 overflow-hidden flex flex-col"
                   >
                     <div className="p-4 flex-1 flex flex-col">
                       <span className="text-xs font-semibold text-tdop-secondary uppercase tracking-wide">{opp.type}</span>

@@ -178,7 +178,7 @@ export const OpportunityDetail: React.FC = () => {
               {opportunity.isVerified && (
                 <div className="group relative">
                   <Badge variant="success"><Shield className="w-3 h-3 mr-1 inline" />Verified</Badge>
-                  <div className="absolute right-0 top-full mt-2 w-64 p-3 bg-white rounded-xl shadow-lg border border-gray-100 text-xs text-gray-600 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-10">
+                  <div className="absolute right-0 top-full mt-2 w-64 p-3 bg-white rounded-xl shadow-elevated border border-gray-100 text-xs text-gray-600 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-10">
                     This opportunity has been verified by TDOP. The organization and listing details have been reviewed.
                   </div>
                 </div>
@@ -324,7 +324,7 @@ export const OpportunityDetail: React.FC = () => {
               <Link
                 key={rel.id}
                 to={`/opportunities/${rel.id}`}
-                className="flex items-center justify-between p-3 rounded-xl border border-gray-100 hover:border-tdop-primary/20 hover:shadow-soft transition-all"
+                className="flex items-center justify-between p-3 rounded-xl border border-gray-100 hover:border-gray-200 hover:shadow-bento transition-all duration-200"
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <div className="w-9 h-9 rounded-xl bg-tdop-primary/10 text-tdop-primary flex items-center justify-center shrink-0">
@@ -346,7 +346,7 @@ export const OpportunityDetail: React.FC = () => {
       {isAuthenticated && isSeeker && (
         <div className="sticky bottom-4 flex items-center justify-center gap-4">
           {isExpired ? (
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 px-6 py-4 text-center">
+            <div className="bg-white rounded-2xl shadow-elevated border border-gray-100 px-6 py-4 text-center">
               <p className="text-gray-500 font-medium">This opportunity is no longer accepting applications.</p>
             </div>
           ) : (
@@ -361,7 +361,7 @@ export const OpportunityDetail: React.FC = () => {
       {/* Apply Modal */}
       {showApplyModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" role="dialog" aria-modal="true" aria-label="Apply for opportunity">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-2xl shadow-elevated w-full max-w-lg max-h-[90vh] overflow-y-auto animate-modal-in">
             <div className="flex items-center justify-between p-6 border-b border-gray-100">
               <div>
                 <h2 className="text-lg font-bold text-tdop-navy">Apply for {opportunity.title}</h2>
@@ -442,7 +442,7 @@ export const OpportunityDetail: React.FC = () => {
       {/* Report Modal */}
       {showReportModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" role="dialog" aria-modal="true" aria-label="Report opportunity">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md">
+          <div className="bg-white rounded-2xl shadow-elevated w-full max-w-md animate-modal-in">
             <div className="flex items-center justify-between p-6 border-b border-gray-100">
               <h2 className="text-lg font-bold text-tdop-navy">Report opportunity</h2>
               <button onClick={() => setShowReportModal(false)} className="p-2 rounded-lg hover:bg-gray-100" aria-label="Close">

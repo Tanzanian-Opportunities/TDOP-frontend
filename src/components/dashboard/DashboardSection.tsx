@@ -20,7 +20,7 @@ export const DashboardSection: React.FC<DashboardSectionProps> = ({
   empty = false,
 }) => {
   return (
-    <section className={`bg-white rounded-2xl border border-gray-100 shadow-card overflow-hidden ${className}`}>
+    <section className={`bg-white rounded-bento border border-gray-100 shadow-bento overflow-hidden ${className}`}>
       <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
         <div className="flex items-center gap-2">
           {icon && <span className="text-tdop-primary">{icon}</span>}

@@ -66,15 +66,15 @@
 
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .btn-primary {
-    @apply bg-tdop-primary text-white hover:bg-blue-700;
+    @apply bg-tdop-primary text-white hover:bg-blue-700 shadow-soft hover:shadow-elevated;
   }
 
   .btn-secondary {
-    @apply bg-gray-200 text-gray-800 hover:bg-gray-300;
+    @apply bg-gray-100 text-gray-700 hover:bg-gray-200;
   }
 
   .btn-outline {
@@ -86,7 +86,7 @@
   }
 
   .input-group {
-    @apply flex flex-col gap-1;
+    @apply flex flex-col gap-1.5;
   }
 
   .input-wrapper {
@@ -102,11 +102,38 @@
   }
 
   .card {
-    @apply bg-white rounded-xl border border-gray-200 shadow-card;
+    @apply bg-white rounded-bento border border-gray-100 shadow-bento;
   }
 
   .skeleton {
-    @apply animate-pulse bg-gray-200 rounded;
+    @apply rounded-bento bg-gray-200;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: skeleton 1.8s ease-in-out infinite;
+  }
+
+  .glass {
+    @apply bg-white/80 backdrop-blur-xl border border-white/20;
+  }
+
+  .glass-card {
+    @apply bg-white/70 backdrop-blur-lg border border-white/30 shadow-glass rounded-bento;
+  }
+
+  .bento-card {
+    @apply bg-white rounded-bento border border-gray-100 shadow-bento p-6 transition-all duration-200;
+  }
+
+  .bento-card:hover {
+    @apply shadow-bento-hover border-gray-200;
+  }
+
+  .section-heading {
+    @apply font-display text-3xl sm:text-4xl font-bold text-tdop-navy tracking-tight;
+  }
+
+  .section-subtitle {
+    @apply text-sm font-semibold uppercase tracking-widest text-tdop-secondary;
   }
 }
 
@@ -170,6 +197,27 @@
 
 .dark .card {
   @apply bg-gray-800 border-gray-700;
+}
+
+.dark .bento-card {
+  @apply bg-gray-800/90 border-gray-700/50;
+}
+
+.dark .bento-card:hover {
+  @apply border-gray-600/50;
+}
+
+.dark .glass {
+  @apply bg-gray-900/80 border-gray-700/30;
+}
+
+.dark .glass-card {
+  @apply bg-gray-800/70 border-gray-700/30;
+}
+
+.dark .skeleton {
+  background: linear-gradient(90deg, #374151 25%, #4b5563 50%, #374151 75%);
+  background-size: 200% 100%;
 }
 
 .dark {

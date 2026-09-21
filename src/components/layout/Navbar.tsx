@@ -35,7 +35,7 @@ const navLinks = [
   const currentPath = location.pathname + location.hash;
 
  return (
- <nav className="sticky top-0 z-50 bg-white border-b border-gray-200 dark:bg-gray-900/95 dark:border-gray-800" role="navigation" aria-label="Main navigation">
+ <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-gray-100 dark:bg-gray-900/80 dark:border-gray-800/50 shadow-nav" role="navigation" aria-label="Main navigation">
  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
  <div className="flex items-center justify-between h-16 gap-4">
  <Link to="/" className="flex items-center shrink-0" aria-label="TDOP home">
@@ -46,15 +46,15 @@ const navLinks = [
  {navLinks.map(link => {
  const active = link.to === currentPath || (link.to !== '/' && link.to !== '/#help' && location.pathname.startsWith(link.to));
  return (
- <Link
- key={link.to + link.label}
- to={link.to}
- className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-active
-  ? 'text-tdop-primary bg-tdop-primary/10'
-  : 'text-gray-600 hover:text-tdop-primary hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'
-  }`}
- >
+  <Link
+    key={link.to + link.label}
+    to={link.to}
+    className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+    active
+      ? 'text-tdop-primary bg-tdop-primary/10'
+      : 'text-gray-600 hover:text-tdop-primary hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800'
+    }`}
+    >
  {link.label}
  </Link>
  );
@@ -119,7 +119,7 @@ currentLang === 'sw' ? 'bg-tdop-primary text-white' : 'text-gray-500 hover:text-
  <ChevronDown className="w-4 h-4 text-gray-500 hidden sm:block" />
  </button>
  {showUserMenu && (
-<div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50 animate-slide-down dark:bg-gray-800 dark:border-gray-700">
+<div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-elevated border border-gray-100 py-2 z-50 animate-dropdown-in dark:bg-gray-800 dark:border-gray-700">
   <div className="px-4 py-2 border-b border-gray-100 dark:border-gray-700">
   <p className="text-sm font-medium text-tdop-navy dark:text-gray-100">{user?.firstName} {user?.lastName}</p>
   <p className="text-xs text-gray-500 capitalize dark:text-gray-400">{user?.role}</p>
@@ -140,16 +140,16 @@ currentLang === 'sw' ? 'bg-tdop-primary text-white' : 'text-gray-500 hover:text-
  </div>
  ) : (
  <div className="flex items-center gap-2">
- <Link
- to="/login"
- className="hidden sm:block px-4 py-2 text-sm font-medium text-tdop-primary border border-tdop-primary/30 rounded-lg hover:bg-tdop-primary hover:text-white transition-colors"
- >
- {t('auth.login')}
- </Link>
- <Link
- to="/register"
- className="px-4 py-2 text-sm font-semibold text-white bg-tdop-primary hover:bg-blue-700 rounded-lg shadow-soft transition-colors"
- >
+  <Link
+    to="/login"
+    className="hidden sm:block px-4 py-2 text-sm font-medium text-tdop-primary border border-tdop-primary/20 rounded-lg hover:bg-tdop-primary/5 transition-all duration-200"
+    >
+    {t('auth.login')}
+  </Link>
+  <Link
+    to="/register"
+    className="px-4 py-2 text-sm font-semibold text-white bg-tdop-primary hover:bg-blue-700 rounded-lg shadow-soft hover:shadow-elevated transition-all duration-200"
+    >
  {t('nav.getStarted')}
  </Link>
  </div>

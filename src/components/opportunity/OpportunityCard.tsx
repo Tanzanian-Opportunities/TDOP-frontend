@@ -38,7 +38,7 @@ export const OpportunityCard: React.FC<OpportunityCardProps> = ({ opportunity, c
  };
 
  return (
- <Card className={`hover:shadow-lg transition-shadow ${className}`}>
+  <Card className={`hover:shadow-bento-hover transition-all duration-200 ${className}`}>
  <div className="flex items-start justify-between mb-3">
  <div className="flex-1 min-w-0">
  <h3 className="font-semibold text-lg text-tdop-navy truncate">

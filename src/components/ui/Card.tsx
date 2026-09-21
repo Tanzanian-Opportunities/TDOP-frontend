@@ -11,7 +11,7 @@ interface CardProps {
 export const Card: React.FC<CardProps> = ({ children, className = '', hover = false, padding = true, onClick }) => {
   return (
     <div
-      className={`bg-white rounded-xl border border-gray-200 shadow-card ${padding ? 'p-6' : ''} ${hover ? 'hover:shadow-md hover:border-tdop-primary/30 cursor-pointer transition-all duration-200' : ''} ${className}`}
+      className={`bg-white rounded-bento border border-gray-100 shadow-bento ${padding ? 'p-6' : ''} ${hover ? 'hover:shadow-bento-hover hover:border-gray-200 cursor-pointer transition-all duration-200' : ''} ${className}`}
       onClick={onClick}
     >
       {children}

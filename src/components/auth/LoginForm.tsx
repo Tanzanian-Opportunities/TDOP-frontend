@@ -61,7 +61,7 @@ const LoginForm: React.FC = () => {
           </p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-soft border border-gray-100 p-7 sm:p-8">
+        <div className="bg-white rounded-2xl shadow-elevated border border-gray-100 p-7 sm:p-8">
           <form onSubmit={onSubmit} className="space-y-5">
             {error && (
               <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-600">
@@ -79,7 +79,7 @@ const LoginForm: React.FC = () => {
                   type="text"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:border-tdop-primary focus:ring-2 focus:ring-tdop-primary/20 outline-none transition-all text-sm"
+                  className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:border-tdop-primary focus:ring-2 focus:ring-tdop-primary/20 outline-none transition-all duration-200 text-sm"
                   placeholder="name@example.com"
                   autoComplete="username"
                   required
@@ -125,7 +125,7 @@ const LoginForm: React.FC = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 rounded-xl bg-tdop-primary hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold shadow-soft transition-colors"
+              className="w-full py-3 rounded-xl bg-tdop-primary hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold shadow-soft hover:shadow-elevated transition-all duration-200"
             >
               {loading ? (
                 <span className="inline-flex items-center justify-center gap-2">

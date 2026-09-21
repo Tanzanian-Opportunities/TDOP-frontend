@@ -37,7 +37,7 @@ const InputDialog: React.FC<InputDialogProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true">
       <div className="fixed inset-0 bg-black/40 backdrop-blur-sm" onClick={onCancel} />
-      <div className="relative bg-white rounded-2xl shadow-xl max-w-md w-full p-6 animate-slide-up">
+      <div className="relative bg-white rounded-2xl shadow-elevated max-w-md w-full p-6 animate-modal-in">
         <button
           onClick={onCancel}
           className="absolute top-4 right-4 p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"

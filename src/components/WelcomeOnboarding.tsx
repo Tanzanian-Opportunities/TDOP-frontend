@@ -68,7 +68,7 @@ const WelcomeOnboarding: React.FC = () => {
 
   return (
     <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" role="dialog" aria-modal="true" aria-label="Welcome to TDOP">
-      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden">
+      <div className="bg-white rounded-3xl shadow-elevated w-full max-w-md overflow-hidden animate-modal-in">
         <div className="p-8 text-center">
           <div className={`w-16 h-16 rounded-2xl ${step.color} flex items-center justify-center mx-auto mb-4`}>
             <Icon className="w-8 h-8" />

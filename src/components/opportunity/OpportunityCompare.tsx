@@ -49,10 +49,10 @@ export const OpportunityCompare: React.FC<OpportunityCompareProps> = ({
  </div>
  </div>
 
- <div className="overflow-x-auto">
- <table className="w-full min-w-[600px]">
- <thead>
- <tr className="border-b border-gray-200">
+  <div className="overflow-x-auto rounded-bento border border-gray-100 shadow-bento">
+  <table className="w-full min-w-[600px]">
+  <thead>
+  <tr className="border-b border-gray-100 bg-gray-50/50">
  <th className="text-left p-3 text-sm font-medium text-gray-500">{t('comparison.titleColumn')}</th>
  {opportunities.map(opp => (
  <th key={opp.id} className="text-left p-3 text-sm font-medium text-gray-500 relative">

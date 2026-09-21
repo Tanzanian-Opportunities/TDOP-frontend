@@ -131,14 +131,14 @@ const TestimonialSlider: React.FC = () => {
               <button
                 onClick={() => go('prev')}
                 aria-label="Previous story"
-                className="flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white text-tdop-primary shadow-soft transition-all hover:bg-tdop-primary hover:text-white hover:shadow-gold dark:border-gray-700 dark:bg-gray-800"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white text-tdop-primary shadow-bento transition-all duration-200 hover:bg-tdop-primary hover:text-white hover:shadow-elevated dark:border-gray-700 dark:bg-gray-800"
               >
                 <ChevronLeft className="h-5 w-5" />
               </button>
               <button
                 onClick={() => go('next')}
                 aria-label="Next story"
-                className="flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white text-tdop-primary shadow-soft transition-all hover:bg-tdop-primary hover:text-white hover:shadow-gold dark:border-gray-700 dark:bg-gray-800"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white text-tdop-primary shadow-bento transition-all duration-200 hover:bg-tdop-primary hover:text-white hover:shadow-elevated dark:border-gray-700 dark:bg-gray-800"
               >
                 <ChevronRight className="h-5 w-5" />
               </button>
@@ -148,7 +148,7 @@ const TestimonialSlider: React.FC = () => {
 
         <div className="grid grid-cols-1 items-stretch gap-8 lg:grid-cols-[1.6fr_1fr]">
           <div
-            className="relative overflow-hidden rounded-[2rem] border border-gray-100 bg-white shadow-xl dark:border-gray-700 dark:bg-gray-800"
+            className="relative overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-elevated dark:border-gray-700 dark:bg-gray-800"
             onTouchStart={onTouchStart}
             onTouchEnd={onTouchEnd}
           >
@@ -196,7 +196,7 @@ const TestimonialSlider: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex flex-col rounded-[2rem] border border-gray-100 bg-white/80 p-5 backdrop-blur dark:border-gray-700 dark:bg-gray-800/80 sm:p-6">
+          <div className="flex flex-col rounded-3xl border border-gray-100 bg-white/80 p-5 backdrop-blur-lg dark:border-gray-700 dark:bg-gray-800/80 sm:p-6">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold uppercase tracking-widest text-gray-400">
                 {t('landing.storiesLabel')}
@@ -214,9 +214,9 @@ const TestimonialSlider: React.FC = () => {
                     key={i}
                     onClick={() => jump(i)}
                     aria-label={`Go to story by ${s.name}`}
-                    className={`group w-full rounded-2xl border p-3.5 text-left transition-all duration-300 ${
+                    className={`group w-full rounded-2xl border p-3.5 text-left transition-all duration-200 ${
                       active
-                        ? 'border-tdop-primary/30 bg-gradient-to-br from-tdop-primary/5 to-tdop-secondary/5 shadow-soft'
+                        ? 'border-tdop-primary/30 bg-gradient-to-br from-tdop-primary/5 to-tdop-secondary/5 shadow-bento'
                         : 'border-gray-100 hover:border-tdop-primary/20 hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-white/5'
                     }`}
                   >

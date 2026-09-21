@@ -45,7 +45,7 @@ const ApplicationDetailPage: React.FC = () => {
 
   const withdrawMutation = useMutation({
     mutationFn: async () => {
-      await axiosInstance.put(`/applications/${id}/withdraw`);
+      await axiosInstance.post(`/applications/${id}/withdraw`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['application', id] });

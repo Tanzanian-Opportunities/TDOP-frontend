@@ -20,13 +20,13 @@ export const Button: React.FC<ButtonProps> = ({
   asChild = false,
   ...props
 }) => {
-  const baseClasses = 'inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed';
+  const baseClasses = 'inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tdop-primary/40 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]';
   const variantClasses = {
-    primary: 'bg-tdop-primary text-white hover:bg-blue-700 shadow-soft hover:shadow-md',
-    secondary: 'bg-gray-100 text-gray-700 hover:bg-gray-200',
+    primary: 'bg-tdop-primary text-white hover:bg-blue-700 shadow-soft hover:shadow-elevated',
+    secondary: 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200',
     outline: 'border border-tdop-primary/30 text-tdop-primary hover:bg-tdop-primary hover:text-white',
-    ghost: 'text-gray-600 hover:bg-gray-100',
-    danger: 'bg-red-500 text-white hover:bg-red-600',
+    ghost: 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
+    danger: 'bg-red-500 text-white hover:bg-red-600 shadow-sm hover:shadow-md',
     accent: 'bg-tdop-accent text-white hover:bg-amber-600 shadow-gold',
   };
   const sizeClasses = {

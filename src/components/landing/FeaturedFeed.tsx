@@ -11,7 +11,7 @@ const FeaturedCard: React.FC<{ opp: Opportunity; index: number }> = ({ opp, inde
   return (
     <Link
       to={`/opportunities/${opp.id}`}
-      className="group rounded-2xl border border-gray-100 bg-white hover:shadow-card hover:-translate-y-1 transition-all duration-200 overflow-hidden flex flex-col"
+      className="group bento-card hover:shadow-bento-hover hover:-translate-y-1 overflow-hidden flex flex-col"
     >
       <div className="p-5 flex flex-col flex-1">
         <span className="text-xs font-semibold uppercase tracking-wide text-tdop-secondary">
@@ -73,7 +73,7 @@ const FeaturedFeed: React.FC = () => {
         {isLoading && !isError ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="rounded-2xl overflow-hidden bg-white border border-gray-100">
+              <div key={i} className="rounded-bento overflow-hidden bg-white border border-gray-100 shadow-bento">
                 <div className="p-5 space-y-3">
                   <div className="skeleton h-3 w-24" />
                   <div className="skeleton h-5 w-3/4" />
@@ -84,7 +84,7 @@ const FeaturedFeed: React.FC = () => {
             ))}
           </div>
         ) : list.length === 0 ? (
-          <div className="text-center py-16 bg-white rounded-2xl border border-gray-100">
+          <div className="text-center py-16 bg-white rounded-bento border border-gray-100 shadow-bento">
             <p className="text-gray-500 text-lg">{t('opportunities.noOpportunities') || 'No featured opportunities available yet.'}</p>
           </div>
         ) : (

@@ -79,7 +79,7 @@ const RegisterForm: React.FC = () => {
         </div>
 
         {step === 'role' ? (
-          <div className="bg-white rounded-2xl shadow-soft border border-gray-100 p-7 sm:p-8 space-y-4">
+          <div className="bg-white rounded-2xl shadow-elevated border border-gray-100 p-7 sm:p-8 space-y-4">
             {roleCards.map(card => {
               const Icon = card.icon;
               const active = selectedRole === card.role;
@@ -100,7 +100,7 @@ const RegisterForm: React.FC = () => {
             })}
           </div>
         ) : (
-          <div className="bg-white rounded-2xl shadow-soft border border-gray-100 p-7 sm:p-8">
+          <div className="bg-white rounded-2xl shadow-elevated border border-gray-100 p-7 sm:p-8">
             <form onSubmit={onSubmit} className="space-y-5">
               {error && (
                 <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-600">
@@ -146,7 +146,7 @@ const RegisterForm: React.FC = () => {
                 <input type="password" value={form.confirmPassword} onChange={e => setForm({ ...form, confirmPassword: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-tdop-primary focus:ring-2 focus:ring-tdop-primary/20 outline-none transition-all text-sm" placeholder="••••••••" required minLength={8} />
               </div>
 
-              <button type="submit" className="w-full py-3 rounded-xl bg-tdop-primary hover:bg-blue-700 text-white font-semibold shadow-soft transition-colors disabled:opacity-60 disabled:cursor-not-allowed">
+              <button type="submit" className="w-full py-3 rounded-xl bg-tdop-primary hover:bg-blue-700 text-white font-semibold shadow-soft hover:shadow-elevated transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed">
                 {t('auth.continueBtn')}
               </button>
             </form>

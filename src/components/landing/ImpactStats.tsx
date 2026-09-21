@@ -45,7 +45,7 @@ const ImpactStats: React.FC = () => {
           {statItems.map(stat => {
             const Icon = stat.icon;
             return (
-              <div key={stat.labelKey} className="text-center p-6 rounded-2xl bg-gray-50 border border-gray-100">
+              <div key={stat.labelKey} className="text-center p-6 rounded-bento bg-gray-50 border border-gray-100 shadow-bento">
                 <div className="w-14 h-14 mx-auto rounded-2xl bg-tdop-primary/10 flex items-center justify-center">
                   <Icon className="w-7 h-7 text-tdop-primary" />
                 </div>
