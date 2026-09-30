@@ -66,8 +66,6 @@ const TestimonialSlider: React.FC = () => {
 
   const stories: Story[] = baseStories.map((s, i) => ({ ...s, ...storyMeta[i] }));
 
-  if (stories.length === 0) return null;
-
   const total = stories.length;
   const item = stories[index];
 
@@ -79,6 +77,8 @@ const TestimonialSlider: React.FC = () => {
     }, AUTOPLAY_MS);
     return () => clearInterval(id);
   }, [total, paused]);
+
+  if (stories.length === 0) return null;
 
   const go = (dir: 'next' | 'prev') => {
     setDirection(dir);
