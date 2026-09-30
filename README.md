@@ -102,7 +102,11 @@ The app ships with a light/dark theme. Toggle it via the button in the navbar; t
 ## Related
 
 - [TDOP Backend](https://github.com/Tanzanian-Opportunities/TDOP-backend) — Spring Boot REST API
-- [TDOP Infra](https://github.com/Tanzanian-Opportunities/TDOP-infra) — Docker Compose / Nginx deployment
+- [TDOP Infra](https://github.com/Tanzanian-Opportunities/TDOP-infra) — Docker Compose / Cloudflare edge deployment
 - [TDOP Docs](https://github.com/Tanzanian-Opportunities/TDOP-docs) — governance, specs, and project management
 - [Umbrella index](https://github.com/Tanzanian-Opportunities/Tanzanian_Opportunities) — full project overview
 - [Kanban board](https://github.com/orgs/Tanzanian-Opportunities/projects/1) — task tracking
+
+## License
+
+MIT - see [`LICENSE`](https://github.com/Tanzanian-Opportunities/TDOP-docs/blob/develop/LICENSE) (single license of record, kept in `TDOP-docs`).
