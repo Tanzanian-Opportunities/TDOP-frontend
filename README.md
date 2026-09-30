@@ -30,7 +30,7 @@ cp .env.example .env
 npm run dev
 ```
 
-The app runs at `http://localhost:3000` by default. The backend API is expected at the URL in `.env` (default `http://localhost:8080/api/v1`) — see [TDOP Backend](../TDOP-backend/README.md).
+The app runs at `http://localhost:3000` by default. The backend API is expected at the URL in `.env` (default `http://localhost:8080/api/v1`) — see [TDOP Backend](https://github.com/Tanzanian-Opportunities/TDOP-backend).
 
 ## Demo Accounts
 
@@ -101,5 +101,8 @@ The app ships with a light/dark theme. Toggle it via the button in the navbar; t
 
 ## Related
 
-- [TDOP Backend](../TDOP-backend/README.md) — Spring Boot REST API
-- [TDOP Root README](../README.md) — Full project overview
+- [TDOP Backend](https://github.com/Tanzanian-Opportunities/TDOP-backend) — Spring Boot REST API
+- [TDOP Infra](https://github.com/Tanzanian-Opportunities/TDOP-infra) — Docker Compose / Nginx deployment
+- [TDOP Docs](https://github.com/Tanzanian-Opportunities/TDOP-docs) — governance, specs, and project management
+- [Umbrella index](https://github.com/Tanzanian-Opportunities/Tanzanian_Opportunities) — full project overview
+- [Kanban board](https://github.com/orgs/Tanzanian-Opportunities/projects/1) — task tracking
